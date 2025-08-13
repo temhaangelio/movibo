@@ -29,8 +29,8 @@ else
 fi
 
 # Dosya izinlerini düzelt
-sudo chown -R www-data:www-data /var/www/movibo/storage
-sudo chmod -R 775 /var/www/movibo/storage
+#sudo chown -R www-data:www-data /var/www/movibo/storage
+#sudo chmod -R 775 /var/www/movibo/storage
 
 sudo chown -R www-data:www-data /var/www/movibo/bootstrap
 sudo chmod -R 775 /var/www/movibo/bootstrap
