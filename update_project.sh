@@ -11,7 +11,7 @@ OLD_COMMIT=$(git rev-parse HEAD 2>/dev/null)
 
 # Git güncellemelerini fetch ve reset et
 git fetch --all
-git reset --hard origin/main
+git reset --hard origin/master
 
 # Yeni commit'i al
 NEW_COMMIT=$(git rev-parse HEAD 2>/dev/null)
