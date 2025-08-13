@@ -15,7 +15,7 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
-        
+
         $notifications = $user->notifications()
             ->with('fromUser')
             ->orderBy('created_at', 'desc')
@@ -33,7 +33,7 @@ class NotificationController extends Controller
     public function markAsRead(Notification $notification): JsonResponse
     {
         $user = auth()->user();
-        
+
         // Sadece kendi bildirimlerini işaretleyebilir
         if ($notification->user_id !== $user->id) {
             return response()->json([
@@ -56,7 +56,7 @@ class NotificationController extends Controller
     public function markAllAsRead(): JsonResponse
     {
         $user = auth()->user();
-        
+
         $user->notifications()
             ->where('is_read', false)
             ->update(['is_read' => true]);
@@ -88,7 +88,7 @@ class NotificationController extends Controller
     {
         $follower = User::find($followerId);
         $following = User::find($followingId);
-        
+
         return self::createNotification(
             $followingId,
             $followerId,
@@ -105,7 +105,7 @@ class NotificationController extends Controller
     {
         $liker = User::find($likerId);
         $post = \App\Models\Post::with('user')->find($postId);
-        
+
         if ($post && $post->user_id !== $likerId) {
             return self::createNotification(
                 $post->user_id,
@@ -115,7 +115,7 @@ class NotificationController extends Controller
                 ['post_id' => $postId]
             );
         }
-        
+
         return null;
     }
 
@@ -126,7 +126,7 @@ class NotificationController extends Controller
     {
         $commenter = User::find($commenterId);
         $post = \App\Models\Post::with('user')->find($postId);
-        
+
         if ($post && $post->user_id !== $commenterId) {
             return self::createNotification(
                 $post->user_id,
@@ -136,7 +136,7 @@ class NotificationController extends Controller
                 ['post_id' => $postId, 'comment_id' => $commentId]
             );
         }
-        
+
         return null;
     }
 }

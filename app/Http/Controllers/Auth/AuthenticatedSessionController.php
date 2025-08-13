@@ -34,7 +34,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         // Admin kullanıcıları admin paneline yönlendir
-        if (auth()->user()->isAdmin()) {
+        if (Auth::user()->isAdmin()) {
             return redirect()->intended('/panel');
         }
 

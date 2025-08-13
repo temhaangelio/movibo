@@ -13,7 +13,7 @@ class ApiController extends Controller
     public function searchMovies(Request $request): JsonResponse
     {
         $query = $request->get('query');
-        
+
         if (!$query) {
             return response()->json(['results' => []]);
         }
@@ -24,7 +24,7 @@ class ApiController extends Controller
         try {
             $response = file_get_contents($url);
             $data = json_decode($response, true);
-            
+
             return response()->json($data);
         } catch (\Exception $e) {
             return response()->json(['error' => 'API request failed'], 500);
@@ -34,7 +34,7 @@ class ApiController extends Controller
     public function searchBooks(Request $request): JsonResponse
     {
         $query = $request->get('query');
-        
+
         if (!$query) {
             return response()->json(['items' => []]);
         }
@@ -44,7 +44,7 @@ class ApiController extends Controller
         try {
             $response = file_get_contents($url);
             $data = json_decode($response, true);
-            
+
             return response()->json($data);
         } catch (\Exception $e) {
             return response()->json(['error' => 'API request failed'], 500);
@@ -54,11 +54,11 @@ class ApiController extends Controller
     public function discoverPosts(Request $request): JsonResponse
     {
         $user = auth()->user();
-        
+
         // Takip edilmeyen kullanıcıların paylaşımlarını getir
         $followingIds = $user->following()->pluck('users.id')->toArray();
         $followingIds[] = $user->id;
-        
+
         $posts = Post::with(['user', 'likes', 'comments'])
             ->whereNotIn('user_id', $followingIds)
             ->orderBy('created_at', 'desc')
@@ -77,11 +77,11 @@ class ApiController extends Controller
     public function followingPosts(Request $request): JsonResponse
     {
         $user = auth()->user();
-        
+
         // Takip edilen kullanıcıların ID'lerini al
         $followingIds = $user->following()->pluck('users.id')->toArray();
         $followingIds[] = $user->id; // Kendi paylaşımlarını da dahil et
-        
+
         $posts = Post::with(['user', 'likes', 'comments'])
             ->whereIn('user_id', $followingIds)
             ->orderBy('created_at', 'desc')
@@ -115,7 +115,7 @@ class ApiController extends Controller
     {
         $query = $request->get('query');
         $currentUser = auth()->user();
-        
+
         if (!$query || strlen($query) < 2) {
             return response()->json(['users' => []]);
         }
@@ -138,4 +138,4 @@ class ApiController extends Controller
             'users' => $users,
         ]);
     }
-} 
+}
