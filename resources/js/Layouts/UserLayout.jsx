@@ -82,6 +82,16 @@ const UserLayout = ({ children, auth }) => {
                                 </Link>
                             )}
                             
+                            {/* Uygulamaya Git Butonu */}
+                            <Link
+                                href="/home"
+                                className="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white text-xs font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"
+                                title="Ana Sayfa"
+                            >
+                                <House className="w-4 h-4 mr-1" />
+                                Ana Sayfa
+                            </Link>
+                            
                             {/* Ayarlar */}
                             <Link
                                 href="/settings"

@@ -83,7 +83,10 @@ export default function AdminLayout({ children }) {
 
                     {/* Bottom Links */}
                     <div className="py-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
-                        <div className="flex items-center space-x-3 px-4 border-b border-gray-200 dark:border-gray-700 pb-4">
+                        <Link
+                            href="/panel/profile"
+                            className="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                        >
                             <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
                                 <span className="text-white font-semibold">
                                     {auth.user.name.charAt(0).toUpperCase()}
@@ -97,14 +100,7 @@ export default function AdminLayout({ children }) {
                                     {auth.user.email}
                                 </p>
                             </div>
-                        </div>
-                        <button
-                            onClick={() => router.post("/logout")}
-                            className="flex items-center w-full px-3 py-2 text-sm font-medium rounded-lg transition-colors text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
-                        >
-                            <SignOut className="w-5 h-5 mr-3" />
-                            Çıkış Yap
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -114,13 +110,26 @@ export default function AdminLayout({ children }) {
                 {/* Top Header */}
                 <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
                     <div className="px-6 py-3">
-                        <div className="relative">
-                            <MagnifyingGlass className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder="Ara..."
-                                className="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            />
+                        <div className="flex items-center justify-between">
+                            <div className="relative flex-1 max-w-md">
+                                <MagnifyingGlass className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <input
+                                    type="text"
+                                    placeholder="Ara..."
+                                    className="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
+                            
+                            {/* Uygulamaya Git Butonu */}
+                            <div className="flex items-center space-x-3">
+                                <Link
+                                    href="/home"
+                                    className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"
+                                >
+                                    <Globe className="w-4 h-4 mr-2" />
+                                    Uygulamaya Git
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </header>
@@ -185,7 +194,11 @@ export default function AdminLayout({ children }) {
 
                     {/* Mobile User Profile */}
                     <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                        <div className="flex items-center space-x-3">
+                        <Link
+                            href="/panel/profile"
+                            onClick={() => setShowingNavigationDropdown(false)}
+                            className="flex items-center space-x-3 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded-lg transition-colors"
+                        >
                             <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
                                 <span className="text-white font-semibold">
                                     {auth.user.name.charAt(0).toUpperCase()}
@@ -199,7 +212,7 @@ export default function AdminLayout({ children }) {
                                     {auth.user.email}
                                 </p>
                             </div>
-                        </div>
+                        </Link>
                     </div>
 
                     {/* Mobile Navigation */}
@@ -248,22 +261,14 @@ export default function AdminLayout({ children }) {
 
                     {/* Mobile Bottom Links */}
                     <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
-                        <button className="flex items-center w-full px-3 py-2 text-sm font-medium rounded-lg transition-colors text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <Globe className="w-5 h-5 mr-3" />
-                            Topluluk
-                        </button>
-                        <div className="px-3 py-2">
-                            <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                {auth.user.name}
-                            </p>
-                        </div>
-                        <button
-                            onClick={() => router.post("/logout")}
-                            className="flex items-center w-full px-3 py-2 text-sm font-medium rounded-lg transition-colors text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                        <Link
+                            href="/home"
+                            onClick={() => setShowingNavigationDropdown(false)}
+                            className="flex items-center w-full px-3 py-2 text-sm font-medium rounded-lg transition-colors text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
                         >
-                            <SignOut className="w-5 h-5 mr-3" />
-                            Çıkış Yap
-                        </button>
+                            <Globe className="w-5 h-5 mr-3" />
+                            Uygulamaya Git
+                        </Link>
                     </div>
                 </div>
             </div>

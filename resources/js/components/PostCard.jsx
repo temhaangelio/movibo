@@ -16,6 +16,9 @@ import {
 } from "@phosphor-icons/react";
 
 const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
+    // Debug: Post verilerini kontrol et
+    console.log("PostCard render - post:", post);
+    console.log("PostCard render - post.user:", post.user);
     const { t } = useTranslation();
     const [isLiked, setIsLiked] = useState(post.is_liked || false);
     const [likesCount, setLikesCount] = useState(post.likes_count || 0);
@@ -47,28 +50,51 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
 
     // Takip durumunu kontrol et
     useEffect(() => {
-        if (user && post.user && user.id !== post.user.id) {
-            fetch(`/users/${post.user.id}/follow/check`)
-                .then((res) => res.json())
+        if (
+            user &&
+            post.user &&
+            user.id !== post.user.id &&
+            post.user.username
+        ) {
+            console.log("Post user data:", post.user);
+            console.log("Checking follow status for:", post.user.username);
+            fetch(`/users/${post.user.username}/follow/check`)
+                .then((res) => {
+                    console.log("Follow check response status:", res.status);
+                    return res.json();
+                })
                 .then((data) => {
+                    console.log("Follow check data:", data);
                     setIsFollowing(data.isFollowing);
+                })
+                .catch((error) => {
+                    console.error("Follow check error:", error);
                 });
         }
     }, [user, post.user]);
 
     const handleFollow = async () => {
-        if (!user || !post.user || user.id === post.user.id) return;
+        if (
+            !user ||
+            !post.user ||
+            user.id === post.user.id ||
+            !post.user.username
+        )
+            return;
 
         try {
-            const response = await fetch(`/users/${post.user.id}/follow`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"),
-                },
-            });
+            const response = await fetch(
+                `/users/${post.user.username}/follow`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute("content"),
+                    },
+                }
+            );
 
             const data = await response.json();
 
@@ -185,20 +211,31 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
             {/* Kullanıcı Bilgisi */}
             <div className="flex items-center p-4">
-                <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
-                    <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                </div>
+                <Link
+                    href={
+                        post.user?.username
+                            ? `/users/${post.user.username}`
+                            : `/users/${post.user_id}`
+                    }
+                    className="flex items-center"
+                >
+                    <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors">
+                        <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                    </div>
+                </Link>
                 <div className="ml-3 flex-1">
-                    <p className="font-medium text-gray-900 dark:text-white">
-                        {post.user?.name
-                            .split(" ")
-                            .map(
-                                (word) =>
-                                    word.charAt(0).toUpperCase() +
-                                    word.slice(1).toLowerCase()
-                            )
-                            .join(" ")}
-                    </p>
+                    <Link
+                        href={
+                            post.user?.username
+                                ? `/users/${post.user.username}`
+                                : `/users/${post.user_id}`
+                        }
+                        className="block"
+                    >
+                        <p className="font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">
+                            {post.user?.name}
+                        </p>
+                    </Link>
                     <div className="flex items-center space-x-2">
                         <p className="text-sm text-gray-500 dark:text-gray-400">
                             <TimeAgo date={post.created_at} />
@@ -209,13 +246,13 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
                     {user && post.user && user.id !== post.user.id && (
                         <button
                             onClick={handleFollow}
-                            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
                                 isFollowing
-                                    ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                                    : "bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600"
+                                    ? "bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30"
+                                    : "bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 shadow-sm hover:shadow-md"
                             }`}
                         >
-                            {isFollowing ? "Takip Ediliyor" : "Takip Et"}
+                            {isFollowing ? "Takibi Bırak" : "Takip Et"}
                         </button>
                     )}
 

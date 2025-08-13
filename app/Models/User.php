@@ -124,4 +124,12 @@ class User extends Authenticatable
     {
         return $this->notifications()->where('is_read', false)->count();
     }
+
+    /**
+     * Route model binding için username kullan
+     */
+    public function getRouteKeyName()
+    {
+        return 'username';
+    }
 }

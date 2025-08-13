@@ -5,12 +5,31 @@ import AdminLayout from "/Layouts/AdminLayout";
 import Buton from "/ui/Buton";
 import Card from "/ui/Card";
 import Confirm from "/ui/Confirm";
-import { ChatCircle, Trash, Eye, User } from "@phosphor-icons/react";
+import {
+    ChatCircle,
+    Trash,
+    Eye,
+    User,
+    MagnifyingGlass,
+} from "@phosphor-icons/react";
 
 const Index = ({ comments }) => {
     const { t } = useTranslation();
     const [deleteCommentId, setDeleteCommentId] = useState(null);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const filteredComments =
+        comments.data?.filter((comment) => {
+            if (!searchTerm) return true;
+
+            const searchLower = searchTerm.toLowerCase();
+            return (
+                comment.user?.name?.toLowerCase().includes(searchLower) ||
+                comment.content?.toLowerCase().includes(searchLower) ||
+                comment.post?.id?.toString().includes(searchLower)
+            );
+        }) || [];
 
     const handleDelete = (commentId) => {
         setDeleteCommentId(commentId);
@@ -34,6 +53,31 @@ const Index = ({ comments }) => {
 
             <Card>
                 <div className="p-6">
+                    {/* Header with Search */}
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                            Yorum Yönetimi
+                        </h2>
+                        <div className="flex items-center space-x-4">
+                            {/* Search */}
+                            <div className="relative">
+                                <MagnifyingGlass className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                <input
+                                    type="text"
+                                    placeholder="Kullanıcı, yorum veya paylaşım ID ara..."
+                                    value={searchTerm}
+                                    onChange={(e) =>
+                                        setSearchTerm(e.target.value)
+                                    }
+                                    className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+                                />
+                            </div>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                                Toplam: {filteredComments.length}
+                            </span>
+                        </div>
+                    </div>
+
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead className="bg-gray-50 dark:bg-gray-800">
@@ -56,7 +100,7 @@ const Index = ({ comments }) => {
                                 </tr>
                             </thead>
                             <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-                                {comments.data?.map((comment) => (
+                                {filteredComments.map((comment) => (
                                     <tr key={comment.id}>
                                         <td className="px-6 py-4">
                                             <div className="text-sm text-gray-900 dark:text-white">

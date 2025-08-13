@@ -15,16 +15,25 @@ class DashboardController extends Controller
     public function index()
     {
         $stats = [
-            'total_users' => User::count(),
-            'total_posts' => Post::count(),
-            'total_comments' => Comment::count(),
-            'total_likes' => Like::count(),
-            'recent_posts' => Post::with('user')->latest()->take(5)->get(),
-            'recent_users' => User::latest()->take(5)->get(),
+            'totalUsers' => User::count(),
+            'totalPosts' => Post::count(),
+            'totalComments' => Comment::count(),
+            'totalLikes' => Like::count(),
         ];
+
+        $recentUsers = User::latest()->take(5)->get();
+        $recentPosts = Post::with(['user', 'likes', 'comments'])
+            ->withCount(['likes', 'comments'])
+            ->latest()
+            ->take(5)
+            ->get();
+        $recentComments = Comment::with('user')->latest()->take(5)->get();
 
         return Inertia::render('Admin/Dashboard', [
             'stats' => $stats,
+            'recentUsers' => $recentUsers,
+            'recentPosts' => $recentPosts,
+            'recentComments' => $recentComments,
         ]);
     }
 }

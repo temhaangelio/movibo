@@ -6,7 +6,7 @@ import Buton from "/ui/Buton";
 import PostCard from "@/components/PostCard";
 import Alert from "/ui/Alert";
 
-import { Camera, User } from "@phosphor-icons/react";
+import { Camera, User, X, Users } from "@phosphor-icons/react";
 
 const Profil = ({ auth, user, posts }) => {
     const { t } = useTranslation();
@@ -23,6 +23,12 @@ const Profil = ({ auth, user, posts }) => {
         type: "success",
         message: "",
     });
+    const [showFollowersModal, setShowFollowersModal] = useState(false);
+    const [showFollowingModal, setShowFollowingModal] = useState(false);
+    const [followers, setFollowers] = useState([]);
+    const [following, setFollowing] = useState([]);
+    const [loadingFollowers, setLoadingFollowers] = useState(false);
+    const [loadingFollowing, setLoadingFollowing] = useState(false);
 
     // Takip durumunu kontrol et
     useEffect(() => {
@@ -45,6 +51,8 @@ const Profil = ({ auth, user, posts }) => {
         if (!auth.user || !currentUser || auth.user.id === currentUser.id)
             return;
 
+        setUploading(true);
+
         try {
             const response = await fetch(`/users/${currentUser.id}/follow`, {
                 method: "POST",
@@ -62,9 +70,56 @@ const Profil = ({ auth, user, posts }) => {
                 setIsFollowing(data.isFollowing);
                 setFollowersCount(data.followersCount);
                 setFollowingCount(data.followingCount);
+
+                // Başarı mesajı göster
+                setAlert({
+                    open: true,
+                    type: "success",
+                    message: data.message,
+                });
+            } else {
+                // Hata mesajı göster
+                setAlert({
+                    open: true,
+                    type: "error",
+                    message: data.message || "Bir hata oluştu.",
+                });
             }
         } catch (error) {
             console.error("Follow error:", error);
+            setAlert({
+                open: true,
+                type: "error",
+                message: "Bir hata oluştu. Lütfen tekrar deneyin.",
+            });
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    const loadFollowers = async () => {
+        setLoadingFollowers(true);
+        try {
+            const response = await fetch(`/users/${currentUser.id}/followers`);
+            const data = await response.json();
+            setFollowers(data.followers.data || []);
+        } catch (error) {
+            console.error("Followers error:", error);
+        } finally {
+            setLoadingFollowers(false);
+        }
+    };
+
+    const loadFollowing = async () => {
+        setLoadingFollowing(true);
+        try {
+            const response = await fetch(`/users/${currentUser.id}/following`);
+            const data = await response.json();
+            setFollowing(data.following.data || []);
+        } catch (error) {
+            console.error("Following error:", error);
+        } finally {
+            setLoadingFollowing(false);
         }
     };
 
@@ -224,28 +279,22 @@ const Profil = ({ auth, user, posts }) => {
                             {/* Kullanıcı Bilgileri */}
                             <div className="text-center mb-6">
                                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                                    {currentUser.name
-                                        .split(" ")
-                                        .map(
-                                            (word) =>
-                                                word.charAt(0).toUpperCase() +
-                                                word.slice(1).toLowerCase()
-                                        )
-                                        .join(" ")}
+                                    {user.name}
                                 </h2>
                                 <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
-                                    @
-                                    {currentUser.username ||
-                                        currentUser.name
-                                            ?.toLowerCase()
-                                            .replace(/\s+/g, "") ||
-                                        "user"}
+                                    @{user.username || "user"}
                                 </p>
                             </div>
 
                             {/* Takip İstatistikleri */}
                             <div className="grid grid-cols-3 gap-4">
-                                <div className="text-center">
+                                <div
+                                    className="text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg p-2 transition-colors"
+                                    onClick={() => {
+                                        setShowFollowersModal(true);
+                                        loadFollowers();
+                                    }}
+                                >
                                     <div className="text-2xl font-bold text-gray-900 dark:text-white">
                                         {followersCount}
                                     </div>
@@ -253,7 +302,13 @@ const Profil = ({ auth, user, posts }) => {
                                         {t("followers")}
                                     </div>
                                 </div>
-                                <div className="text-center">
+                                <div
+                                    className="text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg p-2 transition-colors"
+                                    onClick={() => {
+                                        setShowFollowingModal(true);
+                                        loadFollowing();
+                                    }}
+                                >
                                     <div className="text-2xl font-bold text-gray-900 dark:text-white">
                                         {followingCount}
                                     </div>
@@ -276,18 +331,35 @@ const Profil = ({ auth, user, posts }) => {
                                 <div className="mb-6">
                                     <button
                                         onClick={handleFollow}
-                                        className={`w-full px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                                        disabled={uploading}
+                                        className={`w-full px-4 py-3 rounded-full text-sm font-medium transition-all duration-200 flex items-center justify-center space-x-2 ${
                                             isFollowing
-                                                ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                                                : "bg-gray-900 dark:bg-gray-700 text-white hover:bg-gray-800 dark:hover:bg-gray-600"
+                                                ? "bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30"
+                                                : "bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 shadow-sm hover:shadow-md"
+                                        } ${
+                                            uploading
+                                                ? "opacity-50 cursor-not-allowed"
+                                                : ""
                                         }`}
                                     >
-                                        {isFollowing
-                                            ? t(
-                                                  "following_now",
-                                                  "Takip Ediliyor"
-                                              )
-                                            : t("follow")}
+                                        {uploading ? (
+                                            <>
+                                                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                                                <span>
+                                                    {isFollowing
+                                                        ? "Takip Bırakılıyor..."
+                                                        : "Takip Ediliyor..."}
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>
+                                                    {isFollowing
+                                                        ? "Takibi Bırak"
+                                                        : "Takip Et"}
+                                                </span>
+                                            </>
+                                        )}
                                     </button>
                                 </div>
                             )}
@@ -326,6 +398,140 @@ const Profil = ({ auth, user, posts }) => {
                     </div>
                 </div>
             </div>
+
+            {/* Takipçiler Modal */}
+            {showFollowersModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-96 overflow-hidden">
+                        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                Takipçiler ({followersCount})
+                            </h3>
+                            <button
+                                onClick={() => setShowFollowersModal(false)}
+                                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <div className="p-4 overflow-y-auto max-h-80">
+                            {loadingFollowers ? (
+                                <div className="text-center py-8">
+                                    <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                                    <p className="text-gray-500 dark:text-gray-400 mt-2">
+                                        Yükleniyor...
+                                    </p>
+                                </div>
+                            ) : followers.length > 0 ? (
+                                <div className="space-y-3">
+                                    {followers.map((follower) => (
+                                        <div
+                                            key={follower.id}
+                                            className="flex items-center space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg"
+                                        >
+                                            <div className="flex-shrink-0">
+                                                {follower.profile_photo ? (
+                                                    <img
+                                                        src={`/storage/${follower.profile_photo}`}
+                                                        alt={follower.name}
+                                                        className="w-10 h-10 rounded-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                                                        <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                                    {follower.name}
+                                                </p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                                    @{follower.username}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-center py-8">
+                                    <Users className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-2" />
+                                    <p className="text-gray-500 dark:text-gray-400">
+                                        Henüz takipçi yok
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Takip Edilenler Modal */}
+            {showFollowingModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-96 overflow-hidden">
+                        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                Takip Edilenler ({followingCount})
+                            </h3>
+                            <button
+                                onClick={() => setShowFollowingModal(false)}
+                                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <div className="p-4 overflow-y-auto max-h-80">
+                            {loadingFollowing ? (
+                                <div className="text-center py-8">
+                                    <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                                    <p className="text-gray-500 dark:text-gray-400 mt-2">
+                                        Yükleniyor...
+                                    </p>
+                                </div>
+                            ) : following.length > 0 ? (
+                                <div className="space-y-3">
+                                    {following.map((followed) => (
+                                        <div
+                                            key={followed.id}
+                                            className="flex items-center space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg"
+                                        >
+                                            <div className="flex-shrink-0">
+                                                {followed.profile_photo ? (
+                                                    <img
+                                                        src={`/storage/${followed.profile_photo}`}
+                                                        alt={followed.name}
+                                                        className="w-10 h-10 rounded-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                                                        <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                                    {followed.name}
+                                                </p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                                    @{followed.username}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-center py-8">
+                                    <Users className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-2" />
+                                    <p className="text-gray-500 dark:text-gray-400">
+                                        Henüz kimseyi takip etmiyor
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </UserLayout>
     );
 };

@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -127,7 +128,7 @@ Route::middleware('auth')->group(function () {
     })->name('profile');
     
     // Başka kullanıcıların profillerini görüntüleme
-    Route::get('/users/{user}', function ($user) {
+    Route::get('/users/{user}', function (User $user) {
         $posts = $user->posts()->with(['user', 'likes', 'comments'])->latest()->get();
         
         // User'ı privacy_settings ile birlikte yükle
@@ -230,10 +231,17 @@ Route::middleware(['auth', 'admin'])->prefix('panel')->name('admin.')->group(fun
             ]
         ];
 
-        return Inertia::render('Admin/Destek', [
+        return Inertia::render('Admin/Destek/Index', [
             'supportTickets' => $supportTickets
         ]);
     })->name('destek');
+    
+    Route::get('/profile', function () {
+        return Inertia::render('Admin/Profil/Index');
+    })->name('profile');
+    
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo');
 });
 
 require __DIR__.'/auth.php';

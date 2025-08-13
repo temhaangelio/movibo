@@ -28,14 +28,24 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user->load(['posts' => function ($query) {
-            $query->latest()->take(10);
-        }, 'comments' => function ($query) {
-            $query->latest()->take(10);
-        }]);
+        // User stats
+        $userStats = [
+            'totalPosts' => $user->posts()->count(),
+            'totalComments' => $user->comments()->count(),
+            'totalLikes' => $user->likes()->count(),
+        ];
+
+        // Recent posts with counts
+        $userPosts = $user->posts()
+            ->withCount(['likes', 'comments'])
+            ->latest()
+            ->take(10)
+            ->get();
 
         return Inertia::render('Admin/Users/Show', [
             'user' => $user,
+            'userStats' => $userStats,
+            'userPosts' => $userPosts,
         ]);
     }
 
