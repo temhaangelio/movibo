@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark tema için görseldeki renk paleti */
+.dark {
+    --tw-bg-opacity: 1;
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+.dark body {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
