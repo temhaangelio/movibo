@@ -29,14 +29,12 @@ else
 fi
 
 # Dosya izinlerini düzelt
-#sudo chown -R www-data:www-data /var/www/movibo/storage
-#sudo chmod -R 775 /var/www/movibo/storage
 
 sudo chown -R www-data:www-data /var/www/movibo/bootstrap
 sudo chmod -R 775 /var/www/movibo/bootstrap
 
-sudo chown -R www-data:www-data /var/www/movibo/public/storage
-sudo chmod -R 775 /var/www/movibo/public/storage
+#sudo chown -R www-data:www-data /var/www/movibo/public/storage
+#sudo chmod -R 775 /var/www/movibo/public/storage
 
 # Scriptin kendisini çalıştırılabilir yap
 chmod +x /var/www/movibo/update_project.sh
