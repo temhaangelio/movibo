@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      */
@@ -51,7 +53,7 @@ class CommentController extends Controller
         ]);
 
         $comment = auth()->user()->comments()->create($validated);
-        
+
         // Post'un yorum sayısını güncelle
         $post = Post::find($validated['post_id']);
         $post->updateCommentsCount();
@@ -59,8 +61,8 @@ class CommentController extends Controller
         // Bildirim oluştur (kendi paylaşımına yorum yapmazsa)
         if ($post->user_id !== auth()->user()->id) {
             NotificationController::createCommentNotification(
-                auth()->user()->id, 
-                $post->id, 
+                auth()->user()->id,
+                $post->id,
                 $comment->id
             );
         }
@@ -104,7 +106,7 @@ class CommentController extends Controller
 
         $post = $comment->post;
         $comment->delete();
-        
+
         // Post'un yorum sayısını güncelle
         $post->updateCommentsCount();
 
