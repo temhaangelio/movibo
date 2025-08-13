@@ -15,7 +15,7 @@ const Buton = ({
 
     const variants = {
         primary:
-            "bg-gray-400 dark:bg-gray-800 text-white hover:bg-gray-800 dark:hover:bg-blue-700 focus:ring-gray-500 dark:focus:ring-blue-400",
+            "bg-black dark:bg-gray-800 text-white hover:bg-gray-800 dark:hover:bg-blue-700 focus:ring-gray-500 dark:focus:ring-blue-400",
         secondary:
             "bg-gray-200 dark:bg-blue-600 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-blue-700 focus:ring-gray-500 dark:focus:ring-blue-400",
         danger: "bg-red-600 dark:bg-red-700 text-white hover:bg-red-700 dark:hover:bg-red-800 focus:ring-red-500 dark:focus:ring-red-400",

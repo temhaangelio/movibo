@@ -29,6 +29,7 @@ class User extends Authenticatable
         'privacy_settings',
         'terms_accepted',
         'terms_accepted_at',
+        'is_admin',
     ];
 
     /**
@@ -53,6 +54,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'notification_preferences' => 'array',
             'privacy_settings' => 'array',
+            'is_admin' => 'boolean',
         ];
     }
 
@@ -96,8 +98,7 @@ class User extends Authenticatable
     // Admin kontrolü
     public function isAdmin(): bool
     {
-        $adminEmails = ['admin@movibo.com', 'temha@example.com'];
-        return in_array($this->email, $adminEmails);
+        return $this->is_admin === true;
     }
 
     /**

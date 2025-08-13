@@ -145,7 +145,7 @@ const Profil = ({ auth, user, posts }) => {
 
             <div className="px-4 py-6">
                 {/* Profil Bilgileri ve Paylaşımlar */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
+                <div className="grid grid-cols-1 gap-0">
                     {/* Profil Bilgileri - Sol Taraf */}
                     <div className="lg:col-span-1">
                         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">

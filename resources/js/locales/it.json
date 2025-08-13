@@ -190,5 +190,10 @@
     "updated_successfully": "Aggiornato con successo",
     "deleted_successfully": "Eliminato con successo",
     "created_successfully": "Creato con successo",
-    "saved_successfully": "Salvato con successo"
+    "saved_successfully": "Salvato con successo",
+    "terms_acceptance_text": "Accetto i termini di servizio e la politica sulla privacy",
+    "terms_of_service": "Termini di servizio",
+    "view_terms_of_service": "Visualizza termini di servizio",
+    "view": "Visualizza",
+    "film": "Film"
 }

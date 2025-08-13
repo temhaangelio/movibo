@@ -34,7 +34,7 @@ const ThemeToggle = ({ currentTheme, onThemeChange, className = "" }) => {
                     ) : (
                         <Sun
                             className={`absolute right-1 top-1 w-4 h-4 ${
-                                isDark ? "text-gray-400" : "text-yellow-500"
+                                isDark ? "text-gray-400" : "text-black"
                             }`}
                         />
                     )}

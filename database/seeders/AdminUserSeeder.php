@@ -17,6 +17,7 @@ class AdminUserSeeder extends Seeder
         User::create([
             'name' => 'Admin',
             'email' => 'admin@movibo.com',
+            'username' => 'admin',
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
         ]);
@@ -24,6 +25,7 @@ class AdminUserSeeder extends Seeder
         User::create([
             'name' => 'Temha',
             'email' => 'temha@example.com',
+            'username' => 'temha',
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
         ]);

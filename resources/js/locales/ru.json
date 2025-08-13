@@ -190,5 +190,10 @@
     "updated_successfully": "Успешно обновлено",
     "deleted_successfully": "Успешно удалено",
     "created_successfully": "Успешно создано",
-    "saved_successfully": "Успешно сохранено"
+    "saved_successfully": "Успешно сохранено",
+    "terms_acceptance_text": "Я принимаю условия использования и политику конфиденциальности",
+    "terms_of_service": "Условия использования",
+    "view_terms_of_service": "Просмотр условий использования",
+    "view": "Просмотр",
+    "film": "Фильм"
 }

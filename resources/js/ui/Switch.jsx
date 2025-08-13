@@ -56,8 +56,8 @@ const Switch = ({
                 after:transition-all 
                 after:duration-200
                 dark:border-gray-500 
-                peer-checked:bg-blue-600
-                dark:peer-checked:bg-blue-500
+                peer-checked:bg-black
+                dark:peer-checked:bg-black
                 dark:after:border-gray-500
                 ${switchClasses[size]}
                 ${disabled ? "cursor-not-allowed" : ""}

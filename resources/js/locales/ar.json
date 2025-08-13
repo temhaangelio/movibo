@@ -190,5 +190,10 @@
     "updated_successfully": "تم التحديث بنجاح",
     "deleted_successfully": "تم الحذف بنجاح",
     "created_successfully": "تم الإنشاء بنجاح",
-    "saved_successfully": "تم الحفظ بنجاح"
+    "saved_successfully": "تم الحفظ بنجاح",
+    "terms_acceptance_text": "أوافق على شروط الخدمة وسياسة الخصوصية",
+    "terms_of_service": "شروط الخدمة",
+    "view_terms_of_service": "عرض شروط الخدمة",
+    "view": "عرض",
+    "film": "فيلم"
 }

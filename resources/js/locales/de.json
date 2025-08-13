@@ -190,5 +190,10 @@
     "updated_successfully": "Erfolgreich aktualisiert",
     "deleted_successfully": "Erfolgreich gelöscht",
     "created_successfully": "Erfolgreich erstellt",
-    "saved_successfully": "Erfolgreich gespeichert"
+    "saved_successfully": "Erfolgreich gespeichert",
+    "terms_acceptance_text": "Ich akzeptiere die Nutzungsbedingungen und Datenschutzrichtlinie",
+    "terms_of_service": "Nutzungsbedingungen",
+    "view_terms_of_service": "Nutzungsbedingungen anzeigen",
+    "view": "Anzeigen",
+    "film": "Film"
 }

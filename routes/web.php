@@ -170,13 +170,70 @@ Route::middleware('auth')->group(function () {
 
 
 // Admin rotaları
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('panel')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class);
     Route::get('/posts', [AdminPostController::class, 'index'])->name('posts.index');
     Route::get('/posts/{post}', [AdminPostController::class, 'show'])->name('posts.show');
     Route::delete('/posts/{post}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
     Route::resource('comments', AdminCommentController::class);
+    Route::get('/destek', function () {
+        // Örnek destek talepleri - gerçek uygulamada veritabanından gelecek
+        $supportTickets = [
+            [
+                'id' => 1,
+                'user' => [
+                    'name' => 'Ahmet Yılmaz',
+                    'email' => 'ahmet@example.com'
+                ],
+                'subject' => 'Hesap erişim sorunu',
+                'message' => 'Hesabıma giriş yapamıyorum. Şifremi sıfırladım ama hala sorun yaşıyorum.',
+                'status' => 'open',
+                'created_at' => '2024-01-15T10:30:00Z',
+                'replies_count' => 0
+            ],
+            [
+                'id' => 2,
+                'user' => [
+                    'name' => 'Ayşe Demir',
+                    'email' => 'ayse@example.com'
+                ],
+                'subject' => 'Video yükleme problemi',
+                'message' => 'Film paylaşımı yaparken video yükleyemiyorum. Dosya boyutu 50MB ve MP4 formatında.',
+                'status' => 'in_progress',
+                'created_at' => '2024-01-14T15:45:00Z',
+                'replies_count' => 2
+            ],
+            [
+                'id' => 3,
+                'user' => [
+                    'name' => 'Mehmet Kaya',
+                    'email' => 'mehmet@example.com'
+                ],
+                'subject' => 'Bildirim ayarları',
+                'message' => 'Bildirim ayarlarını değiştirmek istiyorum ama ayarlar sayfasında bulamıyorum.',
+                'status' => 'resolved',
+                'created_at' => '2024-01-13T09:20:00Z',
+                'replies_count' => 1
+            ],
+            [
+                'id' => 4,
+                'user' => [
+                    'name' => 'Fatma Özkan',
+                    'email' => 'fatma@example.com'
+                ],
+                'subject' => 'Takip sistemi sorunu',
+                'message' => 'Kullanıcıları takip edebiliyorum ama takipçilerim listesinde görünmüyor.',
+                'status' => 'open',
+                'created_at' => '2024-01-12T14:15:00Z',
+                'replies_count' => 0
+            ]
+        ];
+
+        return Inertia::render('Admin/Destek', [
+            'supportTickets' => $supportTickets
+        ]);
+    })->name('destek');
 });
 
 require __DIR__.'/auth.php';

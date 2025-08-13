@@ -19,10 +19,8 @@ class AdminMiddleware
             return redirect()->route('login');
         }
 
-        // Basit admin kontrolü - email'e göre
-        $adminEmails = ['admin@movibo.com', 'temha@example.com'];
-        
-        if (!in_array(auth()->user()->email, $adminEmails)) {
+        // Admin kontrolü - is_admin alanına göre
+        if (!auth()->user()->isAdmin()) {
             abort(403, 'Bu sayfaya erişim yetkiniz yok.');
         }
 

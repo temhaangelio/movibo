@@ -19,6 +19,7 @@ import {
     Palette,
     Translate,
     CaretDown,
+    FileText,
 } from "@phosphor-icons/react";
 
 const Ayarlar = ({ auth }) => {
@@ -344,7 +345,7 @@ const Ayarlar = ({ auth }) => {
                         </div>
 
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center">
+                            <div className="flex items-center ">
                                 <Translate className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
                                 <div>
                                     <h3 className="text-sm font-medium text-gray-900 dark:text-white">
@@ -553,6 +554,27 @@ const Ayarlar = ({ auth }) => {
                                     </div>
                                 </Dropdown.Content>
                             </Dropdown>
+                        </div>
+
+                        <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
+                            <div className="flex items-center">
+                                <FileText className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
+                                <div>
+                                    <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                                        {t("terms_of_service")}
+                                    </h3>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        {t("view_terms_of_service")}
+                                    </p>
+                                </div>
+                            </div>
+                            <Buton
+                                onClick={() => router.visit("/terms")}
+                                variant="secondary"
+                                size="sm"
+                            >
+                                {t("view")}
+                            </Buton>
                         </div>
                     </div>
                 </Card>

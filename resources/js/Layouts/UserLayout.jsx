@@ -11,6 +11,7 @@ import {
     User,
     Sun,
     Moon,
+    Shield,
 } from "@phosphor-icons/react";
 
 const UserLayout = ({ children, auth }) => {
@@ -70,6 +71,17 @@ const UserLayout = ({ children, auth }) => {
                             <ApplicationLogo className="text-gray-900 text-3xl dark:text-white" />
                         </div>
                         <div className="flex items-center space-x-2">
+                            {/* Admin Panel - Sadece admin kullanıcılar için */}
+                            {userAuth?.user?.is_admin && (
+                                <Link
+                                    href="/panel"
+                                    className="p-2 text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300 transition-colors"
+                                    title="Admin Panel"
+                                >
+                                    <Shield className="w-7 h-7" />
+                                </Link>
+                            )}
+                            
                             {/* Ayarlar */}
                             <Link
                                 href="/settings"
