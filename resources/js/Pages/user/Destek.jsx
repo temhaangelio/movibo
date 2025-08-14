@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Head, useForm } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
 import UserLayout from "/Layouts/UserLayout";
 import TextInput from "/ui/TextInput";
@@ -22,17 +22,17 @@ const Destek = ({ auth }) => {
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const {
-        data: ticketData,
-        setData: setTicketData,
-        post: postTicket,
-        processing: ticketProcessing,
-        errors: ticketErrors,
-        reset: resetTicket,
-    } = useForm({
+    const [ticketData, setTicketData] = useState({
         subject: "",
         message: "",
     });
+    const [ticketProcessing, setTicketProcessing] = useState(false);
+    const [ticketErrors, setTicketErrors] = useState({});
+
+    const resetTicket = () => {
+        setTicketData({ subject: "", message: "" });
+        setTicketErrors({});
+    };
 
     // Destek isteklerini yükle
     const loadTickets = async () => {
@@ -57,17 +57,43 @@ const Destek = ({ auth }) => {
 
     const handleTicketSubmit = (e) => {
         e.preventDefault();
-        postTicket("/support", {
-            onSuccess: () => {
-                setIsNewTicketModalOpen(false);
-                resetTicket();
-                loadTickets(); // Listeyi yenile
-                alert("Destek isteğiniz başarıyla gönderildi!");
+        setTicketProcessing(true);
+
+        // CSRF token'ı al
+        const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+        const csrfToken = csrfMeta ? csrfMeta.getAttribute("content") : "";
+
+        // Fetch ile gönder
+        fetch("/support", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken,
             },
-            onError: (errors) => {
-                console.error("Destek isteği gönderilirken hata:", errors);
-            },
-        });
+            credentials: "same-origin",
+            body: JSON.stringify({
+                subject: ticketData.subject,
+                message: ticketData.message,
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    setIsNewTicketModalOpen(false);
+                    resetTicket();
+                    loadTickets(); // Listeyi yenile
+                    alert("Destek isteğiniz başarıyla gönderildi!");
+                } else {
+                    console.error("Destek isteği gönderilirken hata:", data);
+                    setTicketErrors(data.errors || {});
+                }
+            })
+            .catch((error) => {
+                console.error("Destek isteği gönderilirken hata:", error);
+            })
+            .finally(() => {
+                setTicketProcessing(false);
+            });
     };
 
     const openNewTicketModal = () => {
@@ -121,20 +147,23 @@ const Destek = ({ auth }) => {
             <div className="px-4 py-6">
                 {/* Header */}
                 <div className="mb-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                Destek
-                            </h1>
-                            <p className="text-gray-600 dark:text-gray-400 mt-1">
-                                Sorun yaşıyorsanız destek ekibimizle iletişime geçin
-                            </p>
-                        </div>
-                        <Buton onClick={openNewTicketModal} variant="primary">
-                            <Plus className="w-4 h-4 mr-2" />
-                            Yeni Destek İsteği
-                        </Buton>
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                            Destek
+                        </h1>
+                        <p className="text-gray-600 dark:text-gray-400">
+                            Sorun yaşıyorsanız destek ekibimizle iletişime
+                            geçin.
+                        </p>
                     </div>
+                    <Buton
+                        className="w-full md:w-auto mt-4"
+                        onClick={openNewTicketModal}
+                        variant="primary"
+                    >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Yeni Destek İsteği
+                    </Buton>
                 </div>
 
                 {/* Destek İstekleri Listesi */}
@@ -146,7 +175,11 @@ const Destek = ({ auth }) => {
 
                         {loading ? (
                             <div className="text-center py-8">
-                                <Loading size="lg" showText={true} text="Yükleniyor..." />
+                                <Loading
+                                    size="lg"
+                                    showText={true}
+                                    text="Yükleniyor..."
+                                />
                             </div>
                         ) : tickets.length === 0 ? (
                             <div className="text-center py-8">
@@ -154,7 +187,10 @@ const Destek = ({ auth }) => {
                                 <p className="text-gray-500 dark:text-gray-400 mb-4">
                                     Henüz destek isteğiniz bulunmuyor.
                                 </p>
-                                <Buton onClick={openNewTicketModal} variant="primary">
+                                <Buton
+                                    onClick={openNewTicketModal}
+                                    variant="primary"
+                                >
                                     İlk Destek İsteğinizi Gönderin
                                 </Buton>
                             </div>
@@ -169,7 +205,9 @@ const Destek = ({ auth }) => {
                                             <div className="flex-1">
                                                 <div className="flex items-center space-x-3 mb-2">
                                                     <div className="flex items-center space-x-2">
-                                                        {getStatusIcon(ticket.status)}
+                                                        {getStatusIcon(
+                                                            ticket.status
+                                                        )}
                                                         <h3 className="font-medium text-gray-900 dark:text-white">
                                                             {ticket.subject}
                                                         </h3>
@@ -179,7 +217,9 @@ const Destek = ({ auth }) => {
                                                             ticket.status
                                                         )}`}
                                                     >
-                                                        {getStatusText(ticket.status)}
+                                                        {getStatusText(
+                                                            ticket.status
+                                                        )}
                                                     </span>
                                                 </div>
                                                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">
@@ -191,13 +231,17 @@ const Destek = ({ auth }) => {
                                                         <span>
                                                             {new Date(
                                                                 ticket.created_at
-                                                            ).toLocaleDateString("tr-TR")}
+                                                            ).toLocaleDateString(
+                                                                "tr-TR"
+                                                            )}
                                                         </span>
                                                     </div>
                                                     {ticket.admin_reply && (
                                                         <div className="flex items-center space-x-1">
                                                             <ChatCircle className="w-3 h-3" />
-                                                            <span>Yanıtlandı</span>
+                                                            <span>
+                                                                Yanıtlandı
+                                                            </span>
                                                         </div>
                                                     )}
                                                 </div>
@@ -221,7 +265,9 @@ const Destek = ({ auth }) => {
                                                         <p className="text-xs text-blue-600 dark:text-blue-400 mt-2">
                                                             {new Date(
                                                                 ticket.replied_at
-                                                            ).toLocaleDateString("tr-TR")}
+                                                            ).toLocaleDateString(
+                                                                "tr-TR"
+                                                            )}
                                                         </p>
                                                     )}
                                                 </div>
@@ -246,7 +292,12 @@ const Destek = ({ auth }) => {
                     <TextInput
                         label="Konu"
                         value={ticketData.subject}
-                        onChange={(e) => setTicketData("subject", e.target.value)}
+                        onChange={(e) =>
+                            setTicketData({
+                                ...ticketData,
+                                subject: e.target.value,
+                            })
+                        }
                         error={ticketErrors.subject}
                         placeholder="Sorununuzun kısa açıklaması"
                         required
@@ -257,7 +308,12 @@ const Destek = ({ auth }) => {
                         </label>
                         <textarea
                             value={ticketData.message}
-                            onChange={(e) => setTicketData("message", e.target.value)}
+                            onChange={(e) =>
+                                setTicketData({
+                                    ...ticketData,
+                                    message: e.target.value,
+                                })
+                            }
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400 resize-none"
                             rows={5}
                             placeholder="Sorununuzu detaylı bir şekilde açıklayın..."

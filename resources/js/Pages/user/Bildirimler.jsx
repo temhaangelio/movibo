@@ -1,235 +1,242 @@
 import React, { useState, useEffect } from "react";
-import UserLayout from "/Layouts/UserLayout";
-import { Head } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
+import UserLayout from "/Layouts/UserLayout";
 import Buton from "/ui/Buton";
+import Card from "/ui/Card";
+import Pagination from "/ui/Pagination";
 import TimeAgo from "/ui/TimeAgo";
-import { Bell, Heart, UserPlus, ChatCircle } from "@phosphor-icons/react";
+import {
+    Bell,
+    Check,
+    CheckCircle,
+    Trash,
+    User,
+    Heart,
+    ChatCircle,
+    Plus,
+    Question,
+} from "@phosphor-icons/react";
 
-const Bildirimler = ({ auth }) => {
+const Bildirimler = ({
+    notifications = { data: [], links: [], total: 0, from: 0, to: 0 },
+}) => {
     const { t } = useTranslation();
-    const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
-    const [loading, setLoading] = useState(true);
-    const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
-
-    // Bildirimleri yükle
-    const loadNotifications = async (pageNum = 1) => {
-        try {
-            const response = await fetch(`/api/notifications?page=${pageNum}`);
-            const data = await response.json();
-
-            if (pageNum === 1) {
-                setNotifications(data.notifications.data);
-            } else {
-                setNotifications((prev) => [
-                    ...prev,
-                    ...data.notifications.data,
-                ]);
-            }
-
-            setUnreadCount(data.unreadCount);
-            setHasMore(data.notifications.next_page_url !== null);
-            setPage(data.notifications.current_page);
-        } catch (error) {
-            console.error("Bildirimler yüklenirken hata:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Bildirimi okundu olarak işaretle
-    const markAsRead = async (notificationId) => {
-        try {
-            const response = await fetch(
-                `/api/notifications/${notificationId}/read`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document
-                            .querySelector('meta[name="csrf-token"]')
-                            .getAttribute("content"),
-                    },
-                }
-            );
-
-            if (response.ok) {
-                setNotifications((prev) =>
-                    prev.map((notification) =>
-                        notification.id === notificationId
-                            ? { ...notification, is_read: true }
-                            : notification
-                    )
-                );
-                setUnreadCount((prev) => Math.max(0, prev - 1));
-            }
-        } catch (error) {
-            console.error("Bildirim işaretlenirken hata:", error);
-        }
-    };
-
-    // Tüm bildirimleri okundu olarak işaretle
-    const markAllAsRead = async () => {
-        try {
-            const response = await fetch("/api/notifications/read-all", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"),
-                },
-            });
-
-            if (response.ok) {
-                setNotifications((prev) =>
-                    prev.map((notification) => ({
-                        ...notification,
-                        is_read: true,
-                    }))
-                );
-                setUnreadCount(0);
-            }
-        } catch (error) {
-            console.error("Bildirimler işaretlenirken hata:", error);
-        }
-    };
-
-    // Daha fazla bildirim yükle
-    const loadMore = () => {
-        if (hasMore && !loading) {
-            loadNotifications(page + 1);
-        }
-    };
 
     useEffect(() => {
-        loadNotifications();
+        // Okunmamış bildirim sayısını al
+        fetch("/api/notifications/unread-count")
+            .then((response) => response.json())
+            .then((data) => setUnreadCount(data.count))
+            .catch((error) =>
+                console.error("Bildirim sayısı alınamadı:", error)
+            );
     }, []);
 
-    const getTypeColor = (type) => {
+    const markAsRead = (notificationId) => {
+        fetch(`/api/notifications/${notificationId}/mark-read`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    // Sayfayı yenile
+                    router.reload();
+                }
+            })
+            .catch((error) => console.error("Bildirim işaretlenemedi:", error));
+    };
+
+    const markAllAsRead = () => {
+        fetch("/api/notifications/mark-all-read", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    // Sayfayı yenile
+                    router.reload();
+                }
+            })
+            .catch((error) =>
+                console.error("Bildirimler işaretlenemedi:", error)
+            );
+    };
+
+    const getNotificationIcon = (type) => {
         switch (type) {
-            case "like":
-                return "text-red-500";
             case "follow":
-                return "text-blue-500";
+                return <User className="w-5 h-5 text-blue-500" />;
+            case "like":
+                return <Heart className="w-5 h-5 text-red-500" />;
             case "comment":
-                return "text-green-500";
+                return <ChatCircle className="w-5 h-5 text-green-500" />;
+            case "post":
+                return <Plus className="w-5 h-5 text-purple-500" />;
+            case "support":
+                return <Question className="w-5 h-5 text-blue-500" />;
             default:
-                return "text-gray-500";
+                return <Bell className="w-5 h-5 text-gray-500" />;
+        }
+    };
+
+    const getNotificationLink = (notification) => {
+        switch (notification.type) {
+            case "support":
+                return "/support";
+            case "follow":
+                return `/profile/${notification.from_user_id}`;
+            case "like":
+            case "comment":
+                return `/post/${notification.data?.post_id}`;
+            default:
+                return "#";
         }
     };
 
     return (
-        <UserLayout auth={auth}>
-            <Head title={t("notifications")} />
-            <div className="px-4 py-6">
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                    {/* Bildirim Listesi */}
-                    <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                        {loading && notifications.length === 0 ? (
-                            <div className="p-6 text-center">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-4 border-gray-900 mx-auto"></div>
-                                <p className="mt-2 text-gray-500 dark:text-gray-400">
-                                    {t(
-                                        "loading_notifications",
-                                        "Bildirimler yükleniyor..."
-                                    )}
-                                </p>
-                            </div>
-                        ) : notifications.length === 0 ? (
-                            <div className="p-6 text-center">
-                                <Bell className="w-12 h-12  mx-auto mb-4" />
-                                <p>{t("no_notifications")}</p>
-                            </div>
-                        ) : (
-                            notifications.map((notification) => (
+        <UserLayout>
+            <Head title="Bildirimler" />
+
+            <div className="w-full mx-auto py-6">
+                <div className="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                            Bildirimler
+                        </h1>
+                        <p className="text-gray-600 dark:text-gray-400 mt-1">
+                            Tüm bildirimlerinizi buradan takip edebilirsiniz
+                        </p>
+                    </div>
+                    {unreadCount > 0 && (
+                        <Buton
+                            onClick={markAllAsRead}
+                            variant="outline"
+                            className="flex items-center space-x-2"
+                        >
+                            <CheckCircle className="w-4 h-4" />
+                            <span>Tümünü Okundu İşaretle</span>
+                        </Buton>
+                    )}
+                </div>
+
+                <Card className="p-6">
+                    {notifications.data?.length === 0 ? (
+                        <div className="text-center py-12">
+                            <Bell className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                                Henüz bildiriminiz yok!
+                            </h3>
+                            <p className="text-gray-500 dark:text-gray-400">
+                                Yeni aktiviteler olduğunda burada görünecek.
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="space-y-4">
+                            {notifications.data?.map((notification) => (
                                 <div
                                     key={notification.id}
-                                    className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
-                                        !notification.is_read
-                                            ? "bg-blue-50 dark:bg-blue-900/20"
-                                            : ""
+                                    className={`flex items-start space-x-4 p-4 rounded-lg border transition-colors ${
+                                        notification.is_read
+                                            ? "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+                                            : "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700"
                                     }`}
-                                    onClick={() =>
-                                        !notification.is_read &&
-                                        markAsRead(notification.id)
-                                    }
                                 >
-                                    <div className="flex items-start space-x-3">
-                                        {/* Kullanıcı Avatar */}
-                                        <div className="flex-shrink-0">
-                                            <div className="w-10 h-10 bg-gray-900 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                                                <span className="text-white font-medium">
-                                                    {notification.from_user?.name?.charAt(
-                                                        0
-                                                    ) || "U"}
-                                                </span>
-                                            </div>
-                                        </div>
+                                    <div className="flex-shrink-0 mt-1">
+                                        {getNotificationIcon(notification.type)}
+                                    </div>
 
-                                        {/* Bildirim İçeriği */}
-                                        <div className="flex-1 min-w-0">
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center justify-between">
                                             <div className="flex items-center space-x-2">
-                                                <p className="text-sm text-gray-900 dark:text-white">
-                                                    {notification.content}
-                                                </p>
+                                                {notification.from_user && (
+                                                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                                                        <span className="text-white text-xs font-semibold">
+                                                            {notification.from_user.name
+                                                                .charAt(0)
+                                                                .toUpperCase()}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                                <div>
+                                                    <p className="text-sm text-gray-900 dark:text-white">
+                                                        {notification.content}
+                                                    </p>
+                                                    <div className="flex items-center space-x-2 mt-1">
+                                                        <TimeAgo
+                                                            date={
+                                                                notification.created_at
+                                                            }
+                                                        />
+                                                        {!notification.is_read && (
+                                                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                                                Yeni
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center space-x-2">
                                                 {!notification.is_read && (
-                                                    <div className="w-2 h-2 bg-gray-900 rounded-full"></div>
+                                                    <button
+                                                        onClick={() =>
+                                                            markAsRead(
+                                                                notification.id
+                                                            )
+                                                        }
+                                                        className="p-1 text-gray-400 hover:text-green-500 transition-colors"
+                                                        title="Okundu olarak işaretle"
+                                                    >
+                                                        <Check className="w-4 h-4" />
+                                                    </button>
+                                                )}
+                                                {getNotificationLink(
+                                                    notification
+                                                ) !== "#" && (
+                                                    <Link
+                                                        href={getNotificationLink(
+                                                            notification
+                                                        )}
+                                                        className="p-1 text-gray-400 hover:text-blue-500 transition-colors"
+                                                        title="Görüntüle"
+                                                    >
+                                                        <CheckCircle className="w-4 h-4" />
+                                                    </Link>
                                                 )}
                                             </div>
-                                            <TimeAgo
-                                                date={notification.created_at}
-                                                className="text-xs mt-1"
-                                            />
-                                        </div>
-
-                                        {/* Bildirim Türü İkonu */}
-                                        <div className="flex-shrink-0">
-                                            {notification.type === "like" && (
-                                                <Heart
-                                                    className={`w-5 h-5 ${getTypeColor(
-                                                        notification.type
-                                                    )}`}
-                                                />
-                                            )}
-                                            {notification.type === "follow" && (
-                                                <UserPlus
-                                                    className={`w-5 h-5 ${getTypeColor(
-                                                        notification.type
-                                                    )}`}
-                                                />
-                                            )}
-                                            {notification.type ===
-                                                "comment" && (
-                                                <ChatCircle
-                                                    className={`w-5 h-5 ${getTypeColor(
-                                                        notification.type
-                                                    )}`}
-                                                />
-                                            )}
                                         </div>
                                     </div>
                                 </div>
-                            ))
-                        )}
-                    </div>
-
-                    {/* Daha Fazla Yükle */}
-                    {hasMore && (
-                        <div className="p-4 text-center">
-                            <Buton
-                                onClick={loadMore}
-                                disabled={loading}
-                                variant="secondary"
-                                size="sm"
-                            >
-                                {loading ? "Yükleniyor..." : "Daha Fazla"}
-                            </Buton>
+                            ))}
                         </div>
                     )}
-                </div>
+
+                    {/* Pagination */}
+                    {notifications.links && (
+                        <div className="mt-6">
+                            <Pagination
+                                links={notifications.links}
+                                total={notifications.total || 0}
+                                from={notifications.from || 0}
+                                to={notifications.to || 0}
+                            />
+                        </div>
+                    )}
+                </Card>
             </div>
         </UserLayout>
     );

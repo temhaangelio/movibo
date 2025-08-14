@@ -139,7 +139,7 @@ const Discover = ({ auth }) => {
                 />
 
                 {/* Önerilen Filmler */}
-                <div className="px-4 py-4 sm:px-6">
+                <div className="py-4">
                     {loading ? (
                         <div className="text-center py-12">
                             <Loading

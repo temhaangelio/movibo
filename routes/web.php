@@ -162,9 +162,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/settings/delete-account', [ProfileController::class, 'deleteAccount'])->name('settings.delete-account');
 
     // Destek rotaları
-    Route::get('/support', [App\Http\Controllers\SupportController::class, 'index'])->name('support');
-    Route::post('/support', [App\Http\Controllers\SupportController::class, 'store'])->name('support.store');
-    Route::get('/api/support/tickets', [App\Http\Controllers\SupportController::class, 'getUserTickets'])->name('api.support.tickets');
+Route::get('/support', [App\Http\Controllers\SupportController::class, 'index'])->name('support');
+Route::post('/support', [App\Http\Controllers\SupportController::class, 'store'])->name('support.store');
+Route::get('/api/support/tickets', [App\Http\Controllers\SupportController::class, 'getUserTickets'])->name('api.support.tickets');
+
+// Bildirim rotaları
+Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications');
+Route::post('/api/notifications/{notification}/mark-read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
+Route::post('/api/notifications/mark-all-read', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+Route::get('/api/notifications/unread-count', [App\Http\Controllers\NotificationController::class, 'getUnreadCount'])->name('notifications.unread-count');
 
     // Bildirim rotaları
     Route::get('/notifications', function () {
@@ -202,6 +208,12 @@ Route::middleware(['auth', 'admin'])->prefix('panel')->name('admin.')->group(fun
     Route::get('/posts/{post}', [AdminPostController::class, 'show'])->name('posts.show');
     Route::delete('/posts/{post}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
     Route::resource('comments', AdminCommentController::class);
+    
+    // Admin destek rotaları
+    Route::get('/support', [App\Http\Controllers\Admin\SupportController::class, 'index'])->name('support.index');
+    Route::get('/support/{ticket}', [App\Http\Controllers\Admin\SupportController::class, 'show'])->name('support.show');
+    Route::patch('/support/{ticket}', [App\Http\Controllers\Admin\SupportController::class, 'update'])->name('support.update');
+    Route::delete('/support/{ticket}', [App\Http\Controllers\Admin\SupportController::class, 'destroy'])->name('support.destroy');
     Route::get('/destek', function () {
         // Örnek destek talepleri - gerçek uygulamada veritabanından gelecek
         $supportTickets = [

@@ -21,6 +21,7 @@ import {
     CaretDown,
     FileText,
     Question,
+    ArrowRight,
 } from "@phosphor-icons/react";
 
 const Ayarlar = ({ auth }) => {
@@ -223,9 +224,9 @@ const Ayarlar = ({ auth }) => {
         <UserLayout auth={auth}>
             <Head title={t("settings")} />
 
-            <div className="px-4 py-6 bg-gray-50 dark:bg-gray-900">
+            <div className="pb-4 bg-gray-50 dark:bg-gray-900 mt-4">
                 <Card>
-                    <div className="p-6 space-y-4">
+                    <div className="p-4 space-y-4">
                         <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
                             <div className="flex items-center">
                                 <User className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
@@ -594,32 +595,28 @@ const Ayarlar = ({ auth }) => {
                                     </p>
                                 </div>
                             </div>
-                            <Question className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                            <ArrowRight className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                         </Link>
                     </div>
                 </Card>
             </div>
 
-            <div className="px-4 pb-6">
-                <Card>
-                    <div className="p-6 space-y-3">
-                        <Buton
-                            type="button"
-                            variant="danger"
-                            onClick={() => router.post("/logout")}
-                            className="w-full"
-                        >
-                            {t("logout")}
-                        </Buton>
-                        <Buton
-                            variant="danger"
-                            onClick={() => setIsConfirmOpen(true)}
-                            className="w-full"
-                        >
-                            {t("delete_account")}
-                        </Buton>
-                    </div>
-                </Card>
+            <div className="space-y-3">
+                <Buton
+                    type="button"
+                    variant="danger"
+                    onClick={() => router.post("/logout")}
+                    className="w-full"
+                >
+                    {t("logout")}
+                </Buton>
+                <Buton
+                    variant="danger"
+                    onClick={() => setIsConfirmOpen(true)}
+                    className="w-full"
+                >
+                    {t("delete_account")}
+                </Buton>
             </div>
 
             <Confirm

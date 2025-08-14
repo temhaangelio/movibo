@@ -210,7 +210,7 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
     return (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
             {/* Kullanıcı Bilgisi */}
-            <div className="flex items-center p-4">
+            <div className="flex items-center p-3">
                 <Link
                     href={
                         post.user?.username
@@ -301,7 +301,7 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
             </div>
 
             {/* Media Bilgisi */}
-            <div className="p-4">
+            <div className="p-3">
                 <div className="mb-3">
                     <Link href={`/movies/${post.media_id}`}>
                         <h3 className="font-semibold text-gray-900 dark:text-white text-lg mb-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">

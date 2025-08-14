@@ -18,6 +18,7 @@ import {
 const UserLayout = ({ children, auth }) => {
     const { t } = useTranslation();
     const [isDark, setIsDark] = useState(false);
+    const [unreadCount, setUnreadCount] = useState(0);
 
     // Auth prop'u yoksa usePage'den al
     const userAuth = auth || usePage().props.auth;
@@ -43,6 +44,16 @@ const UserLayout = ({ children, auth }) => {
         return () => observer.disconnect();
     }, []);
 
+    // Okunmamış bildirim sayısını al
+    useEffect(() => {
+        fetch("/api/notifications/unread-count")
+            .then((response) => response.json())
+            .then((data) => setUnreadCount(data.count))
+            .catch((error) =>
+                console.error("Bildirim sayısı alınamadı:", error)
+            );
+    }, []);
+
     const toggleTheme = () => {
         const currentTheme = localStorage.getItem("theme") || "auto";
         const newTheme = currentTheme === "dark" ? "light" : "dark";
@@ -63,30 +74,30 @@ const UserLayout = ({ children, auth }) => {
     };
 
     return (
-        <div className="min-h-screen mx-auto bg-gray-50 dark:bg-gray-900 flex flex-col">
-            <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
+            {/* Mobile Header */}
+            <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
                 <div className="px-4 py-3">
                     <div className="flex items-center justify-between">
                         <Link href="/home" className="flex items-center">
-                            <ApplicationLogo className="text-gray-900 text-3xl dark:text-white" />
+                            <ApplicationLogo className="text-gray-900 text-2xl dark:text-white" />
                         </Link>
-                        <div className="flex items-center">
+                        <div className="flex items-center space-x-2">
                             {userAuth?.user?.is_admin && (
                                 <Link
                                     href="/panel"
-                                    className="p-2 transition-colors"
+                                    className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                                     title="Admin Panel"
                                 >
-                                    <Shield className="w-7 h-7" />
+                                    <Shield className="w-6 h-6" />
                                 </Link>
                             )}
-
                             <Link
                                 href="/settings"
                                 className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                                 title={t("settings")}
                             >
-                                <Gear className="w-7 h-7" />
+                                <Gear className="w-6 h-6" />
                             </Link>
                         </div>
                     </div>
@@ -94,20 +105,24 @@ const UserLayout = ({ children, auth }) => {
             </header>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto pb-20">{children}</main>
+            <main className="flex-1 overflow-y-auto pb-24 px-4">
+                {children}
+            </main>
 
-            {/* Bottom Navigation Bar - Tüm ekran boyutlarında görünür */}
-            <nav className="fixed  bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex justify-around">
+            {/* Mobile Bottom Navigation */}
+            <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50">
+                <div className="flex justify-around items-center py-2">
                     {/* Ana Sayfa */}
                     <Link
                         href="/home"
-                        className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
+                            url.startsWith("/home")
+                                ? "text-gray-900 dark:text-white"
+                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        }`}
                     >
                         <House
-                            className={`w-8 h-8 mb-1 ${
-                                url.startsWith("/home") ? "" : ""
-                            }`}
+                            className="w-6 h-6"
                             weight={
                                 url.startsWith("/home") ? "fill" : "regular"
                             }
@@ -117,12 +132,14 @@ const UserLayout = ({ children, auth }) => {
                     {/* Keşfet */}
                     <Link
                         href="/discover"
-                        className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
+                            url.startsWith("/discover")
+                                ? "text-gray-900 dark:text-white"
+                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        }`}
                     >
                         <MagnifyingGlass
-                            className={`w-8 h-8 mr-2 ${
-                                url.startsWith("/discover") ? "" : ""
-                            }`}
+                            className="w-6 h-6"
                             weight={
                                 url.startsWith("/discover") ? "fill" : "regular"
                             }
@@ -132,14 +149,14 @@ const UserLayout = ({ children, auth }) => {
                     {/* Yeni Paylaşım */}
                     <Link
                         href="/create"
-                        className="flex flex-col items-center py-3 px-4 text-gray-600 dark:text-gray-400"
+                        className="flex flex-col items-center py-2 px-3"
                     >
                         <div
-                            className={`w-12 h-12 rounded-full flex items-center justify-center mb-1 ${
+                            className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg ${
                                 url.startsWith("/create")
-                                    ? "bg-black dark:bg-white"
-                                    : "bg-gray-900 dark:bg-gray-700"
-                            }`}
+                                    ? "bg-blue-600 dark:bg-blue-500"
+                                    : "bg-gray-900 dark:bg-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600"
+                            } transition-colors`}
                         >
                             <Plus
                                 className="w-6 h-6 text-white"
@@ -151,29 +168,40 @@ const UserLayout = ({ children, auth }) => {
                     {/* Bildirimler */}
                     <Link
                         href="/notifications"
-                        className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors relative ${
+                            url.startsWith("/notifications")
+                                ? "text-gray-900 dark:text-white"
+                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        }`}
                     >
-                        <Bell
-                            className={`w-8 h-8 mr-2 ${
-                                url.startsWith("/notifications") ? "" : ""
-                            }`}
-                            weight={
-                                url.startsWith("/notifications")
-                                    ? "fill"
-                                    : "regular"
-                            }
-                        />
+                        <div className="relative">
+                            <Bell
+                                className="w-6 h-6"
+                                weight={
+                                    url.startsWith("/notifications")
+                                        ? "fill"
+                                        : "regular"
+                                }
+                            />
+                            {unreadCount > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                                    {unreadCount > 99 ? "99+" : unreadCount}
+                                </span>
+                            )}
+                        </div>
                     </Link>
 
                     {/* Profil */}
                     <Link
                         href="/profile"
-                        className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
+                            url.startsWith("/profile")
+                                ? "text-gray-900 dark:text-white"
+                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        }`}
                     >
                         <User
-                            className={`w-8 h-8 mr-2 ${
-                                url.startsWith("/profile") ? "" : ""
-                            }`}
+                            className="w-6 h-6"
                             weight={
                                 url.startsWith("/profile") ? "fill" : "regular"
                             }

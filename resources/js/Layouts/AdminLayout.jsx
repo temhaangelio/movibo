@@ -14,6 +14,7 @@ import {
     Globe,
     SignOut,
     Calendar,
+    Question,
 } from "@phosphor-icons/react";
 
 export default function AdminLayout({ children }) {
@@ -104,14 +105,14 @@ export default function AdminLayout({ children }) {
                             Aktiviteler
                         </Link>
                         <Link
-                            href="/panel/destek"
+                            href="/panel/support"
                             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                                currentPath.startsWith("/panel/destek")
+                                currentPath.startsWith("/panel/support")
                                     ? "bg-accent-blue/10 dark:bg-accent-blue/30 text-blue-500 dark:text-accent-blue"
                                     : "text-gray-700 dark:text-gray-300 hover:bg-accent-blue/10 dark:hover:bg-accent-blue/20 hover:text-accent-blue dark:hover:text-accent-blue"
                             }`}
                         >
-                            <Headphones className="w-5 h-5 mr-3" />
+                            <Question className="w-5 h-5 mr-3" />
                             Destek
                         </Link>
                     </nav>

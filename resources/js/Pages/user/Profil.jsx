@@ -198,12 +198,12 @@ const Profil = ({ auth, user, posts }) => {
                 onClose={() => setAlert({ ...alert, open: false })}
             />
 
-            <div className="px-4 py-6">
+            <div className="pb-4 mt-4">
                 {/* Profil Bilgileri ve Paylaşımlar */}
                 <div className="grid grid-cols-1 gap-0">
                     {/* Profil Bilgileri - Sol Taraf */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-4">
                             {/* Profil Fotoğrafı */}
                             <div className="text-center mb-6">
                                 <div className="relative inline-block">

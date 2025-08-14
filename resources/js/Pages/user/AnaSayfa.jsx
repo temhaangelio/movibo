@@ -97,24 +97,29 @@ const AnaSayfa = ({ auth, posts, user }) => {
         <UserLayout auth={auth}>
             <Head title={t("home")} />
 
-            <div className="mx-auto w-full px-6">
+            <div className="w-full">
                 {/* Tab Navigation */}
-                <Tab
-                    tabs={[
-                        {
-                            id: "following",
-                            label: t("following_posts", "Takip Ettiklerin"),
-                        },
-                        { id: "all", label: t("all_posts", "Tüm Paylaşımlar") },
-                    ]}
-                    activeTab={activeTab}
-                    onTabChange={setActiveTab}
-                />
+                <div className="mb-4">
+                    <Tab
+                        tabs={[
+                            {
+                                id: "following",
+                                label: t("following_posts", "Takip Ettiklerin"),
+                            },
+                            {
+                                id: "all",
+                                label: t("all_posts", "Tüm Paylaşımlar"),
+                            },
+                        ]}
+                        activeTab={activeTab}
+                        onTabChange={setActiveTab}
+                    />
+                </div>
 
                 {/* Paylaşımlar */}
-                <div className="py-4">
+                <div className="pb-4">
                     {loading ? (
-                        <div className="text-center py-12">
+                        <div className="text-center py-8">
                             <Loading
                                 size="lg"
                                 showText={true}
@@ -125,7 +130,7 @@ const AnaSayfa = ({ auth, posts, user }) => {
                             />
                         </div>
                     ) : currentPosts && currentPosts.length > 0 ? (
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                             {currentPosts.map((post) => (
                                 <PostCard
                                     key={post.id}
@@ -138,11 +143,15 @@ const AnaSayfa = ({ auth, posts, user }) => {
                             ))}
                         </div>
                     ) : (
-                        <div className="flex flex-col w-full items-center py-12 text-black dark:text-white">
-                            <FileText size={48} />
-                            <span>
+                        <div className="flex flex-col items-center justify-center py-16 text-center">
+                            <FileText className="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4" />
+                            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                                 {t("no_content_yet", "Henüz bir içerik yok!")}
-                            </span>
+                            </h3>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">
+                                Takip ettiğiniz kullanıcılar paylaşım yaptığında
+                                burada görünecek
+                            </p>
                         </div>
                     )}
                 </div>
