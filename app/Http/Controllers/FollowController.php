@@ -42,7 +42,7 @@ class FollowController extends Controller
             ]);
             $isFollowing = true;
             $message = 'Takip edildi.';
-            
+
             // Bildirim oluştur
             NotificationController::createFollowNotification($currentUser->id, $user->id);
         }

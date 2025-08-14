@@ -19,13 +19,19 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\NotificationController;
 
+Route::get('noktaupdate', function () {
+    $output = shell_exec('export PATH=$PATH:/usr/local/bin && sudo /var/www/movibo/update_project.sh 2>&1');
+
+    dd($output);
+});
+
 // Ana sayfa - giriş yapmamış kullanıcılar için
 Route::get('/', function () {
     if (auth()->check()) {
         // Giriş yapmış kullanıcıları ana sayfaya yönlendir
         return redirect()->route('home.authenticated');
     }
-    
+
     return Inertia::render('Welcome');
 })->name('welcome');
 
@@ -37,11 +43,11 @@ Route::get('/terms', function () {
 // Giriş yapmış kullanıcılar için ana sayfa
 Route::get('/home', function () {
     $user = auth()->user();
-    
+
     // Takip edilen kullanıcıların ID'lerini al
     $followingIds = $user->following()->pluck('users.id')->toArray();
     $followingIds[] = $user->id; // Kendi paylaşımlarını da dahil et
-    
+
     $posts = Post::with(['user', 'likes', 'comments'])
         ->whereIn('user_id', $followingIds)
         ->orderBy('created_at', 'desc')
@@ -69,12 +75,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
     Route::post('/posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
     Route::resource('comments', CommentController::class);
-    
+
     // Yeni paylaşım sayfası
     Route::get('/create', function () {
         return Inertia::render('user/Ekle');
     })->name('create');
-    
+
     // API routes
     Route::get('/api/search/movies', [ApiController::class, 'searchMovies'])->name('api.search.movies');
     Route::get('/api/search/books', [ApiController::class, 'searchBooks'])->name('api.search.books');
@@ -84,86 +90,86 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/movies/popular', [MovieController::class, 'getPopularMovies'])->name('api.movies.popular');
     Route::get('/api/movies/{id}', [MovieController::class, 'getMovieDetails'])->name('api.movies.details');
     Route::get('/api/actors/{id}', [MovieController::class, 'getActorDetails'])->name('api.actors.details');
-    
+
     // Follow routes
     Route::post('/users/{user}/follow', [FollowController::class, 'toggle'])->name('users.follow');
     Route::get('/users/{user}/followers', [FollowController::class, 'followers'])->name('users.followers');
     Route::get('/users/{user}/following', [FollowController::class, 'following'])->name('users.following');
     Route::get('/users/{user}/follow/check', [FollowController::class, 'check'])->name('users.follow.check');
-    
+
     // Arama routes
     Route::get('/discover', function () {
         return Inertia::render('user/Arama');
     })->name('discover');
     Route::get('/api/discover/posts', [ApiController::class, 'discoverPosts'])->name('api.discover.posts');
-    
+
     // Film detay sayfası
     Route::get('/movies/{id}', function ($id) {
         return Inertia::render('user/FilmDetay', [
             'id' => $id
         ]);
     })->name('movies.show');
-    
+
     // Oyuncu detay sayfası
     Route::get('/actors/{id}', function ($id) {
         return Inertia::render('user/OyuncuDetay', [
             'id' => $id
         ]);
     })->name('actors.show');
-    
+
     // Profil rotası
     Route::get('/profile', function () {
         $user = auth()->user();
         $posts = $user->posts()->with(['user', 'likes', 'comments'])->latest()->get();
-        
+
         // User'ı privacy_settings ile birlikte yükle
         $user->load('followers', 'following');
         $user->followers_count = $user->followers()->count();
         $user->following_count = $user->following()->count();
-        
+
         return Inertia::render('user/Profil', [
             'user' => $user,
             'posts' => $posts,
         ]);
     })->name('profile');
-    
+
     // Başka kullanıcıların profillerini görüntüleme
     Route::get('/users/{user}', function (User $user) {
         $posts = $user->posts()->with(['user', 'likes', 'comments'])->latest()->get();
-        
+
         // User'ı privacy_settings ile birlikte yükle
         $user->load('followers', 'following');
         $user->followers_count = $user->followers()->count();
         $user->following_count = $user->following()->count();
-        
+
         return Inertia::render('user/Profil', [
             'user' => $user,
             'posts' => $posts,
         ]);
     })->name('users.show');
-    
+
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo');
-    
+
     // Ayarlar rotası
     Route::get('/settings', function () {
         return Inertia::render('user/Ayarlar');
     })->name('settings');
-    
+
     Route::patch('/settings', [ProfileController::class, 'updateSettings'])->name('settings.update');
     Route::patch('/settings/notifications', [ProfileController::class, 'updateNotifications'])->name('settings.notifications');
     Route::patch('/settings/privacy', [ProfileController::class, 'updatePrivacy'])->name('settings.privacy');
     Route::delete('/settings/delete-account', [ProfileController::class, 'deleteAccount'])->name('settings.delete-account');
-    
+
     // Bildirim rotaları
     Route::get('/notifications', function () {
         return Inertia::render('user/Bildirimler');
     })->name('notifications');
-    
+
     Route::get('/api/notifications', [NotificationController::class, 'index'])->name('api.notifications.index');
     Route::post('/api/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('api.notifications.read');
     Route::post('/api/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('api.notifications.read-all');
-    
+
     // Yorum API routes
     Route::get('/api/posts/{post}/comments', [CommentController::class, 'getPostComments'])->name('api.posts.comments');
 });

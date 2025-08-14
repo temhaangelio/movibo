@@ -1,0 +1,1 @@
+import{j as e}from"./app-DtpYycAE.js";function c({className:o,...s}){const t="font-black",a=o||"font-black dark:text-white";return e.jsx("div",{className:`${t} ${a}`,...s,children:"movibo"})}export{c as A};
