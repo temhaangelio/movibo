@@ -2,12 +2,20 @@ import React from "react";
 import { Head, Link } from "@inertiajs/react";
 import AdminLayout from "/Layouts/AdminLayout";
 import Card from "/ui/Card";
-import { ArrowLeft, User, Calendar, Heart, ChatCircle, Trash, Eye } from "@phosphor-icons/react";
+import {
+    ArrowLeft,
+    User,
+    Calendar,
+    Heart,
+    ChatCircle,
+    Trash,
+    Eye,
+} from "@phosphor-icons/react";
 
 const Show = ({ post }) => {
     return (
         <AdminLayout>
-            <Head title={`Post Detayı - ${post.media_title || 'Paylaşım'}`} />
+            <Head title={`Post Detayı - ${post.media_title || "Paylaşım"}`} />
 
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
@@ -44,7 +52,9 @@ const Show = ({ post }) => {
                                 </div>
                             </div>
                             <div className="text-right text-sm text-gray-500 dark:text-gray-400">
-                                {new Date(post.created_at).toLocaleDateString("tr-TR")}
+                                {new Date(post.created_at).toLocaleDateString(
+                                    "tr-TR"
+                                )}
                             </div>
                         </div>
 
@@ -64,7 +74,9 @@ const Show = ({ post }) => {
                                 <div className="grid grid-cols-2 gap-4 text-sm">
                                     {post.media_type && (
                                         <div>
-                                            <span className="text-gray-500 dark:text-gray-400">Tür:</span>
+                                            <span className="text-gray-500 dark:text-gray-400">
+                                                Tür:
+                                            </span>
                                             <span className="ml-2 text-gray-900 dark:text-white capitalize">
                                                 {post.media_type}
                                             </span>
@@ -72,7 +84,9 @@ const Show = ({ post }) => {
                                     )}
                                     {post.media_genre && (
                                         <div>
-                                            <span className="text-gray-500 dark:text-gray-400">Tür:</span>
+                                            <span className="text-gray-500 dark:text-gray-400">
+                                                Tür:
+                                            </span>
                                             <span className="ml-2 text-gray-900 dark:text-white">
                                                 {post.media_genre}
                                             </span>
@@ -80,7 +94,9 @@ const Show = ({ post }) => {
                                     )}
                                     {post.media_rating && (
                                         <div>
-                                            <span className="text-gray-500 dark:text-gray-400">Puan:</span>
+                                            <span className="text-gray-500 dark:text-gray-400">
+                                                Puan:
+                                            </span>
                                             <span className="ml-2 text-gray-900 dark:text-white">
                                                 {post.media_rating}/10
                                             </span>
@@ -88,7 +104,9 @@ const Show = ({ post }) => {
                                     )}
                                     {post.user_rating && (
                                         <div>
-                                            <span className="text-gray-500 dark:text-gray-400">Kullanıcı Puanı:</span>
+                                            <span className="text-gray-500 dark:text-gray-400">
+                                                Kullanıcı Puanı:
+                                            </span>
                                             <span className="ml-2 text-gray-900 dark:text-white">
                                                 {post.user_rating}/10
                                             </span>
@@ -97,7 +115,9 @@ const Show = ({ post }) => {
                                 </div>
                                 {post.media_description && (
                                     <div className="mt-3">
-                                        <span className="text-gray-500 dark:text-gray-400">Açıklama:</span>
+                                        <span className="text-gray-500 dark:text-gray-400">
+                                            Açıklama:
+                                        </span>
                                         <p className="mt-1 text-gray-900 dark:text-white">
                                             {post.media_description}
                                         </p>
@@ -115,7 +135,9 @@ const Show = ({ post }) => {
                                 </div>
                                 <div className="flex items-center space-x-1">
                                     <ChatCircle className="w-4 h-4" />
-                                    <span>{post.comments_count || 0} yorum</span>
+                                    <span>
+                                        {post.comments_count || 0} yorum
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -129,11 +151,16 @@ const Show = ({ post }) => {
                             </h3>
                             <div className="space-y-4">
                                 {post.comments.map((comment) => (
-                                    <div key={comment.id} className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0">
+                                    <div
+                                        key={comment.id}
+                                        className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0"
+                                    >
                                         <div className="flex items-start space-x-3">
                                             <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center">
                                                 <span className="text-white font-semibold text-sm">
-                                                    {comment.user.name.charAt(0).toUpperCase()}
+                                                    {comment.user.name
+                                                        .charAt(0)
+                                                        .toUpperCase()}
                                                 </span>
                                             </div>
                                             <div className="flex-1">
@@ -149,7 +176,9 @@ const Show = ({ post }) => {
                                                     {comment.content}
                                                 </p>
                                                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                                                    {new Date(comment.created_at).toLocaleString("tr-TR")}
+                                                    {new Date(
+                                                        comment.created_at
+                                                    ).toLocaleString("tr-TR")}
                                                 </div>
                                             </div>
                                         </div>
@@ -188,27 +217,35 @@ const Show = ({ post }) => {
                         <div className="space-y-2 text-sm">
                             <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
                                 <Calendar className="w-4 h-4" />
-                                <span>Kayıt: {new Date(post.user.created_at).toLocaleDateString("tr-TR")}</span>
+                                <span>
+                                    Kayıt:{" "}
+                                    {new Date(
+                                        post.user.created_at
+                                    ).toLocaleDateString("tr-TR")}
+                                </span>
                             </div>
                             <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
                                 <User className="w-4 h-4" />
-                                <span>Durum: {post.user.is_admin ? 'Admin' : 'Kullanıcı'}</span>
+                                <span>
+                                    Durum:{" "}
+                                    {post.user.is_admin ? "Admin" : "Kullanıcı"}
+                                </span>
                             </div>
                         </div>
                         <div className="mt-4 space-y-2">
                             <Link
                                 href={`/panel/users/${post.user.id}`}
                                 className="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+                                title="Kullanıcıyı Görüntüle"
                             >
-                                <Eye className="w-4 h-4 mr-2" />
-                                Kullanıcıyı Görüntüle
+                                <Eye className="w-4 h-4" />
                             </Link>
                             <Link
                                 href={`/panel/users/${post.user.id}/activities`}
                                 className="w-full inline-flex items-center justify-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg transition-colors"
+                                title="Aktiviteleri Görüntüle"
                             >
-                                <Calendar className="w-4 h-4 mr-2" />
-                                Aktiviteleri Görüntüle
+                                <Calendar className="w-4 h-4" />
                             </Link>
                         </div>
                     </Card>
@@ -221,14 +258,18 @@ const Show = ({ post }) => {
                         <div className="space-y-3">
                             <button
                                 onClick={() => {
-                                    if (confirm('Bu paylaşımı silmek istediğinize emin misiniz?')) {
+                                    if (
+                                        confirm(
+                                            "Bu paylaşımı silmek istediğinize emin misiniz?"
+                                        )
+                                    ) {
                                         // Delete post logic
                                     }
                                 }}
                                 className="w-full inline-flex items-center justify-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors"
+                                title="Paylaşımı Sil"
                             >
-                                <Trash className="w-4 h-4 mr-2" />
-                                Paylaşımı Sil
+                                <Trash className="w-4 h-4" />
                             </button>
                         </div>
                     </Card>

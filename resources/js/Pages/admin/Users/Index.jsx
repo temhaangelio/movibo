@@ -6,6 +6,17 @@ import Buton from "/ui/Buton";
 import Card from "/ui/Card";
 import Confirm from "/ui/Confirm";
 import {
+    Table,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableHeader,
+    TableCell,
+} from "/ui/Table";
+import Pagination from "/ui/Pagination";
+import Header from "/ui/Header";
+import Dropdown from "/ui/Dropdown";
+import {
     User,
     Trash,
     Eye,
@@ -80,61 +91,34 @@ const Index = ({ users }) => {
         <AdminLayout>
             <Head title="Kullanıcı Yönetimi" />
 
-            <Card className="p-6">
-                {/* Header with Search */}
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                        Kullanıcı Yönetimi
-                    </h2>
-                    <div className="flex items-center space-x-4">
-                        {/* Search */}
-                        <div className="relative">
-                            <MagnifyingGlass className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder="Kullanıcı adı, e-posta veya kullanıcı adı ara..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
-                            />
-                        </div>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
-                            Toplam: {filteredUsers.length}
-                        </span>
-                    </div>
-                </div>
+            <Card className="p-6" style={{ overflow: "visible" }}>
+                <Header
+                    title="Kullanıcı Yönetimi"
+                    searchTerm={searchTerm}
+                    onSearchChange={(e) => setSearchTerm(e.target.value)}
+                    searchPlaceholder="Ad, e-posta veya kullanıcı adı ara..."
+                />
 
-                <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead className="bg-gray-50 dark:bg-gray-800">
+                <div className="overflow-visible">
+                    <Table>
+                        <TableHead>
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    Kullanıcı
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    Email
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    Kayıt Tarihi
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    Durum
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    Blok Durumu
-                                </th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <TableHeader>Kullanıcı</TableHeader>
+                                <TableHeader>Email</TableHeader>
+                                <TableHeader>Durum</TableHeader>
+                                <TableHeader>Blok Durumu</TableHeader>
+                                <TableHeader align="right">
                                     İşlemler
-                                </th>
+                                </TableHeader>
                             </tr>
-                        </thead>
-                        <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-                            {filteredUsers.map((user) => (
-                                <tr
+                        </TableHead>
+                        <TableBody>
+                            {filteredUsers.map((user, index) => (
+                                <TableRow
                                     key={user.id}
-                                    className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                                    style={{ overflow: "visible" }}
                                 >
-                                    <td className="px-6 py-4 whitespace-nowrap">
+                                    <TableCell>
                                         <div className="flex items-center">
                                             <div className="flex-shrink-0 h-10 w-10">
                                                 <div
@@ -172,8 +156,8 @@ const Index = ({ users }) => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                    </TableCell>
+                                    <TableCell>
                                         <span
                                             className={
                                                 user.is_blocked
@@ -183,13 +167,8 @@ const Index = ({ users }) => {
                                         >
                                             {user.email}
                                         </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                        {new Date(
-                                            user.created_at
-                                        ).toLocaleDateString("tr-TR")}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
+                                    </TableCell>
+                                    <TableCell>
                                         <span
                                             className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                                                 user.is_admin
@@ -201,8 +180,8 @@ const Index = ({ users }) => {
                                                 ? "Admin"
                                                 : "Kullanıcı"}
                                         </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
+                                    </TableCell>
+                                    <TableCell>
                                         <span
                                             className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                                                 user.is_blocked
@@ -214,23 +193,30 @@ const Index = ({ users }) => {
                                                 ? "Bloklu"
                                                 : "Aktif"}
                                         </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <div className="flex items-center justify-end space-x-2">
+                                    </TableCell>
+                                    <TableCell
+                                        align="right"
+                                        className="relative"
+                                        style={{
+                                            position: "relative",
+                                            zIndex: 50,
+                                            overflow: "visible",
+                                        }}
+                                    >
+                                        <div className="flex space-x-2 justify-end">
                                             <Link
                                                 href={`/panel/users/${user.id}`}
-                                                className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                                className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 dark:border-gray-600 text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                                title="Görüntüle"
                                             >
-                                                <Eye className="w-4 h-4 mr-1" />
-                                                Görüntüle
+                                                <Eye className="w-4 h-4" />
                                             </Link>
                                             <Link
                                                 href={`/panel/users/${user.id}/activities`}
-                                                className="inline-flex items-center px-3 py-1.5 border border-blue-300 dark:border-blue-600 text-xs font-medium rounded-md text-blue-700 dark:text-blue-400 bg-white dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                                                title="Kullanıcı aktivitelerini görüntüle"
+                                                className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 dark:border-gray-600 text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                                title="Aktiviteler"
                                             >
-                                                <Clock className="w-4 h-4 mr-1" />
-                                                Aktiviteler
+                                                <Clock className="w-4 h-4" />
                                             </Link>
                                             <button
                                                 onClick={() =>
@@ -239,83 +225,43 @@ const Index = ({ users }) => {
                                                         user.is_blocked
                                                     )
                                                 }
-                                                className={`inline-flex items-center px-3 py-1.5 border text-xs font-medium rounded-md transition-colors ${
-                                                    user.is_blocked
-                                                        ? "border-green-300 dark:border-green-600 text-green-700 dark:text-green-400 bg-white dark:bg-gray-800 hover:bg-green-50 dark:hover:bg-green-900/20"
-                                                        : "border-orange-300 dark:border-orange-600 text-orange-700 dark:text-orange-400 bg-white dark:bg-gray-800 hover:bg-orange-50 dark:hover:bg-orange-900/20"
-                                                }`}
+                                                className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 dark:border-gray-600 text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                                 title={
                                                     user.is_blocked
-                                                        ? "Kullanıcıyı bloktan çıkar"
-                                                        : "Kullanıcıyı blokla"
+                                                        ? "Bloktan Çıkar"
+                                                        : "Blokla"
                                                 }
                                             >
                                                 {user.is_blocked ? (
-                                                    <>
-                                                        <LockOpen className="w-4 h-4 mr-1" />
-                                                        Bloktan Çıkar
-                                                    </>
+                                                    <LockOpen className="w-4 h-4" />
                                                 ) : (
-                                                    <>
-                                                        <Lock className="w-4 h-4 mr-1" />
-                                                        Blokla
-                                                    </>
+                                                    <Lock className="w-4 h-4" />
                                                 )}
                                             </button>
                                             <button
                                                 onClick={() =>
                                                     handleDelete(user.id)
                                                 }
-                                                className="inline-flex items-center px-3 py-1.5 border border-red-300 dark:border-red-600 text-xs font-medium rounded-md text-red-700 dark:text-red-400 bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                                                className="inline-flex items-center justify-center w-8 h-8 border border-red-300 dark:border-red-600 text-xs font-medium rounded-md text-red-700 dark:text-red-300 bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                                                title="Sil"
                                             >
-                                                <Trash className="w-4 h-4 mr-1" />
-                                                Sil
+                                                <Trash className="w-4 h-4" />
                                             </button>
                                         </div>
-                                    </td>
-                                </tr>
+                                    </TableCell>
+                                </TableRow>
                             ))}
-                        </tbody>
-                    </table>
+                        </TableBody>
+                    </Table>
                 </div>
 
                 {/* Pagination */}
-                {users.links && (
-                    <div className="mt-6">
-                        <div className="flex items-center justify-between">
-                            <div className="text-sm text-gray-700 dark:text-gray-300">
-                                Toplam {users.total} kullanıcıdan {users.from}-
-                                {users.to} arası gösteriliyor
-                            </div>
-                            <div className="flex space-x-2">
-                                {users.links.map((link, index) =>
-                                    link.url ? (
-                                        <Link
-                                            key={index}
-                                            href={link.url}
-                                            className={`px-3 py-2 text-sm font-medium rounded-md ${
-                                                link.active
-                                                    ? "bg-blue-600 text-white"
-                                                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600"
-                                            }`}
-                                            dangerouslySetInnerHTML={{
-                                                __html: link.label,
-                                            }}
-                                        />
-                                    ) : (
-                                        <span
-                                            key={index}
-                                            className="px-3 py-2 text-sm font-medium rounded-md bg-gray-100 dark:bg-gray-700 text-gray-400 cursor-not-allowed"
-                                            dangerouslySetInnerHTML={{
-                                                __html: link.label,
-                                            }}
-                                        />
-                                    )
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                )}
+                <Pagination
+                    links={users.links}
+                    total={users.total}
+                    from={users.from}
+                    to={users.to}
+                />
             </Card>
 
             <Confirm

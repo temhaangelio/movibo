@@ -24,7 +24,7 @@ const Loading = ({
 
     const Spinner = () => (
         <div
-            className={`animate-spin rounded-full border-2 border-gray-300 dark:border-gray-600 border-t-gray-900 dark:border-t-gray-300 ${sizes[size]} ${className}`}
+            className={`animate-spin rounded-full border-4 border-gray-300 dark:border-gray-600 border-t-gray-900 dark:border-t-gray-300 ${sizes[size]} ${className}`}
             {...props}
         />
     );

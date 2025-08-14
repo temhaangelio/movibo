@@ -130,7 +130,7 @@ const Bildirimler = ({ auth }) => {
                     <div className="divide-y divide-gray-200 dark:divide-gray-700">
                         {loading && notifications.length === 0 ? (
                             <div className="p-6 text-center">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-4 border-gray-900 mx-auto"></div>
                                 <p className="mt-2 text-gray-500 dark:text-gray-400">
                                     {t(
                                         "loading_notifications",
@@ -141,7 +141,7 @@ const Bildirimler = ({ auth }) => {
                         ) : notifications.length === 0 ? (
                             <div className="p-6 text-center">
                                 <Bell className="w-12 h-12  mx-auto mb-4" />
-                                <p>{t('no_notifications')}</p>
+                                <p>{t("no_notifications")}</p>
                             </div>
                         ) : (
                             notifications.map((notification) => (

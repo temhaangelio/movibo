@@ -16,8 +16,6 @@ function setTheme(theme) {
             theme = "auto";
         }
 
-        console.log("setTheme çağrıldı:", theme);
-
         if (
             theme === "dark" ||
             (theme === "auto" &&

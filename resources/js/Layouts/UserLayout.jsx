@@ -12,6 +12,7 @@ import {
     Sun,
     Moon,
     Shield,
+    Question,
 } from "@phosphor-icons/react";
 
 const UserLayout = ({ children, auth }) => {
@@ -79,6 +80,7 @@ const UserLayout = ({ children, auth }) => {
                                     <Shield className="w-7 h-7" />
                                 </Link>
                             )}
+
                             <Link
                                 href="/settings"
                                 className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"

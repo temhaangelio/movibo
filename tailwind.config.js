@@ -30,7 +30,6 @@ export default {
                     800: "#1f2937",
                     900: "#111827",
                 },
-                // Dark tema için Swiss Gaming tarzı renk paleti
                 dark: {
                     50: "#1a1a1a",
                     100: "#2d2d2d",
@@ -43,7 +42,6 @@ export default {
                     800: "#cccccc",
                     900: "#e6e6e6",
                 },
-                // Vurgu renkleri
                 accent: {
                     purple: "#8b5cf6",
                     magenta: "#ec4899",

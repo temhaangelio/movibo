@@ -3,6 +3,7 @@ import { Head } from "@inertiajs/react";
 import AdminLayout from "/Layouts/AdminLayout";
 import Card from "/ui/Card";
 import Buton from "/ui/Buton";
+import Header from "/ui/Header";
 import {
     Headphones,
     Envelope,
@@ -160,28 +161,17 @@ const Index = ({ supportTickets = [] }) => {
 
                 {/* Support Tickets */}
                 <Card className="p-6">
-                    {/* Header with Search */}
-                    <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                            Destek Talepleri
-                        </h2>
-                        <div className="flex items-center space-x-4">
-                            {/* Search */}
-                            <div className="relative">
-                                <MagnifyingGlass className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                                <input
-                                    type="text"
-                                    placeholder="Kullanıcı, konu veya mesaj ara..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
-                                />
-                            </div>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
-                                Toplam: {filteredTickets.length}
-                            </span>
-                        </div>
-                    </div>
+                    <Header
+                        title="Destek Talepleri"
+                        searchTerm={searchTerm}
+                        onSearchChange={(e) => setSearchTerm(e.target.value)}
+                        searchPlaceholder="Kullanıcı, konu veya mesaj ara..."
+                        searchWidth="w-64"
+                    >
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                            Toplam: {filteredTickets.length}
+                        </span>
+                    </Header>
 
                     {/* Status Filters */}
                     <div className="flex flex-wrap gap-2 mb-6">

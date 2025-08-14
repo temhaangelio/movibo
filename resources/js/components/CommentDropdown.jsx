@@ -139,7 +139,11 @@ const CommentDropdown = ({ open, onClose, post, user }) => {
                 <div className="max-h-64 overflow-y-auto p-4">
                     {loading ? (
                         <div className="text-center py-4">
-                            <Loading size="sm" showText={true} text="Yorumlar yükleniyor..." />
+                            <Loading
+                                size="sm"
+                                showText={true}
+                                text="Yorumlar yükleniyor..."
+                            />
                         </div>
                     ) : comments.length === 0 ? (
                         <div className="text-center py-4">
@@ -177,7 +181,8 @@ const CommentDropdown = ({ open, onClose, post, user }) => {
                                             onClick={() =>
                                                 handleDeleteComment(comment.id)
                                             }
-                                            className="text-gray-500 dark:text-gray-400"
+                                            className="text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors p-1 rounded"
+                                            title="Yorumu Sil"
                                         >
                                             <Trash className="w-3 h-3" />
                                         </button>

@@ -161,6 +161,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/settings/privacy', [ProfileController::class, 'updatePrivacy'])->name('settings.privacy');
     Route::delete('/settings/delete-account', [ProfileController::class, 'deleteAccount'])->name('settings.delete-account');
 
+    // Destek rotaları
+    Route::get('/support', [App\Http\Controllers\SupportController::class, 'index'])->name('support');
+    Route::post('/support', [App\Http\Controllers\SupportController::class, 'store'])->name('support.store');
+    Route::get('/api/support/tickets', [App\Http\Controllers\SupportController::class, 'getUserTickets'])->name('api.support.tickets');
+
     // Bildirim rotaları
     Route::get('/notifications', function () {
         return Inertia::render('user/Bildirimler');
@@ -259,7 +264,7 @@ Route::middleware(['auth', 'admin'])->prefix('panel')->name('admin.')->group(fun
         return Inertia::render('Admin/Profil/Index');
     })->name('profile');
     
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile', [ProfileController::class, 'updateAdmin'])->name('profile.update');
     Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo');
 });
 

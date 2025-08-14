@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Head, useForm, router } from "@inertiajs/react";
+import { Head, useForm, router, Link } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
 import UserLayout from "/Layouts/UserLayout";
 import TextInput from "/ui/TextInput";
@@ -20,6 +20,7 @@ import {
     Translate,
     CaretDown,
     FileText,
+    Question,
 } from "@phosphor-icons/react";
 
 const Ayarlar = ({ auth }) => {
@@ -344,7 +345,7 @@ const Ayarlar = ({ auth }) => {
                             />
                         </div>
 
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 pb-4">
                             <div className="flex items-center ">
                                 <Translate className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
                                 <div>
@@ -576,6 +577,25 @@ const Ayarlar = ({ auth }) => {
                                 {t("view")}
                             </Buton>
                         </div>
+
+                        <Link
+                            href="/support"
+                            className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+                        >
+                            <div className="flex items-center">
+                                <Question className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
+                                <div>
+                                    <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                                        Destek
+                                    </h3>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        Sorun yaşıyorsanız destek ekibimizle
+                                        iletişime geçin
+                                    </p>
+                                </div>
+                            </div>
+                            <Question className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                        </Link>
                     </div>
                 </Card>
             </div>

@@ -344,7 +344,7 @@ const Profil = ({ auth, user, posts }) => {
                                     >
                                         {uploading ? (
                                             <>
-                                                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                                                <div className="w-4 h-4 border-4 border-current border-t-transparent rounded-full animate-spin"></div>
                                                 <span>
                                                     {isFollowing
                                                         ? "Takip Bırakılıyor..."
@@ -417,7 +417,7 @@ const Profil = ({ auth, user, posts }) => {
                         <div className="p-4 overflow-y-auto max-h-80">
                             {loadingFollowers ? (
                                 <div className="text-center py-8">
-                                    <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                                    <div className="w-6 h-6 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
                                     <p className="text-gray-500 dark:text-gray-400 mt-2">
                                         Yükleniyor...
                                     </p>
@@ -484,7 +484,7 @@ const Profil = ({ auth, user, posts }) => {
                         <div className="p-4 overflow-y-auto max-h-80">
                             {loadingFollowing ? (
                                 <div className="text-center py-8">
-                                    <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                                    <div className="w-6 h-6 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
                                     <p className="text-gray-500 dark:text-gray-400 mt-2">
                                         Yükleniyor...
                                     </p>
