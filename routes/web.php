@@ -173,7 +173,20 @@ Route::middleware('auth')->group(function () {
 // Admin rotaları
 Route::middleware(['auth', 'admin'])->prefix('panel')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('users', UserController::class);
+    
+    // Admin users routes - ID ile erişim için
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::patch('/users/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::patch('/users/{id}/toggle-block', [UserController::class, 'toggleBlock'])->name('users.toggle-block');
+    Route::get('/users/{id}/activities', [UserController::class, 'activities'])->name('users.activities');
+    Route::get('/activities', [UserController::class, 'allActivities'])->name('activities.index');
+    
     Route::get('/posts', [AdminPostController::class, 'index'])->name('posts.index');
     Route::get('/posts/{post}', [AdminPostController::class, 'show'])->name('posts.show');
     Route::delete('/posts/{post}', [AdminPostController::class, 'destroy'])->name('posts.destroy');

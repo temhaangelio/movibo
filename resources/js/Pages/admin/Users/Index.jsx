@@ -5,7 +5,17 @@ import AdminLayout from "/Layouts/AdminLayout";
 import Buton from "/ui/Buton";
 import Card from "/ui/Card";
 import Confirm from "/ui/Confirm";
-import { User, Trash, Eye, Plus, MagnifyingGlass } from "@phosphor-icons/react";
+import {
+    User,
+    Trash,
+    Eye,
+    Plus,
+    MagnifyingGlass,
+    Prohibit,
+    Lock,
+    LockOpen,
+    Clock,
+} from "@phosphor-icons/react";
 
 const Index = ({ users }) => {
     const { t } = useTranslation();
@@ -25,8 +35,37 @@ const Index = ({ users }) => {
                     setIsConfirmOpen(false);
                     setDeleteUserId(null);
                 },
+                onError: (errors) => {
+                    console.error("User deletion failed:", errors);
+                    alert(
+                        "Kullanıcı silinirken bir hata oluştu. Lütfen tekrar deneyin."
+                    );
+                    setIsConfirmOpen(false);
+                    setDeleteUserId(null);
+                },
+                onFinish: () => {
+                    // İşlem tamamlandığında loading state'i temizle
+                },
             });
         }
+    };
+
+    const toggleBlock = (userId, currentBlockStatus) => {
+        router.patch(
+            `/panel/users/${userId}/toggle-block`,
+            {},
+            {
+                onSuccess: () => {
+                    // Sayfa yeniden yüklenecek ve güncel durum gösterilecek
+                },
+                onError: (errors) => {
+                    console.error("User block toggle failed:", errors);
+                    alert(
+                        "Kullanıcı bloklama durumu değiştirilirken bir hata oluştu!"
+                    );
+                },
+            }
+        );
     };
 
     const filteredUsers =
@@ -81,6 +120,9 @@ const Index = ({ users }) => {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     Durum
                                 </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    Blok Durumu
+                                </th>
                                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     İşlemler
                                 </th>
@@ -95,7 +137,13 @@ const Index = ({ users }) => {
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
                                             <div className="flex-shrink-0 h-10 w-10">
-                                                <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center">
+                                                <div
+                                                    className={`h-10 w-10 rounded-full flex items-center justify-center ${
+                                                        user.is_blocked
+                                                            ? "bg-gray-400 dark:bg-gray-600"
+                                                            : "bg-blue-600"
+                                                    }`}
+                                                >
                                                     <span className="text-white font-semibold text-sm">
                                                         {user.name
                                                             .charAt(0)
@@ -104,17 +152,37 @@ const Index = ({ users }) => {
                                                 </div>
                                             </div>
                                             <div className="ml-4">
-                                                <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                                <div
+                                                    className={`text-sm font-medium ${
+                                                        user.is_blocked
+                                                            ? "text-gray-500 dark:text-gray-400 line-through"
+                                                            : "text-gray-900 dark:text-white"
+                                                    }`}
+                                                >
                                                     {user.name}
                                                 </div>
-                                                <div className="text-sm text-gray-500 dark:text-gray-400">
+                                                <div
+                                                    className={`text-sm ${
+                                                        user.is_blocked
+                                                            ? "text-gray-400 dark:text-gray-500 line-through"
+                                                            : "text-gray-500 dark:text-gray-400"
+                                                    }`}
+                                                >
                                                     @{user.username}
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                        {user.email}
+                                        <span
+                                            className={
+                                                user.is_blocked
+                                                    ? "line-through text-gray-500 dark:text-gray-400"
+                                                    : ""
+                                            }
+                                        >
+                                            {user.email}
+                                        </span>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                         {new Date(
@@ -134,6 +202,19 @@ const Index = ({ users }) => {
                                                 : "Kullanıcı"}
                                         </span>
                                     </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <span
+                                            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                                user.is_blocked
+                                                    ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                                                    : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                            }`}
+                                        >
+                                            {user.is_blocked
+                                                ? "Bloklu"
+                                                : "Aktif"}
+                                        </span>
+                                    </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div className="flex items-center justify-end space-x-2">
                                             <Link
@@ -143,6 +224,44 @@ const Index = ({ users }) => {
                                                 <Eye className="w-4 h-4 mr-1" />
                                                 Görüntüle
                                             </Link>
+                                            <Link
+                                                href={`/panel/users/${user.id}/activities`}
+                                                className="inline-flex items-center px-3 py-1.5 border border-blue-300 dark:border-blue-600 text-xs font-medium rounded-md text-blue-700 dark:text-blue-400 bg-white dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                                                title="Kullanıcı aktivitelerini görüntüle"
+                                            >
+                                                <Clock className="w-4 h-4 mr-1" />
+                                                Aktiviteler
+                                            </Link>
+                                            <button
+                                                onClick={() =>
+                                                    toggleBlock(
+                                                        user.id,
+                                                        user.is_blocked
+                                                    )
+                                                }
+                                                className={`inline-flex items-center px-3 py-1.5 border text-xs font-medium rounded-md transition-colors ${
+                                                    user.is_blocked
+                                                        ? "border-green-300 dark:border-green-600 text-green-700 dark:text-green-400 bg-white dark:bg-gray-800 hover:bg-green-50 dark:hover:bg-green-900/20"
+                                                        : "border-orange-300 dark:border-orange-600 text-orange-700 dark:text-orange-400 bg-white dark:bg-gray-800 hover:bg-orange-50 dark:hover:bg-orange-900/20"
+                                                }`}
+                                                title={
+                                                    user.is_blocked
+                                                        ? "Kullanıcıyı bloktan çıkar"
+                                                        : "Kullanıcıyı blokla"
+                                                }
+                                            >
+                                                {user.is_blocked ? (
+                                                    <>
+                                                        <LockOpen className="w-4 h-4 mr-1" />
+                                                        Bloktan Çıkar
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Lock className="w-4 h-4 mr-1" />
+                                                        Blokla
+                                                    </>
+                                                )}
+                                            </button>
                                             <button
                                                 onClick={() =>
                                                     handleDelete(user.id)

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
 class User extends Authenticatable
 {
@@ -30,6 +31,7 @@ class User extends Authenticatable
         'terms_accepted',
         'terms_accepted_at',
         'is_admin',
+        'is_blocked',
     ];
 
     /**
@@ -55,7 +57,41 @@ class User extends Authenticatable
             'notification_preferences' => 'array',
             'privacy_settings' => 'array',
             'is_admin' => 'boolean',
+            'is_blocked' => 'boolean',
         ];
+    }
+
+    /**
+     * Model boot metodu - event listener'ları tanımla
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Kullanıcı silindiğinde ilişkili tüm verileri sil
+        static::deleting(function ($user) {
+            // Kullanıcının paylaşımlarını sil
+            $user->posts()->delete();
+            
+            // Kullanıcının yorumlarını sil
+            $user->comments()->delete();
+            
+            // Kullanıcının beğenilerini sil
+            $user->likes()->delete();
+            
+            // Follow ilişkilerini temizle
+            $user->followers()->detach();
+            $user->following()->detach();
+            
+            // Bildirimleri sil
+            $user->notifications()->delete();
+            $user->sentNotifications()->delete();
+            
+            // Profil fotoğrafını sil (eğer varsa)
+            if ($user->profile_photo) {
+                \Storage::disk('public')->delete($user->profile_photo);
+            }
+        });
     }
 
     // İlişkiler
@@ -115,6 +151,14 @@ class User extends Authenticatable
     public function sentNotifications()
     {
         return $this->hasMany(Notification::class, 'from_user_id');
+    }
+
+    /**
+     * Kullanıcının aktivite logları
+     */
+    public function activities()
+    {
+        return $this->hasMany(UserActivity::class);
     }
 
     /**

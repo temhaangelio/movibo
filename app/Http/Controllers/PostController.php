@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
+use App\Services\ActivityService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class PostController extends Controller
@@ -56,6 +59,9 @@ class PostController extends Controller
 
         $post = auth()->user()->posts()->create($validated);
 
+        // Post oluşturma aktivitesini logla
+        ActivityService::logPostCreate(auth()->user(), $validated, $request);
+
         return redirect()->route('home.authenticated')->with('success', 'Paylaşım başarıyla oluşturuldu!');
     }
 
@@ -78,6 +84,13 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $this->authorize('delete', $post);
+
+        // Post silme aktivitesini logla
+        $postData = [
+            'media_title' => $post->media_title,
+            'media_type' => $post->media_type
+        ];
+        ActivityService::logPostDelete(auth()->user(), $postData, request());
 
         $post->delete();
 

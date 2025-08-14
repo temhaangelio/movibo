@@ -84,118 +84,107 @@ const Dashboard = ({ stats, recentUsers, recentPosts, recentComments }) => {
                         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                             Son Aktiviteler
                         </h2>
-                        <Link
-                            href="/panel"
-                            className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                        >
-                            Tümünü Gör
-                        </Link>
                     </div>
-                    <div className="space-y-4">
-                        {/* Yeni Kullanıcı Kayıtları */}
-                        {recentUsers?.slice(0, 3).map((user) => (
-                            <div
-                                key={`user-${user.id}`}
-                                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                            >
-                                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                                    <Users className="w-4 h-4 text-white" />
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-sm text-gray-900 dark:text-white">
-                                        <span className="font-medium">
-                                            {user.name}
-                                        </span>{" "}
-                                        sisteme kayıt oldu
-                                    </p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                                        @{user.username} •{" "}
-                                        {new Date(
-                                            user.created_at
-                                        ).toLocaleDateString("tr-TR")}
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
+                    <div>
+                        {/* Tüm aktiviteleri birleştir ve tarihe göre sırala */}
+                        {(() => {
+                            const allActivities = [
+                                // Kullanıcı kayıtları
+                                ...(recentUsers?.slice(0, 3).map((user) => ({
+                                    id: `user-${user.id}`,
+                                    type: "user",
+                                    user: user,
+                                    content: `${user.name} sisteme kayıt oldu`,
+                                    created_at: user.created_at,
+                                    icon: Users,
+                                    bgColor: "bg-blue-600",
+                                    link: `/panel/users/${user.id}`,
+                                })) || []),
 
-                        {/* Yeni Paylaşımlar */}
-                        {recentPosts?.slice(0, 3).map((post) => (
-                            <div
-                                key={`post-${post.id}`}
-                                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                            >
-                                <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
-                                    <Article className="w-4 h-4 text-white" />
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-sm text-gray-900 dark:text-white">
-                                        <span className="font-medium">
-                                            {post.user?.name}
-                                        </span>{" "}
-                                        yeni bir paylaşım yaptı
-                                    </p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                                        {post.content?.substring(0, 50)}... •{" "}
-                                        {new Date(
-                                            post.created_at
-                                        ).toLocaleDateString("tr-TR")}
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
+                                // Paylaşımlar
+                                ...(recentPosts?.slice(0, 3).map((post) => ({
+                                    id: `post-${post.id}`,
+                                    type: "post",
+                                    user: post.user,
+                                    content: `${post.user?.name} yeni bir paylaşım yaptı`,
+                                    description:
+                                        post.content?.substring(0, 50) + "...",
+                                    created_at: post.created_at,
+                                    icon: Article,
+                                    bgColor: "bg-green-600",
+                                    link: `/panel/posts/${post.id}`,
+                                })) || []),
 
-                        {/* Yeni Yorumlar */}
-                        {recentComments?.slice(0, 3).map((comment) => (
-                            <div
-                                key={`comment-${comment.id}`}
-                                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                            >
-                                <div className="w-8 h-8 bg-pink-600 rounded-full flex items-center justify-center">
-                                    <ChatCircle className="w-4 h-4 text-white" />
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-sm text-gray-900 dark:text-white">
-                                        <span className="font-medium">
-                                            {comment.user?.name}
-                                        </span>{" "}
-                                        bir paylaşıma yorum yaptı
-                                    </p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                                        {comment.content?.substring(0, 50)}... •{" "}
-                                        {new Date(
-                                            comment.created_at
-                                        ).toLocaleDateString("tr-TR")}
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
+                                // Yorumlar
+                                ...(recentComments
+                                    ?.slice(0, 3)
+                                    .map((comment) => ({
+                                        id: `comment-${comment.id}`,
+                                        type: "comment",
+                                        user: comment.user,
+                                        content: `${comment.user?.name} bir paylaşıma yorum yaptı`,
+                                        description:
+                                            comment.content?.substring(0, 50) +
+                                            "...",
+                                        created_at: comment.created_at,
+                                        icon: ChatCircle,
+                                        bgColor: "bg-pink-600",
+                                        link: `/panel/comments/${comment.id}`,
+                                    })) || []),
 
-                        {/* Beğeni Aktiviteleri */}
-                        {recentPosts?.slice(0, 2).map((post) => (
-                            <div
-                                key={`like-${post.id}`}
-                                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                            >
-                                <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
-                                    <Heart className="w-4 h-4 text-white" />
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-sm text-gray-900 dark:text-white">
-                                        <span className="font-medium">
-                                            {post.user?.name}
-                                        </span>{" "}
-                                        paylaşımı {post.likes_count || 0} beğeni
-                                        aldı
-                                    </p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                                        {post.content?.substring(0, 50)}... •{" "}
-                                        {new Date(
-                                            post.created_at
-                                        ).toLocaleDateString("tr-TR")}
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
+                                // Beğeniler
+                                ...(recentPosts?.slice(0, 2).map((post) => ({
+                                    id: `like-${post.id}`,
+                                    type: "like",
+                                    user: post.user,
+                                    content: `${post.user?.name} paylaşımı ${
+                                        post.likes_count || 0
+                                    } beğeni aldı`,
+                                    description:
+                                        post.content?.substring(0, 50) + "...",
+                                    created_at: post.created_at,
+                                    icon: Heart,
+                                    bgColor: "bg-red-600",
+                                    link: `/panel/posts/${post.id}`,
+                                })) || []),
+                            ];
+
+                            // Tarihe göre sırala (en yeni önce)
+                            const sortedActivities = allActivities
+                                .sort(
+                                    (a, b) =>
+                                        new Date(b.created_at) -
+                                        new Date(a.created_at)
+                                )
+                                .slice(0, 8); // En son 8 aktiviteyi göster
+
+                            return sortedActivities.map((activity) => (
+                                <Link
+                                    key={activity.id}
+                                    href={activity.link}
+                                    className="flex items-center space-x-4 p-3 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border-b border-gray-200 dark:border-gray-700"
+                                >
+                                    <div
+                                        className={`w-8 h-8 ${activity.bgColor} rounded-full flex items-center justify-center`}
+                                    >
+                                        <activity.icon className="w-4 h-4 text-white" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-sm text-gray-900 dark:text-white">
+                                            {activity.content}
+                                        </p>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                                            {activity.description && (
+                                                <>{activity.description} • </>
+                                            )}
+                                            {new Date(
+                                                activity.created_at
+                                            ).toLocaleDateString("tr-TR")}
+                                        </p>
+                                    </div>
+                                </Link>
+                            ));
+                        })()}
                     </div>
                 </Card>
             </div>

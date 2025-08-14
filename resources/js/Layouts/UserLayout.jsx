@@ -63,36 +63,22 @@ const UserLayout = ({ children, auth }) => {
 
     return (
         <div className="min-h-screen mx-auto bg-gray-50 dark:bg-gray-900 flex flex-col">
-            {/* Top Header - Tüm ekran boyutlarında görünür */}
             <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                 <div className="px-4 py-3">
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center">
+                        <Link href="/home" className="flex items-center">
                             <ApplicationLogo className="text-gray-900 text-3xl dark:text-white" />
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            {/* Admin Panel - Sadece admin kullanıcılar için */}
+                        </Link>
+                        <div className="flex items-center">
                             {userAuth?.user?.is_admin && (
                                 <Link
                                     href="/panel"
-                                    className="p-2 text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300 transition-colors"
+                                    className="p-2 transition-colors"
                                     title="Admin Panel"
                                 >
                                     <Shield className="w-7 h-7" />
                                 </Link>
                             )}
-                            
-                            {/* Uygulamaya Git Butonu */}
-                            <Link
-                                href="/home"
-                                className="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white text-xs font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"
-                                title="Ana Sayfa"
-                            >
-                                <House className="w-4 h-4 mr-1" />
-                                Ana Sayfa
-                            </Link>
-                            
-                            {/* Ayarlar */}
                             <Link
                                 href="/settings"
                                 className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"

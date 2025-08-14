@@ -29,7 +29,15 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $post->load(['user', 'comments.user', 'likes.user']);
+        $post->load([
+            'user', 
+            'comments.user', 
+            'likes.user'
+        ]);
+
+        // Post istatistiklerini ekle
+        $post->likes_count = $post->likes()->count();
+        $post->comments_count = $post->comments()->count();
 
         return Inertia::render('Admin/Posts/Show', [
             'post' => $post,

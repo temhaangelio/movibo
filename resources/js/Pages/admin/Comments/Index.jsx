@@ -143,26 +143,23 @@ const Index = ({ comments }) => {
                                             ).toLocaleDateString("tr-TR")}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <div className="flex space-x-2">
+                                            <div className="flex items-center justify-end space-x-2">
                                                 <Link
                                                     href={`/panel/comments/${comment.id}`}
+                                                    className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                                 >
-                                                    <Buton
-                                                        variant="outline"
-                                                        size="sm"
-                                                    >
-                                                        <Eye className="w-4 h-4" />
-                                                    </Buton>
+                                                    <Eye className="w-4 h-4 mr-1" />
+                                                    Görüntüle
                                                 </Link>
-                                                <Buton
-                                                    variant="danger"
-                                                    size="sm"
+                                                <button
                                                     onClick={() =>
                                                         handleDelete(comment.id)
                                                     }
+                                                    className="inline-flex items-center px-3 py-1.5 border border-red-300 dark:border-red-600 text-xs font-medium rounded-md text-red-700 dark:text-red-400 bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                                                 >
-                                                    <Trash className="w-4 h-4" />
-                                                </Buton>
+                                                    <Trash className="w-4 h-4 mr-1" />
+                                                    Sil
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>

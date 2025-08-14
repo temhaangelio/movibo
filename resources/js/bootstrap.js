@@ -3,6 +3,14 @@ window.axios = axios;
 
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
+// CSRF token'ı header'a ekle
+const token = document.head.querySelector('meta[name="csrf-token"]');
+if (token) {
+    window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
+} else {
+    console.error("CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token");
+}
+
 // Inertia.js route helper
 window.route = (name, params, absolute, config = {}) => {
     // Basit route mapping - gerçek uygulamada Laravel'in route helper'ı kullanılır
