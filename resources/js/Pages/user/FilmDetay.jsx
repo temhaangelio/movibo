@@ -41,11 +41,7 @@ const FilmDetay = ({ auth }) => {
             <UserLayout auth={auth}>
                 <Head title="Film Yükleniyor..." />
                 <div className="flex items-center justify-center min-h-screen">
-                    <Loading
-                        size="xl"
-                        showText={true}
-                        text="Film yükleniyor..."
-                    />
+                    <Loading size="xl" />
                 </div>
             </UserLayout>
         );

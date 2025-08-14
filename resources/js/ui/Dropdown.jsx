@@ -111,9 +111,12 @@ const Content = ({
                     maxWidth: "300px",
                     transform: "translateX(0)",
                     right: align === "right" && !usePortal ? "0" : undefined,
-                    left: align === "left" && !usePortal ? "0" : undefined,
+                    left: usePortal
+                        ? position.left
+                        : align === "left" && !usePortal
+                        ? "0"
+                        : undefined,
                     top: usePortal ? position.top : undefined,
-                    left: usePortal ? position.left : undefined,
                     zIndex: 999999,
                 }}
             >

@@ -35,11 +35,7 @@ const OyuncuDetay = ({ auth }) => {
             <UserLayout auth={auth}>
                 <Head title="Oyuncu Yükleniyor..." />
                 <div className="flex items-center justify-center min-h-screen">
-                    <Loading
-                        size="xl"
-                        showText={true}
-                        text="Oyuncu yükleniyor..."
-                    />
+                    <Loading size="xl" />
                 </div>
             </UserLayout>
         );

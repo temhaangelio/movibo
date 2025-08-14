@@ -4,8 +4,6 @@ const Loading = ({
     size = "md",
     variant = "spinner",
     className = "",
-    text = "Yükleniyor...",
-    showText = false,
     ...props
 }) => {
     const sizes = {
@@ -13,13 +11,6 @@ const Loading = ({
         md: "w-6 h-6",
         lg: "w-8 h-8",
         xl: "w-12 h-12",
-    };
-
-    const textSizes = {
-        sm: "text-xs",
-        md: "text-sm",
-        lg: "text-base",
-        xl: "text-lg",
     };
 
     const Spinner = () => (
@@ -60,19 +51,6 @@ const Loading = ({
     };
 
     const LoadingComponent = variants[variant];
-
-    if (showText) {
-        return (
-            <div className="flex flex-col items-center justify-center space-y-2">
-                <LoadingComponent />
-                <p
-                    className={`text-gray-600 dark:text-gray-400 ${textSizes[size]}`}
-                >
-                    {text}
-                </p>
-            </div>
-        );
-    }
 
     return <LoadingComponent />;
 };

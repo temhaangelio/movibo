@@ -1,1 +1,0 @@
-import{j as o}from"./app-CUfu8rYq.js";const s=({children:r,className:a="",...d})=>o.jsx("div",{className:`bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 ${a}`,...d,children:r});export{s as C};

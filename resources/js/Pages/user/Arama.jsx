@@ -142,18 +142,11 @@ const Discover = ({ auth }) => {
                 <div className="py-4">
                     {loading ? (
                         <div className="text-center py-12">
-                            <Loading
-                                size="lg"
-                                showText={true}
-                                text={t(
-                                    "loading_movies",
-                                    "Filmler yükleniyor..."
-                                )}
-                            />
+                            <Loading size="lg" />
                         </div>
                     ) : movies.length > 0 ? (
                         <>
-                            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-0">
+                            <div className="grid grid-cols-3 gap-0">
                                 {movies.map((movie) => (
                                     <Link
                                         key={movie.id}
@@ -173,42 +166,10 @@ const Discover = ({ auth }) => {
                                 ))}
                             </div>
 
-                            {/* Load More Section */}
-                            {hasMore && (
-                                <div className="text-center py-8">
-                                    {loadingMore ? (
-                                        <div className="flex items-center justify-center space-x-2">
-                                            <Loading
-                                                size="sm"
-                                                showText={false}
-                                            />
-                                            <span className="text-gray-600 dark:text-gray-400">
-                                                Daha fazla film yükleniyor...
-                                            </span>
-                                        </div>
-                                    ) : (
-                                        <div className="space-y-2">
-                                            <button
-                                                onClick={loadMore}
-                                                className="px-6 py-3 bg-gray-900 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors font-medium"
-                                            >
-                                                Daha Fazla Film Yükle
-                                            </button>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                Sayfa {page} - {movies.length}{" "}
-                                                film yüklendi
-                                            </p>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-
-                            {/* Tüm filmler yüklendi mesajı */}
-                            {!hasMore && movies.length > 0 && (
-                                <div className="text-center py-8">
-                                    <p className="text-gray-500 dark:text-gray-400">
-                                        Tüm filmler yüklendi! 🎬
-                                    </p>
+                            {/* Loading More Indicator */}
+                            {loadingMore && (
+                                <div className="text-center py-4">
+                                    <Loading size="sm" />
                                 </div>
                             )}
                         </>

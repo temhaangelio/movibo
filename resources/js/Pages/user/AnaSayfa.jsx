@@ -120,14 +120,7 @@ const AnaSayfa = ({ auth, posts, user }) => {
                 <div className="pb-4">
                     {loading ? (
                         <div className="text-center py-8">
-                            <Loading
-                                size="lg"
-                                showText={true}
-                                text={t(
-                                    "loading_posts",
-                                    "Paylaşımlar yükleniyor..."
-                                )}
-                            />
+                            <Loading size="lg" />
                         </div>
                     ) : currentPosts && currentPosts.length > 0 ? (
                         <div className="space-y-3">

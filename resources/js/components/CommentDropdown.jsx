@@ -139,11 +139,7 @@ const CommentDropdown = ({ open, onClose, post, user }) => {
                 <div className="max-h-64 overflow-y-auto p-4">
                     {loading ? (
                         <div className="text-center py-4">
-                            <Loading
-                                size="sm"
-                                showText={true}
-                                text="Yorumlar yükleniyor..."
-                            />
+                            <Loading size="sm" />
                         </div>
                     ) : comments.length === 0 ? (
                         <div className="text-center py-4">

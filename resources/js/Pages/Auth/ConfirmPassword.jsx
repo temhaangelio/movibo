@@ -27,33 +27,40 @@ export default function ConfirmPassword() {
                 password before continuing.
             </div>
 
-            <form onSubmit={submit}>
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+            <Card className="p-6">
+                <form onSubmit={submit}>
+                    <div className="mt-4">
+                        <InputLabel htmlFor="password" value="Password" />
 
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        isFocused={true}
-                        onChange={(e) => setData("password", e.target.value)}
-                    />
+                        <TextInput
+                            id="password"
+                            type="password"
+                            name="password"
+                            value={data.password}
+                            className="mt-1 block w-full"
+                            isFocused={true}
+                            onChange={(e) =>
+                                setData("password", e.target.value)
+                            }
+                        />
 
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
+                        <InputError
+                            message={errors.password}
+                            className="mt-2"
+                        />
+                    </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    <Buton
-                        variant="primary"
-                        className="ms-4"
-                        disabled={processing}
-                    >
-                        Onayla
-                    </Buton>
-                </div>
-            </form>
+                    <div className="mt-4 flex items-center justify-end">
+                        <Buton
+                            variant="primary"
+                            className="ms-4"
+                            disabled={processing}
+                        >
+                            Onayla
+                        </Buton>
+                    </div>
+                </form>
+            </Card>
         </AuthLayout>
     );
 }

@@ -175,11 +175,7 @@ const Destek = ({ auth }) => {
 
                         {loading ? (
                             <div className="text-center py-8">
-                                <Loading
-                                    size="lg"
-                                    showText={true}
-                                    text="Yükleniyor..."
-                                />
+                                <Loading size="lg" />
                             </div>
                         ) : tickets.length === 0 ? (
                             <div className="text-center py-8">

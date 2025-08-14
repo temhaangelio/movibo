@@ -10,10 +10,18 @@ const Welcome = () => {
         <>
             <Head title="Movibo - Film ve Kitap Paylaşım Platformu" />
 
-            <div className="min-h-screen py-24 bg-white text-black">
+            <div
+                className="min-h-screen h-full bg-white py-24"
+                style={{
+                    backgroundImage: "url(/bg.png)",
+                    backgroundSize: "30%",
+                }}
+            >
                 {/* Hero Section */}
-                <main className="flex-1 flex items-center justify-center min-h-screen px-4">
-                    <div className="w-full max-w-md mx-auto text-center">
+                <main className="flex-1 flex items-center justify-center min-h-screen h-screen px-4 relative">
+                    {/* Overlay */}
+
+                    <div className="w-full max-w-md mx-auto text-center relative z-10">
                         {/* Logo */}
                         <div className="animate-fade-in">
                             <ApplicationLogo className="w-auto text-5xl font-black" />
@@ -33,17 +41,17 @@ const Welcome = () => {
 
                         {/* Başlık ve Açıklama */}
                         <div className="animate-slide-in-up">
-                            <h1 className="text-4xl font-black mb-6 leading-tight">
+                            <h1 className="flex flex-col text-4xl font-black mb-6 leading-tight">
                                 <span className="text-blue-600">
                                     {t("cinema", "Sinemanın")}
                                 </span>
-                                <br />
+
                                 <span>
                                     {t("social_media", "Sosyal Medyası")}
                                 </span>
                             </h1>
 
-                            <p className="text-lg  mb-8 leading-relaxed">
+                            <p className="text-md mb-8 leading-relaxed">
                                 {t(
                                     "welcome_description",
                                     "İzlediğin filmleri paylaş, listeni oluştur, puan ver, yorum yap diğer kullanıcılarla etkileşime geç ve yeni keşifler yap."
@@ -56,7 +64,7 @@ const Welcome = () => {
                                     <Buton
                                         variant="primary"
                                         size="lg"
-                                        className="w-full font-bold  py-4 text-lg text-white"
+                                        className="w-full font-bold  py-4 text-lg bg-blue-600 text-white"
                                     >
                                         {t("get_started", "Hemen Başla")}
                                     </Buton>

@@ -37,11 +37,10 @@ export default function Login({ status, canResetPassword }) {
                 </div>
             )}
 
-            <Card className="p-6 max-w-md w-full">
+            <Card className="p-6 w-full">
                 <form onSubmit={submit}>
                     <div>
                         <InputLabel htmlFor="email" value={t("email")} />
-
                         <TextInput
                             id="email"
                             type="email"
@@ -116,7 +115,7 @@ export default function Login({ status, canResetPassword }) {
             <div className="mt-6 text-center">
                 <Link
                     href="/register"
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors"
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-xl font-bold transition-colors"
                 >
                     {t("not_registered")}
                 </Link>

@@ -33,12 +33,15 @@ const Profil = ({ auth, user, posts }) => {
     // Takip durumunu kontrol et
     useEffect(() => {
         if (auth.user && currentUser && auth.user.id !== currentUser.id) {
-            fetch(`/users/${currentUser.id}/follow/check`)
+            fetch(`/users/${currentUser.username}/follow/check`)
                 .then((res) => res.json())
                 .then((data) => {
                     setIsFollowing(data.isFollowing);
                     setFollowersCount(data.followersCount);
                     setFollowingCount(data.followingCount);
+                })
+                .catch((error) => {
+                    console.error("Follow check error:", error);
                 });
         } else if (auth.user && auth.user.id === currentUser.id) {
             // Kendi profilinde takip sayılarını al
@@ -54,15 +57,18 @@ const Profil = ({ auth, user, posts }) => {
         setUploading(true);
 
         try {
-            const response = await fetch(`/users/${currentUser.id}/follow`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"),
-                },
-            });
+            const response = await fetch(
+                `/users/${currentUser.username}/follow`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute("content"),
+                    },
+                }
+            );
 
             const data = await response.json();
 
@@ -100,7 +106,9 @@ const Profil = ({ auth, user, posts }) => {
     const loadFollowers = async () => {
         setLoadingFollowers(true);
         try {
-            const response = await fetch(`/users/${currentUser.id}/followers`);
+            const response = await fetch(
+                `/users/${currentUser.username}/followers`
+            );
             const data = await response.json();
             setFollowers(data.followers.data || []);
         } catch (error) {
@@ -113,7 +121,9 @@ const Profil = ({ auth, user, posts }) => {
     const loadFollowing = async () => {
         setLoadingFollowing(true);
         try {
-            const response = await fetch(`/users/${currentUser.id}/following`);
+            const response = await fetch(
+                `/users/${currentUser.username}/following`
+            );
             const data = await response.json();
             setFollowing(data.following.data || []);
         } catch (error) {
@@ -219,9 +229,23 @@ const Profil = ({ auth, user, posts }) => {
                                                 src={`/storage/${currentUser.profile_photo}`}
                                                 alt="Profil fotoğrafı"
                                                 className="w-24 h-24 rounded-full object-cover mx-auto"
+                                                onError={(e) => {
+                                                    e.target.style.display =
+                                                        "none";
+                                                    e.target.nextSibling.style.display =
+                                                        "flex";
+                                                }}
                                             />
                                         ) : (
-                                            <div className="w-24 h-24 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center mx-auto">
+                                            <div
+                                                className="w-24 h-24 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center mx-auto"
+                                                style={{
+                                                    display:
+                                                        currentUser.profile_photo
+                                                            ? "none"
+                                                            : "flex",
+                                                }}
+                                            >
                                                 <User className="w-12 h-12 text-gray-600 dark:text-gray-400" />
                                             </div>
                                         )}

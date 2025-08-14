@@ -34,7 +34,7 @@ export default function Register() {
         <AuthLayout>
             <Head title={t("register_title")} />
 
-            <Card className="p-6 max-w-md w-full">
+            <Card className="p-6 w-full">
                 <form onSubmit={submit}>
                     <div>
                         <InputLabel htmlFor="name" value={t("name")} />

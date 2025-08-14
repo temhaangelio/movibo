@@ -74,7 +74,7 @@ const UserLayout = ({ children, auth }) => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
+        <div className="min-h-screen h-screen max-w-md mx-auto bg-gray-100 dark:bg-gray-900 flex flex-col">
             {/* Mobile Header */}
             <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
                 <div className="px-4 py-3">
@@ -105,13 +105,13 @@ const UserLayout = ({ children, auth }) => {
             </header>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto pb-24 px-4">
+            <main className="flex-1 overflow-y-auto pb-28 px-4">
                 {children}
             </main>
 
             {/* Mobile Bottom Navigation */}
-            <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50">
-                <div className="flex justify-around items-center py-2">
+            <nav className="fixed bottom-0 left-0 max-w-md mx-auto right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50 shadow-lg pb-safe">
+                <div className="flex justify-around  items-center py-3">
                     {/* Ana Sayfa */}
                     <Link
                         href="/home"
