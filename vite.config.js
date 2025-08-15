@@ -17,7 +17,7 @@ export default defineConfig({
             "/Layouts": path.resolve(__dirname, "resources/js/Layouts"),
         },
     },
-    server: {
-        https: true,
-    },
+    // server: {
+    //     https: true,
+    // },
 });

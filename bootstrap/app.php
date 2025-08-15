@@ -26,12 +26,12 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        // Force HTTPS in production
-        if (app()->environment('production')) {
-            $middleware->web(prepend: [
-                \App\Http\Middleware\ForceHttps::class,
-            ]);
-        }
+        // Force HTTPS in production - temporarily disabled
+        // if (app()->environment('production')) {
+        //     $middleware->web(prepend: [
+        //         \App\Http\Middleware\ForceHttps::class,
+        //     ]);
+        // }
 
         // Admin middleware alias
         $middleware->alias([

@@ -17,8 +17,8 @@
         @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
         @inertiaHead
         
-        <!-- Force HTTPS for assets -->
-        @if(config('app.env') === 'production')
+        <!-- Force HTTPS for assets - temporarily disabled -->
+        {{-- @if(config('app.env') === 'production')
         <script>
             // Force HTTPS for all assets
             document.addEventListener('DOMContentLoaded', function() {
@@ -33,7 +33,7 @@
                 });
             });
         </script>
-        @endif
+        @endif --}}
     </head>
     <body class="font-sans antialiased">
         @inertia
