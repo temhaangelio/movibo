@@ -2,15 +2,7 @@ import React, { useState, useEffect } from "react";
 import UserLayout from "/Layouts/UserLayout";
 import { Head, Link, usePage } from "@inertiajs/react";
 import Loading from "/ui/Loading";
-import {
-    ArrowLeft,
-    Star,
-    Calendar,
-    Clock,
-    Play,
-    Plus,
-    User,
-} from "@phosphor-icons/react";
+import { ArrowLeft, Star, User } from "@phosphor-icons/react";
 
 const FilmDetay = ({ auth }) => {
     const { props } = usePage();

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Head } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
 import UserLayout from "/Layouts/UserLayout";
 import Buton from "/ui/Buton";
 import Loading from "/ui/Loading";
-import { Shuffle } from "@phosphor-icons/react";
+import { Shuffle, Play } from "@phosphor-icons/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDice } from "@fortawesome/free-solid-svg-icons";
 
 const Rastgele = ({ auth }) => {
     const { t } = useTranslation();
@@ -12,97 +14,70 @@ const Rastgele = ({ auth }) => {
     const [loading, setLoading] = useState(false);
     const [movieList, setMovieList] = useState([]);
 
-    // TMDB API anahtarı .env'den alınıyor
-    const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-    const TMDB_BASE_URL = "https://api.themoviedb.org/3";
-
-    // Debug için API anahtarını kontrol et
-    console.log("TMDB API Key:", TMDB_API_KEY);
+    // Backend API endpoint'leri kullanılıyor
 
     // Sayfa yüklendiğinde film listesini al ve rastgele film seç
     useEffect(() => {
         loadMovies();
     }, []);
 
-    // TMDB'den popüler filmleri al
+    // Backend'den popüler filmleri al
     const loadMovies = async () => {
         try {
-            const response = await fetch(
-                `${TMDB_BASE_URL}/movie/popular?api_key=${TMDB_API_KEY}&language=tr-TR&page=1`
-            );
+            const response = await fetch(`/api/movies/popular?page=1`);
             const data = await response.json();
 
-            if (data.results && data.results.length > 0) {
-                setMovieList(data.results);
+            if (data.success && data.movies && data.movies.length > 0) {
+                setMovieList(data.movies);
                 // İlk filmi rastgele seç
                 const randomIndex = Math.floor(
-                    Math.random() * data.results.length
+                    Math.random() * data.movies.length
                 );
-                await getMovieDetails(data.results[randomIndex].id);
+                await getMovieDetails(data.movies[randomIndex].id);
             }
         } catch (error) {
             console.error("Filmler yüklenirken hata:", error);
         }
     };
 
-    // Film detaylarını al (yönetmen, oyuncular, süre vb.)
+    // Backend'den film detaylarını al
     const getMovieDetails = async (movieId) => {
         setLoading(true);
         try {
-            const [movieResponse, creditsResponse] = await Promise.all([
-                fetch(
-                    `${TMDB_BASE_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}&language=tr-TR`
-                ),
-                fetch(
-                    `${TMDB_BASE_URL}/movie/${movieId}/credits?api_key=${TMDB_API_KEY}&language=tr-TR`
-                ),
-            ]);
+            const response = await fetch(`/api/movies/${movieId}`);
+            const data = await response.json();
 
-            const movieData = await movieResponse.json();
-            const creditsData = await creditsResponse.json();
+            if (data.success && data.movie) {
+                const movieData = data.movie;
 
-            // Film verilerini formatla
-            const formattedMovie = {
-                id: movieData.id,
-                title: movieData.title,
-                originalTitle: movieData.original_title,
-                year: new Date(movieData.release_date).getFullYear(),
-                rating: movieData.vote_average,
-                genre: movieData.genres?.map((g) => g.name) || [],
-                director:
-                    creditsData.crew?.find((c) => c.job === "Director")?.name ||
-                    "Bilinmiyor",
-                cast: creditsData.cast?.slice(0, 5).map((c) => c.name) || [],
-                description: movieData.overview || "Açıklama bulunamadı.",
-                poster: movieData.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${movieData.poster_path}`
-                    : "https://via.placeholder.com/300x450/666666/FFFFFF?text=Film+Posteri",
-                duration: `${movieData.runtime || 0} min`,
-                language:
-                    movieData.original_language === "tr"
-                        ? "Türkçe"
-                        : movieData.original_language === "en"
-                        ? "İngilizce"
-                        : movieData.original_language === "ja"
-                        ? "Japonca"
-                        : movieData.original_language === "ko"
-                        ? "Korece"
-                        : movieData.original_language === "es"
-                        ? "İspanyolca"
-                        : movieData.original_language === "fr"
-                        ? "Fransızca"
-                        : movieData.original_language === "de"
-                        ? "Almanca"
-                        : movieData.original_language === "it"
-                        ? "İtalyanca"
-                        : movieData.original_language === "ru"
-                        ? "Rusça"
-                        : movieData.original_language === "ar"
-                        ? "Arapça"
-                        : "Diğer",
-            };
+                // Film verilerini formatla
+                const formattedMovie = {
+                    id: movieData.id,
+                    title: movieData.title,
+                    originalTitle: movieData.original_title,
+                    year: new Date(movieData.release_date).getFullYear(),
+                    rating: movieData.vote_average,
+                    genre: movieData.genres || [],
+                    director: Array.isArray(movieData.crew)
+                        ? movieData.crew.find((c) => c.job === "Director")
+                              ?.name || "Bilinmiyor"
+                        : "Bilinmiyor",
+                    cast: Array.isArray(movieData.cast)
+                        ? movieData.cast.slice(0, 5).map((c) => c.name) || []
+                        : [],
+                    description: movieData.overview || "Açıklama bulunamadı.",
+                    poster:
+                        movieData.poster_path ||
+                        "https://via.placeholder.com/300x450/666666/FFFFFF?text=Film+Posteri",
+                    duration: `${movieData.runtime || 0} min`,
+                    language:
+                        movieData.original_language === "tr"
+                            ? "Türkçe"
+                            : "Diğer",
+                };
 
-            setCurrentMovie(formattedMovie);
+                setCurrentMovie(formattedMovie);
+            }
         } catch (error) {
             console.error("Film detayları alınırken hata:", error);
         } finally {
@@ -120,6 +95,12 @@ const Rastgele = ({ auth }) => {
         await getMovieDetails(movieList[randomIndex].id);
     };
 
+    const goToMovieDetail = () => {
+        if (currentMovie) {
+            router.visit(`/movies/${currentMovie.id}`);
+        }
+    };
+
     if (loading) {
         return (
             <UserLayout auth={auth}>
@@ -135,49 +116,44 @@ const Rastgele = ({ auth }) => {
         <UserLayout auth={auth}>
             <Head title="Rastgele Film" />
 
-            <div className="relative min-h-screen">
+            <div className="relative pt-4">
                 {/* Film Görseli - Arka Plan */}
                 {currentMovie && (
-                    <div className="absolute inset-0 z-0">
-                        <img
-                            src={currentMovie.poster}
-                            alt={currentMovie.title}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                                e.target.src =
-                                    "https://via.placeholder.com/1920x1080/666666/FFFFFF?text=Film+Posteri";
-                            }}
-                        />
-                        {/* Karartma Katmanı */}
-                        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-                    </div>
+                    <img
+                        src={currentMovie.poster}
+                        alt={currentMovie.title}
+                        className="w-full"
+                        onError={(e) => {
+                            e.target.src =
+                                "https://via.placeholder.com/1920x1080/666666/FFFFFF?text=Film+Posteri";
+                        }}
+                    />
                 )}
-
-                {/* İçerik - Üst Katman */}
-                <div className="relative z-10 flex flex-col justify-center items-center min-h-screen px-4">
-                    {/* Header */}
-                    <div className="text-center mb-8">
-                        <h1 className="text-4xl font-bold text-white mb-2 drop-shadow-lg">
-                            Rastgele Film Keşfi
-                        </h1>
-                        <p className="text-white/80 text-lg drop-shadow-md">
-                            Yeni filmler keşfetmek için rastgele film önerileri
-                        </p>
-                    </div>
-
-                    {/* Yeni Film Butonu */}
-                    <div className="text-center">
+                {/* Butonlar - Görselin Üstünde */}
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10 flex justify-center items-center space-x-4">
+                    {currentMovie && (
                         <Buton
-                            onClick={getRandomMovie}
+                            onClick={goToMovieDetail}
                             variant="primary"
                             size="lg"
-                            className="flex items-center space-x-2 mx-auto bg-white text-gray-900 hover:bg-gray-100 shadow-lg"
+                            className="flex items-center space-x-2 bg-black text-gray-900 hover:bg-gray-100 shadow-lg"
                         >
-                            <Shuffle className="w-6 h-6" />
-                            <span>Başka Bir Film Öner</span>
+                            <Play className="w-5 h-5" />
+                            <span>Filme Git</span>
                         </Buton>
-                    </div>
+                    )}
                 </div>
+            </div>
+            <div className="flex justify-center items-center">
+                <Buton
+                    onClick={getRandomMovie}
+                    variant="ghost"
+                    size="lg"
+                    className="flex items-center space-x-2"
+                >
+                    <FontAwesomeIcon icon={faDice} className="w-10 h-10" />
+                    <span>Başka Bir Film Öner</span>
+                </Buton>
             </div>
         </UserLayout>
     );

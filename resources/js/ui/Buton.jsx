@@ -23,6 +23,7 @@ const Buton = ({
             "bg-green-600 dark:bg-green-700 text-white hover:bg-green-700 dark:hover:bg-green-800 focus:ring-green-500 dark:focus:ring-green-400",
         outline:
             "border border-gray-300 dark:border-blue-600 text-gray-700 dark:text-blue-300 hover:bg-gray-50 dark:hover:bg-blue-600 focus:ring-gray-500 dark:focus:ring-blue-400",
+        ghost: "text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0",
     };
 
     const sizes = {

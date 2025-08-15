@@ -31,7 +31,6 @@ const UserLayout = ({ children, auth }) => {
             const isDarkMode =
                 document.documentElement.classList.contains("dark");
             setIsDark(isDarkMode);
-            console.log("Tema durumu kontrol edildi:", isDarkMode);
         };
 
         checkTheme();
@@ -60,8 +59,6 @@ const UserLayout = ({ children, auth }) => {
         const currentTheme = localStorage.getItem("theme") || "auto";
         const newTheme = currentTheme === "dark" ? "light" : "dark";
 
-        console.log("Tema değiştiriliyor:", { currentTheme, newTheme });
-
         // Doğrudan DOM manipülasyonu
         if (newTheme === "dark") {
             document.documentElement.classList.add("dark");
@@ -71,8 +68,6 @@ const UserLayout = ({ children, auth }) => {
 
         localStorage.setItem("theme", newTheme);
         setIsDark(newTheme === "dark");
-
-        console.log("Tema değiştirildi:", newTheme);
     };
 
     return (
