@@ -16,6 +16,24 @@
         @viteReactRefresh
         @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
         @inertiaHead
+        
+        <!-- Force HTTPS for assets -->
+        @if(config('app.env') === 'production')
+        <script>
+            // Force HTTPS for all assets
+            document.addEventListener('DOMContentLoaded', function() {
+                const links = document.querySelectorAll('link[rel="stylesheet"], script[src]');
+                links.forEach(function(link) {
+                    if (link.href && link.href.startsWith('http://')) {
+                        link.href = link.href.replace('http://', 'https://');
+                    }
+                    if (link.src && link.src.startsWith('http://')) {
+                        link.src = link.src.replace('http://', 'https://');
+                    }
+                });
+            });
+        </script>
+        @endif
     </head>
     <body class="font-sans antialiased">
         @inertia
