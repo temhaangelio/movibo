@@ -122,7 +122,7 @@ const Rastgele = ({ auth }) => {
                     <img
                         src={currentMovie.poster}
                         alt={currentMovie.title}
-                        className="w-full"
+                        className="w-full rounded-lg"
                         onError={(e) => {
                             e.target.src =
                                 "https://via.placeholder.com/1920x1080/666666/FFFFFF?text=Film+Posteri";
@@ -130,28 +130,30 @@ const Rastgele = ({ auth }) => {
                     />
                 )}
                 {/* Butonlar - Görselin Üstünde */}
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10 flex justify-center items-center space-x-4">
-                    {currentMovie && (
-                        <Buton
-                            onClick={goToMovieDetail}
-                            variant="primary"
-                            size="lg"
-                            className="flex items-center space-x-2 bg-black text-gray-900 hover:bg-gray-100 shadow-lg"
-                        >
-                            <Play className="w-5 h-5" />
-                            <span>Filme Git</span>
-                        </Buton>
-                    )}
+                <div className="absolute top-8 left-4">
+                    <div className="flex flex-col space-x-2 w-full">
+                        {currentMovie && (
+                            <Buton
+                                onClick={goToMovieDetail}
+                                variant="primary"
+                                size="lg"
+                                className="flex items-center space-x-2  bg-black text-gray-900 hover:bg-gray-100 shadow-lg w-full"
+                            >
+                                <Play className="w-5 h-5" />
+                                <span>Göster</span>
+                            </Buton>
+                        )}
+                    </div>
                 </div>
             </div>
             <div className="flex justify-center items-center">
                 <Buton
                     onClick={getRandomMovie}
-                    variant="ghost"
+                    variant="primary"
                     size="lg"
-                    className="flex items-center space-x-2"
+                    className="flex items-center space-x-2 mt-3 w-full"
                 >
-                    <FontAwesomeIcon icon={faDice} className="w-10 h-10" />
+                    <FontAwesomeIcon icon={faDice} className="w-6 h-6" />
                     <span>Başka Bir Film Öner</span>
                 </Buton>
             </div>
