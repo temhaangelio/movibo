@@ -172,14 +172,10 @@ Route::post('/api/notifications/{notification}/mark-read', [App\Http\Controllers
 Route::post('/api/notifications/mark-all-read', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
 Route::get('/api/notifications/unread-count', [App\Http\Controllers\NotificationController::class, 'getUnreadCount'])->name('notifications.unread-count');
 
-    // Bildirim rotaları
-    Route::get('/notifications', function () {
-        return Inertia::render('user/Bildirimler');
-    })->name('notifications');
-
-    Route::get('/api/notifications', [NotificationController::class, 'index'])->name('api.notifications.index');
-    Route::post('/api/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('api.notifications.read');
-    Route::post('/api/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('api.notifications.read-all');
+// Rastgele film sayfası
+Route::get('/rastgele', function () {
+    return Inertia::render('user/Rastgele');
+})->name('rastgele');
 
     // Yorum API routes
     Route::get('/api/posts/{post}/comments', [CommentController::class, 'getPostComments'])->name('api.posts.comments');

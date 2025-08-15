@@ -71,6 +71,16 @@ const OyuncuDetay = ({ auth }) => {
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                         {/* Profil Fotoğrafı ve Temel Bilgiler */}
                         <div className="relative">
+                            {/* Geri Butonu */}
+                            <div className="absolute top-4 left-4 z-20">
+                                <button
+                                    onClick={() => window.history.back()}
+                                    className="bg-black bg-opacity-75 text-white p-2 rounded-full hover:bg-opacity-90 transition-all flex items-center justify-center"
+                                >
+                                    <ArrowLeft className="w-5 h-5" />
+                                </button>
+                            </div>
+
                             {actor.profile_path ? (
                                 <img
                                     src={actor.profile_path}

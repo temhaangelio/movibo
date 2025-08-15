@@ -5,10 +5,9 @@ import UserLayout from "/Layouts/UserLayout";
 import TextInput from "/ui/TextInput";
 import Buton from "/ui/Buton";
 import Confirm from "/ui/Confirm";
-import Modal from "/ui/Modal";
+import BottomSheet from "/ui/BottomSheet";
 import Card from "/ui/Card";
 import ThemeToggle from "/ui/ThemeToggle";
-import Switch from "/ui/Switch";
 import Dropdown from "/ui/Dropdown";
 import {
     SignOut,
@@ -29,7 +28,7 @@ const Ayarlar = ({ auth }) => {
     const user = auth.user;
     const [currentTheme, setCurrentTheme] = useState("auto");
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-    const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+    const [isProfileSheetOpen, setIsProfileSheetOpen] = useState(false);
 
     useEffect(() => {
         setCurrentTheme(localStorage.getItem("theme") || "auto");
@@ -47,23 +46,6 @@ const Ayarlar = ({ auth }) => {
         email: user.email,
         theme: localStorage.getItem("theme") || "auto",
         language: localStorage.getItem("language") || "tr",
-        notification_preferences: {
-            follow_notifications:
-                user.notification_preferences?.follow_notifications ?? true,
-            like_notifications:
-                user.notification_preferences?.like_notifications ?? true,
-            comment_notifications:
-                user.notification_preferences?.comment_notifications ?? true,
-            email_notifications:
-                user.notification_preferences?.email_notifications ?? false,
-        },
-        privacy_settings: {
-            profile_visibility:
-                user.privacy_settings?.profile_visibility ?? "public",
-            show_email: user.privacy_settings?.show_email ?? false,
-            allow_follow_requests:
-                user.privacy_settings?.allow_follow_requests ?? true,
-        },
     });
 
     // User verisi değiştiğinde form verilerini güncelle
@@ -74,24 +56,6 @@ const Ayarlar = ({ auth }) => {
             email: user.email,
             theme: localStorage.getItem("theme") || "auto",
             language: localStorage.getItem("language") || "tr",
-            notification_preferences: {
-                follow_notifications:
-                    user.notification_preferences?.follow_notifications ?? true,
-                like_notifications:
-                    user.notification_preferences?.like_notifications ?? true,
-                comment_notifications:
-                    user.notification_preferences?.comment_notifications ??
-                    true,
-                email_notifications:
-                    user.notification_preferences?.email_notifications ?? false,
-            },
-            privacy_settings: {
-                profile_visibility:
-                    user.privacy_settings?.profile_visibility ?? "public",
-                show_email: user.privacy_settings?.show_email ?? false,
-                allow_follow_requests:
-                    user.privacy_settings?.allow_follow_requests ?? true,
-            },
         });
     }, [user, setData]);
 
@@ -120,50 +84,6 @@ const Ayarlar = ({ auth }) => {
         // Artık gerekli değil çünkü otomatik kaydetme var
     };
 
-    const handleNotificationChange = (key, value) => {
-        setData("notification_preferences", {
-            ...data.notification_preferences,
-            [key]: value,
-        });
-
-        // Sadece bildirim ayarlarını gönder
-        router.patch(
-            "/settings/notifications",
-            {
-                notification_preferences: {
-                    ...data.notification_preferences,
-                    [key]: value,
-                },
-            },
-            {
-                onSuccess: () => {
-                    console.log("Bildirim ayarları güncellendi");
-                },
-                onError: (errors) => {
-                    console.error(
-                        "Bildirim ayarları güncellenirken hata:",
-                        errors
-                    );
-                },
-            }
-        );
-    };
-
-    const handlePrivacyChange = (key, value) => {
-        setData("privacy_settings", {
-            ...data.privacy_settings,
-            [key]: value,
-        });
-
-        // Sadece gizlilik ayarlarını gönder
-        router.patch("/settings/privacy", {
-            privacy_settings: {
-                ...data.privacy_settings,
-                [key]: value,
-            },
-        });
-    };
-
     const handleThemeChange = (theme) => {
         window.setTheme(theme);
         setCurrentTheme(theme);
@@ -186,6 +106,28 @@ const Ayarlar = ({ auth }) => {
         }, 100);
     };
 
+    const handleProfileSubmit = (e) => {
+        e.preventDefault();
+        patchProfile("/settings", {
+            onSuccess: () => {
+                setIsProfileSheetOpen(false);
+                alert("Profil bilgileri başarıyla güncellendi!");
+            },
+            onError: (errors) => {
+                console.error("Profil güncellenirken hata:", errors);
+            },
+        });
+    };
+
+    const openProfileSheet = () => {
+        setProfileData({
+            name: user.name,
+            username: user.username || "",
+            email: user.email,
+        });
+        setIsProfileSheetOpen(true);
+    };
+
     const handleDeleteAccount = () => {
         router.delete("/settings/delete-account", {
             onSuccess: () => {
@@ -198,28 +140,6 @@ const Ayarlar = ({ auth }) => {
         });
     };
 
-    const handleProfileSubmit = (e) => {
-        e.preventDefault();
-        patchProfile("/settings", {
-            onSuccess: () => {
-                setIsProfileModalOpen(false);
-                alert("Profil bilgileri başarıyla güncellendi!");
-            },
-            onError: (errors) => {
-                console.error("Profil güncellenirken hata:", errors);
-            },
-        });
-    };
-
-    const openProfileModal = () => {
-        setProfileData({
-            name: user.name,
-            username: user.username || "",
-            email: user.email,
-        });
-        setIsProfileModalOpen(true);
-    };
-
     return (
         <UserLayout auth={auth}>
             <Head title={t("settings")} />
@@ -227,7 +147,10 @@ const Ayarlar = ({ auth }) => {
             <div className="pb-4 bg-gray-50 dark:bg-gray-900 mt-4">
                 <Card>
                     <div className="p-4 space-y-4">
-                        <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
+                        <div
+                            onClick={openProfileSheet}
+                            className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+                        >
                             <div className="flex items-center">
                                 <User className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
                                 <div>
@@ -235,93 +158,11 @@ const Ayarlar = ({ auth }) => {
                                         {t("profile_info")}
                                     </h3>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        {t("edit_profile_info")}
+                                        Profil bilgilerinizi düzenleyin
                                     </p>
                                 </div>
                             </div>
-                            <Buton
-                                onClick={openProfileModal}
-                                variant="primary"
-                                size="sm"
-                            >
-                                {t("edit")}
-                            </Buton>
-                        </div>
-
-                        <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
-                            <div className="flex items-center">
-                                <Bell className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
-                                <div>
-                                    <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                                        {t("notifications_settings")}
-                                    </h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        {t("notification_types")}
-                                    </p>
-                                </div>
-                            </div>
-                            <Switch
-                                checked={
-                                    data.notification_preferences
-                                        .follow_notifications &&
-                                    data.notification_preferences
-                                        .like_notifications &&
-                                    data.notification_preferences
-                                        .comment_notifications
-                                }
-                                onChange={(e) => {
-                                    const isChecked = e.target.checked;
-
-                                    // Tüm bildirim ayarlarını aynı anda güncelle
-                                    setData("notification_preferences", {
-                                        ...data.notification_preferences,
-                                        follow_notifications: isChecked,
-                                        like_notifications: isChecked,
-                                        comment_notifications: isChecked,
-                                    });
-
-                                    // Sadece bildirim ayarlarını gönder
-                                    router.patch("/settings/notifications", {
-                                        notification_preferences: {
-                                            ...data.notification_preferences,
-                                            follow_notifications: isChecked,
-                                            like_notifications: isChecked,
-                                            comment_notifications: isChecked,
-                                        },
-                                    });
-                                }}
-                                size="md"
-                            />
-                        </div>
-
-                        <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
-                            <div className="flex items-center">
-                                <Eye className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
-                                <div>
-                                    <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                                        {t("profile_visibility")}
-                                    </h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        {data.privacy_settings
-                                            .profile_visibility === "public"
-                                            ? t("public_profile")
-                                            : t("private_profile")}
-                                    </p>
-                                </div>
-                            </div>
-                            <Switch
-                                checked={
-                                    data.privacy_settings.profile_visibility ===
-                                    "private"
-                                }
-                                onChange={(e) =>
-                                    handlePrivacyChange(
-                                        "profile_visibility",
-                                        e.target.checked ? "private" : "public"
-                                    )
-                                }
-                                size="md"
-                            />
+                            <ArrowRight className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                         </div>
 
                         <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
@@ -558,7 +399,10 @@ const Ayarlar = ({ auth }) => {
                             </Dropdown>
                         </div>
 
-                        <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
+                        <Link
+                            href="/terms"
+                            className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+                        >
                             <div className="flex items-center">
                                 <FileText className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
                                 <div>
@@ -566,22 +410,16 @@ const Ayarlar = ({ auth }) => {
                                         {t("terms_of_service")}
                                     </h3>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        {t("view_terms_of_service")}
+                                        Kullanım şartları
                                     </p>
                                 </div>
                             </div>
-                            <Buton
-                                onClick={() => router.visit("/terms")}
-                                variant="secondary"
-                                size="sm"
-                            >
-                                {t("view")}
-                            </Buton>
-                        </div>
+                            <ArrowRight className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                        </Link>
 
                         <Link
                             href="/support"
-                            className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+                            className="flex items-center justify-between pb-4  hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
                         >
                             <div className="flex items-center">
                                 <Question className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
@@ -590,8 +428,7 @@ const Ayarlar = ({ auth }) => {
                                         Destek
                                     </h3>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        Sorun yaşıyorsanız destek ekibimizle
-                                        iletişime geçin
+                                        Yardım alın
                                     </p>
                                 </div>
                             </div>
@@ -605,7 +442,33 @@ const Ayarlar = ({ auth }) => {
                 <Buton
                     type="button"
                     variant="danger"
-                    onClick={() => router.post("/logout")}
+                    onClick={async () => {
+                        try {
+                            const csrfMeta = document.querySelector(
+                                'meta[name="csrf-token"]'
+                            );
+                            const csrfToken = csrfMeta
+                                ? csrfMeta.getAttribute("content")
+                                : "";
+
+                            const response = await fetch("/logout", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "X-CSRF-TOKEN": csrfToken,
+                                },
+                                credentials: "same-origin",
+                            });
+
+                            if (response.ok) {
+                                window.location.href = "/";
+                            } else {
+                                console.error("Logout failed");
+                            }
+                        } catch (error) {
+                            console.error("Logout error:", error);
+                        }
+                    }}
                     className="w-full"
                 >
                     {t("logout")}
@@ -629,11 +492,11 @@ const Ayarlar = ({ auth }) => {
                 cancelText={t("cancel")}
             />
 
-            <Modal
-                isOpen={isProfileModalOpen}
-                onClose={() => setIsProfileModalOpen(false)}
+            <BottomSheet
+                isOpen={isProfileSheetOpen}
+                onClose={() => setIsProfileSheetOpen(false)}
                 title={t("profile_info")}
-                maxWidth="max-w-lg"
+                maxHeight="max-h-[70vh]"
             >
                 <form onSubmit={handleProfileSubmit} className="space-y-4">
                     <TextInput
@@ -663,11 +526,11 @@ const Ayarlar = ({ auth }) => {
                         }
                         error={profileErrors.email}
                     />
-                    <div className="flex justify-end space-x-3 pt-4">
+                    <div className="flex justify-end space-x-3 pt-4 sticky bottom-0 bg-white dark:bg-gray-800 py-2">
                         <Buton
                             type="button"
                             variant="secondary"
-                            onClick={() => setIsProfileModalOpen(false)}
+                            onClick={() => setIsProfileSheetOpen(false)}
                         >
                             {t("cancel")}
                         </Buton>
@@ -676,7 +539,7 @@ const Ayarlar = ({ auth }) => {
                         </Buton>
                     </div>
                 </form>
-            </Modal>
+            </BottomSheet>
         </UserLayout>
     );
 };

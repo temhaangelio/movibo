@@ -4,6 +4,7 @@ const Loading = ({
     size = "md",
     variant = "spinner",
     className = "",
+    centered = false,
     ...props
 }) => {
     const sizes = {
@@ -51,6 +52,14 @@ const Loading = ({
     };
 
     const LoadingComponent = variants[variant];
+
+    if (centered) {
+        return (
+            <div className="min-h-[60vh] flex items-center justify-center">
+                <LoadingComponent />
+            </div>
+        );
+    }
 
     return <LoadingComponent />;
 };

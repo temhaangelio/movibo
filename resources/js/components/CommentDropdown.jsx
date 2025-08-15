@@ -155,7 +155,13 @@ const CommentDropdown = ({ open, onClose, post, user }) => {
                                     className="flex space-x-3 border-b border-gray-200 dark:border-gray-700 pb-3"
                                 >
                                     <div className="w-6 h-6 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
-                                        <User className="w-3 h-3 text-gray-600 dark:text-gray-400" />
+                                        {comment.user?.name ? (
+                                            <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                                                {comment.user.name.split(' ').map(word => word.charAt(0)).join('').toUpperCase().slice(0, 2)}
+                                            </span>
+                                        ) : (
+                                            <User className="w-3 h-3 text-gray-600 dark:text-gray-400" />
+                                        )}
                                     </div>
                                     <div className="flex-1">
                                         <div className="flex flex-col">

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import UserLayout from "/Layouts/UserLayout";
 import TextInput from "/ui/TextInput";
 import Buton from "/ui/Buton";
-import Modal from "/ui/Modal";
+import BottomSheet from "/ui/BottomSheet";
 import Card from "/ui/Card";
 import Loading from "/ui/Loading";
 import {
@@ -277,12 +277,12 @@ const Destek = ({ auth }) => {
                 </Card>
             </div>
 
-            {/* Yeni Destek İsteği Modal */}
-            <Modal
+            {/* Yeni Destek İsteği BottomSheet */}
+            <BottomSheet
                 isOpen={isNewTicketModalOpen}
                 onClose={() => setIsNewTicketModalOpen(false)}
                 title="Yeni Destek İsteği"
-                maxWidth="max-w-lg"
+                maxHeight="max-h-[80vh]"
             >
                 <form onSubmit={handleTicketSubmit} className="space-y-4">
                     <TextInput
@@ -321,7 +321,7 @@ const Destek = ({ auth }) => {
                             </p>
                         )}
                     </div>
-                    <div className="flex justify-end space-x-3 pt-4">
+                    <div className="flex justify-end space-x-3 pt-4 sticky bottom-0 bg-white dark:bg-gray-800 py-2">
                         <Buton
                             type="button"
                             variant="secondary"
@@ -334,7 +334,7 @@ const Destek = ({ auth }) => {
                         </Buton>
                     </div>
                 </form>
-            </Modal>
+            </BottomSheet>
         </UserLayout>
     );
 };

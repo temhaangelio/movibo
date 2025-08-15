@@ -119,9 +119,7 @@ const AnaSayfa = ({ auth, posts, user }) => {
                 {/* Paylaşımlar */}
                 <div className="pb-4">
                     {loading ? (
-                        <div className="text-center py-8">
-                            <Loading size="lg" />
-                        </div>
+                        <Loading size="lg" centered={true} />
                     ) : currentPosts && currentPosts.length > 0 ? (
                         <div className="space-y-3">
                             {currentPosts.map((post) => (

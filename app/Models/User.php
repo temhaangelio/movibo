@@ -26,8 +26,6 @@ class User extends Authenticatable
         'email',
         'password',
         'profile_photo',
-        'notification_preferences',
-        'privacy_settings',
         'terms_accepted',
         'terms_accepted_at',
         'is_admin',
@@ -54,8 +52,6 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'notification_preferences' => 'array',
-            'privacy_settings' => 'array',
             'is_admin' => 'boolean',
             'is_blocked' => 'boolean',
         ];

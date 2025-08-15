@@ -37,7 +37,7 @@ const Discover = ({ auth }) => {
         fetchMovies();
     }, [url]); // URL değiştiğinde (sayfa açıldığında) filmleri yenile
 
-    const fetchMovies = async (pageNum = 1, append = false) => {
+    const fetchMovies = useCallback(async (pageNum = 1, append = false) => {
         if (pageNum === 1) {
             setLoading(true);
         } else {
@@ -55,17 +55,19 @@ const Discover = ({ auth }) => {
             if (data.movies && data.movies.length > 0) {
                 if (append) {
                     // Yeni filmleri mevcut listeye ekle, duplicate'ları önle
-                    const newMovies = data.movies.filter(
-                        (newMovie) =>
-                            !movies.some(
-                                (existingMovie) =>
-                                    existingMovie.id === newMovie.id
-                            )
-                    );
-                    console.log(
-                        `Adding ${newMovies.length} new movies from page ${pageNum}`
-                    );
-                    setMovies((prev) => [...prev, ...newMovies]);
+                    setMovies((prev) => {
+                        const newMovies = data.movies.filter(
+                            (newMovie) =>
+                                !prev.some(
+                                    (existingMovie) =>
+                                        existingMovie.id === newMovie.id
+                                )
+                        );
+                        console.log(
+                            `Adding ${newMovies.length} new movies from page ${pageNum}`
+                        );
+                        return [...prev, ...newMovies];
+                    });
                 } else {
                     setMovies(data.movies);
                 }
@@ -89,28 +91,48 @@ const Discover = ({ auth }) => {
             setLoading(false);
             setLoadingMore(false);
         }
-    };
+    }, []);
 
     const loadMore = useCallback(() => {
+        console.log("loadMore called:", { page, loadingMore, hasMore });
         if (!loadingMore && hasMore) {
+            console.log("Fetching next page:", page + 1);
             fetchMovies(page + 1, true);
         }
-    }, [page, loadingMore, hasMore]);
+    }, [page, loadingMore, hasMore, fetchMovies]);
 
-    // Scroll event listener
+    // Intersection Observer for infinite scroll
     useEffect(() => {
-        const handleScroll = () => {
-            if (
-                window.innerHeight + document.documentElement.scrollTop >=
-                document.documentElement.offsetHeight - 1000
-            ) {
-                loadMore();
-            }
-        };
+        const triggerElement = document.getElementById("scroll-trigger");
 
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [loadMore]);
+        if (!triggerElement || !hasMore || loadingMore) {
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        console.log(
+                            "Trigger element is visible, loading more movies..."
+                        );
+                        loadMore();
+                    }
+                });
+            },
+            {
+                root: null, // viewport
+                rootMargin: "100px", // 100px before the element becomes visible
+                threshold: 0.1,
+            }
+        );
+
+        observer.observe(triggerElement);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [loadMore, hasMore, loadingMore]);
 
     const handleUserSelect = (user) => {
         setSelectedUser(user);
@@ -141,9 +163,7 @@ const Discover = ({ auth }) => {
                 {/* Önerilen Filmler */}
                 <div className="py-4">
                     {loading ? (
-                        <div className="text-center py-12">
-                            <Loading size="lg" />
-                        </div>
+                        <Loading size="lg" centered={true} />
                     ) : movies.length > 0 ? (
                         <>
                             <div className="grid grid-cols-3 gap-0">
@@ -171,6 +191,15 @@ const Discover = ({ auth }) => {
                                 <div className="text-center py-4">
                                     <Loading size="sm" />
                                 </div>
+                            )}
+
+                            {/* Infinite Scroll Trigger */}
+                            {hasMore && !loadingMore && (
+                                <div
+                                    id="scroll-trigger"
+                                    className="h-1 w-full"
+                                    style={{ marginTop: "100px" }}
+                                />
                             )}
                         </>
                     ) : (

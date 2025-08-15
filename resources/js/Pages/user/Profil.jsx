@@ -246,7 +246,20 @@ const Profil = ({ auth, user, posts }) => {
                                                             : "flex",
                                                 }}
                                             >
-                                                <User className="w-12 h-12 text-gray-600 dark:text-gray-400" />
+                                                {currentUser.name ? (
+                                                    <span className="text-2xl font-bold">
+                                                        {currentUser.name
+                                                            .split(" ")
+                                                            .map((word) =>
+                                                                word.charAt(0)
+                                                            )
+                                                            .join("")
+                                                            .toUpperCase()
+                                                            .slice(0, 2)}
+                                                    </span>
+                                                ) : (
+                                                    <User className="w-12 h-12 text-gray-600 dark:text-gray-400" />
+                                                )}
                                             </div>
                                         )}
 
@@ -368,7 +381,7 @@ const Profil = ({ auth, user, posts }) => {
                                     >
                                         {uploading ? (
                                             <>
-                                                <div className="w-4 h-4 border-4 border-current border-t-transparent rounded-full animate-spin"></div>
+                                                <Loading size="sm" />
                                                 <span>
                                                     {isFollowing
                                                         ? "Takip Bırakılıyor..."
@@ -441,7 +454,7 @@ const Profil = ({ auth, user, posts }) => {
                         <div className="p-4 overflow-y-auto max-h-80">
                             {loadingFollowers ? (
                                 <div className="text-center py-8">
-                                    <div className="w-6 h-6 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                                    <Loading size="md" />
                                     <p className="text-gray-500 dark:text-gray-400 mt-2">
                                         Yükleniyor...
                                     </p>
@@ -462,7 +475,28 @@ const Profil = ({ auth, user, posts }) => {
                                                     />
                                                 ) : (
                                                     <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
-                                                        <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                                                        {follower.name ? (
+                                                            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                                                {follower.name
+                                                                    .split(" ")
+                                                                    .map(
+                                                                        (
+                                                                            word
+                                                                        ) =>
+                                                                            word.charAt(
+                                                                                0
+                                                                            )
+                                                                    )
+                                                                    .join("")
+                                                                    .toUpperCase()
+                                                                    .slice(
+                                                                        0,
+                                                                        2
+                                                                    )}
+                                                            </span>
+                                                        ) : (
+                                                            <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                                                        )}
                                                     </div>
                                                 )}
                                             </div>
@@ -508,7 +542,7 @@ const Profil = ({ auth, user, posts }) => {
                         <div className="p-4 overflow-y-auto max-h-80">
                             {loadingFollowing ? (
                                 <div className="text-center py-8">
-                                    <div className="w-6 h-6 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                                    <Loading size="md" />
                                     <p className="text-gray-500 dark:text-gray-400 mt-2">
                                         Yükleniyor...
                                     </p>
@@ -529,7 +563,28 @@ const Profil = ({ auth, user, posts }) => {
                                                     />
                                                 ) : (
                                                     <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
-                                                        <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                                                        {followed.name ? (
+                                                            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                                                {followed.name
+                                                                    .split(" ")
+                                                                    .map(
+                                                                        (
+                                                                            word
+                                                                        ) =>
+                                                                            word.charAt(
+                                                                                0
+                                                                            )
+                                                                    )
+                                                                    .join("")
+                                                                    .toUpperCase()
+                                                                    .slice(
+                                                                        0,
+                                                                        2
+                                                                    )}
+                                                            </span>
+                                                        ) : (
+                                                            <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                                                        )}
                                                     </div>
                                                 )}
                                             </div>

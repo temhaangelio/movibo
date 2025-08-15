@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Head, Link, usePage, router } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
 import ApplicationLogo from "/ui/Logo";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDice } from "@fortawesome/free-solid-svg-icons";
 import {
     Gear,
     House,
@@ -93,6 +95,22 @@ const UserLayout = ({ children, auth }) => {
                                 </Link>
                             )}
                             <Link
+                                href="/notifications"
+                                className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors relative"
+                                title="Bildirimler"
+                            >
+                                <div className="relative">
+                                    <Bell className="w-6 h-6" />
+                                    {unreadCount > 0 && (
+                                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                                            {unreadCount > 99
+                                                ? "99+"
+                                                : unreadCount}
+                                        </span>
+                                    )}
+                                </div>
+                            </Link>
+                            <Link
                                 href="/settings"
                                 className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                                 title={t("settings")}
@@ -165,30 +183,23 @@ const UserLayout = ({ children, auth }) => {
                         </div>
                     </Link>
 
-                    {/* Bildirimler */}
+                    {/* Rastgele */}
                     <Link
-                        href="/notifications"
-                        className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors relative ${
-                            url.startsWith("/notifications")
+                        href="/rastgele"
+                        className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
+                            url.startsWith("/rastgele")
                                 ? "text-gray-900 dark:text-white"
                                 : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                         }`}
                     >
-                        <div className="relative">
-                            <Bell
-                                className="w-6 h-6"
-                                weight={
-                                    url.startsWith("/notifications")
-                                        ? "fill"
-                                        : "regular"
-                                }
-                            />
-                            {unreadCount > 0 && (
-                                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-bold">
-                                    {unreadCount > 99 ? "99+" : unreadCount}
-                                </span>
-                            )}
-                        </div>
+                        <FontAwesomeIcon
+                            icon={faDice}
+                            className={`w-6 h-6 ${
+                                url.startsWith("/rastgele")
+                                    ? "text-gray-900 dark:text-white"
+                                    : "text-gray-600 dark:text-gray-400"
+                            }`}
+                        />
                     </Link>
 
                     {/* Profil */}

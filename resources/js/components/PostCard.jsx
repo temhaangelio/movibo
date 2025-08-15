@@ -107,16 +107,9 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
     };
 
     const handleLike = () => {
-        console.log("Like button clicked for post:", post.id);
-        console.log("Current like state:", isLiked);
-        console.log("Current likes count:", likesCount);
-
         // Hemen UI'yi güncelle
         const newLikedState = !isLiked;
         const newCount = isLiked ? likesCount - 1 : likesCount + 1;
-
-        console.log("New like state:", newLikedState);
-        console.log("New count:", newCount);
 
         setIsLiked(newLikedState);
         setLikesCount(newCount);
@@ -219,8 +212,34 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
                     }
                     className="flex items-center"
                 >
-                    <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors">
-                        <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                    {post.user?.profile_photo ? (
+                        <img
+                            src={`/storage/${post.user.profile_photo}`}
+                            alt={post.user.name}
+                            className="w-10 h-10 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
+                            onError={(e) => {
+                                e.target.style.display = "none";
+                                e.target.nextSibling.style.display = "flex";
+                            }}
+                        />
+                    ) : null}
+                    <div
+                        className={`w-10 h-10 bg-black dark:bg-gray-900 rounded-full flex items-center justify-center cursor-pointer transition-colors ${
+                            post.user?.profile_photo ? "hidden" : ""
+                        }`}
+                    >
+                        {post.user?.name ? (
+                            <span className="text-sm font-semibold text-white dark:text-gray-400">
+                                {post.user.name
+                                    .split(" ")
+                                    .map((word) => word.charAt(0))
+                                    .join("")
+                                    .toUpperCase()
+                                    .slice(0, 2)}
+                            </span>
+                        ) : (
+                            <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        )}
                     </div>
                 </Link>
                 <div className="ml-3 flex-1">
@@ -237,7 +256,7 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
                         </p>
                     </Link>
                     <div className="flex items-center space-x-2">
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
                             <TimeAgo date={post.created_at} />
                         </p>
                     </div>

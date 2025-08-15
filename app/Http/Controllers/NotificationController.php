@@ -16,10 +16,11 @@ class NotificationController extends Controller
         $notifications = Notification::where('user_id', auth()->id())
             ->with('fromUser')
             ->latest()
-            ->paginate(20);
+            ->get();
 
         return Inertia::render('user/Bildirimler', [
-            'notifications' => $notifications,
+            'auth' => auth()->user(),
+            'notifications' => ['data' => $notifications],
         ]);
     }
 
@@ -60,5 +61,82 @@ class NotificationController extends Controller
             ->count();
 
         return response()->json(['count' => $count]);
+    }
+
+    /**
+     * Create comment notification.
+     */
+    public static function createCommentNotification($fromUserId, $postId, $commentId)
+    {
+        $post = \App\Models\Post::find($postId);
+        $fromUser = \App\Models\User::find($fromUserId);
+        
+        if (!$post) {
+            return;
+        }
+
+        // Kendi paylaşımına yorum yapmazsa bildirim oluştur
+        if ($post->user_id !== $fromUserId) {
+            Notification::create([
+                'user_id' => $post->user_id,
+                'from_user_id' => $fromUserId,
+                'type' => 'comment',
+                'content' => $fromUser ? $fromUser->name . ' paylaşımınıza yorum yaptı' : 'Birisi paylaşımınıza yorum yaptı',
+                'data' => [
+                    'post_id' => $postId,
+                    'comment_id' => $commentId,
+                ],
+                'is_read' => false,
+            ]);
+        }
+    }
+
+    /**
+     * Create like notification.
+     */
+    public static function createLikeNotification($fromUserId, $postId)
+    {
+        $post = \App\Models\Post::find($postId);
+        $fromUser = \App\Models\User::find($fromUserId);
+        
+        if (!$post) {
+            return;
+        }
+
+        // Kendi paylaşımını beğenmezse bildirim oluştur
+        if ($post->user_id !== $fromUserId) {
+            Notification::create([
+                'user_id' => $post->user_id,
+                'from_user_id' => $fromUserId,
+                'type' => 'like',
+                'content' => $fromUser ? $fromUser->name . ' paylaşımınızı beğendi' : 'Birisi paylaşımınızı beğendi',
+                'data' => [
+                    'post_id' => $postId,
+                ],
+                'is_read' => false,
+            ]);
+        }
+    }
+
+    /**
+     * Create follow notification.
+     */
+    public static function createFollowNotification($fromUserId, $toUserId)
+    {
+        // Kendini takip etmezse bildirim oluştur
+        if ($fromUserId !== $toUserId) {
+            $fromUser = \App\Models\User::find($fromUserId);
+            
+            Notification::create([
+                'user_id' => $toUserId,
+                'from_user_id' => $fromUserId,
+                'type' => 'follow',
+                'content' => $fromUser ? $fromUser->name . ' sizi takip etmeye başladı' : 'Birisi sizi takip etmeye başladı',
+                'data' => [
+                    'follower_id' => $fromUserId,
+                ],
+                'is_read' => false,
+            ]);
+        }
     }
 }

@@ -23,6 +23,9 @@
         "vite": "^7.0.4"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^7.0.0",
+        "@fortawesome/free-solid-svg-icons": "^7.0.0",
+        "@fortawesome/react-fontawesome": "^0.2.3",
         "@phosphor-icons/react": "^2.1.10",
         "i18next": "^25.3.4",
         "i18next-browser-languagedetector": "^8.2.0",
