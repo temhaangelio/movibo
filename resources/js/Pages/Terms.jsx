@@ -99,7 +99,7 @@ export default function Terms() {
                     </p>
 
                     <div className="mt-8 p-4 bg-gray-100 rounded-lg">
-                        <p className="text-sm text-gray-600
+                        <p className="text-sm text-gray-600">
                             <strong>Son güncelleme:</strong> 12 Ağustos 2025
                         </p>
                     </div>

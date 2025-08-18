@@ -102,7 +102,7 @@ const Index = ({ posts }) => {
                                             </div>
                                         </div>
                                         <div className="ml-3">
-                                            <div className="text-sm font-medium text-gray-900
+                                            <div className="text-sm font-medium text-gray-900">
                                                 {post.user?.name ||
                                                     "Bilinmeyen Kullanıcı"}
                                             </div>
@@ -117,7 +117,7 @@ const Index = ({ posts }) => {
                                 <TableCell>
                                     <div className="flex items-center">
                                         <Heart className="w-4 h-4 text-red-500 mr-1" />
-                                        <span className="text-sm text-gray-900
+                                        <span className="text-sm text-gray-900">
                                             {post.likes_count || 0}
                                         </span>
                                     </div>
@@ -125,7 +125,7 @@ const Index = ({ posts }) => {
                                 <TableCell>
                                     <div className="flex items-center">
                                         <ChatCircle className="w-4 h-4 text-blue-500 mr-1" />
-                                        <span className="text-sm text-gray-900
+                                        <span className="text-sm text-gray-900">
                                             {post.comments_count || 0}
                                         </span>
                                     </div>

@@ -7,12 +7,7 @@ import TextInput from "/ui/TextInput";
 import InputLabel from "/ui/InputLabel";
 import InputError from "/ui/InputError";
 
-import {
-    CheckCircle,
-    Eye,
-    EyeSlash,
-    SignOut,
-} from "@phosphor-icons/react";
+import { CheckCircle, Eye, EyeSlash, SignOut } from "@phosphor-icons/react";
 
 const Index = ({ auth }) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -100,7 +95,7 @@ const Index = ({ auth }) => {
                                     <TextInput
                                         id="username"
                                         type="text"
-                                        className="mt-1 block w-full bg-gray-100
+                                        className="mt-1 block w-full bg-gray-100"
                                         value={
                                             auth.user.username ||
                                             "Kullanıcı adı yok"
@@ -266,7 +261,7 @@ const Index = ({ auth }) => {
                             </div>
 
                             {recentlySuccessful && (
-                                <div className="flex items-center space-x-2 text-green-600
+                                <div className="flex items-center space-x-2 text-green-600">
                                     <CheckCircle className="w-4 h-4" />
                                     <span>Profil başarıyla güncellendi!</span>
                                 </div>
@@ -283,12 +278,12 @@ const Index = ({ auth }) => {
                     <div className="space-y-4">
                         <div className="flex items-center justify-between p-4 bg-red-50 rounded-lg">
                             <div className="flex items-center space-x-3">
-                                <SignOut className="w-5 h-5 text-red-600 />
+                                <SignOut className="w-5 h-5 text-red-600" />
                                 <div>
-                                    <p className="text-sm font-medium text-red-800
+                                    <p className="text-sm font-medium text-red-800">
                                         Çıkış Yap
                                     </p>
-                                    <p className="text-xs text-red-600
+                                    <p className="text-xs text-red-600">
                                         Hesabınızdan güvenli bir şekilde çıkış
                                         yapın
                                     </p>
@@ -297,7 +292,7 @@ const Index = ({ auth }) => {
                             <Buton
                                 onClick={() => router.post("/logout")}
                                 variant="outline"
-                                className="text-red-600 border-red-600 hover:bg-red-600 hover:text-white
+                                className="text-red-600 border-red-600 hover:bg-red-600 hover:text-white"
                             >
                                 <SignOut className="w-4 h-4 mr-2" />
                                 Çıkış Yap

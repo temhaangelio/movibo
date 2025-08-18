@@ -67,13 +67,13 @@ const Show = ({ ticket }) => {
     const getStatusColor = (status) => {
         switch (status) {
             case "open":
-                return "bg-yellow-100 text-yellow-800
+                return "bg-yellow-100 text-yellow-800";
             case "closed":
-                return "bg-green-100 text-green-800
+                return "bg-green-100 text-green-800";
             case "pending":
-                return "bg-red-100 text-red-800
+                return "bg-red-100 text-red-800";
             default:
-                return "bg-gray-100 text-gray-800
+                return "bg-gray-100 text-gray-800";
         }
     };
 
@@ -95,10 +95,10 @@ const Show = ({ ticket }) => {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-900
+                            <h1 className="text-2xl font-bold text-gray-900">
                                 Destek İsteği Detayı
                             </h1>
-                            <p className="text-gray-600
+                            <p className="text-gray-600">
                                 #{ticket.id} - {ticket.subject}
                             </p>
                         </div>
@@ -131,14 +131,14 @@ const Show = ({ ticket }) => {
                                 </span>
                             </div>
                             <div>
-                                <div className="font-medium text-gray-900
+                                <div className="font-medium text-gray-900">
                                     {ticket.user?.name ||
                                         "Bilinmeyen Kullanıcı"}
                                 </div>
-                                <div className="text-sm text-gray-500
+                                <div className="text-sm text-gray-500">
                                     {ticket.user?.email}
                                 </div>
-                                <div className="text-xs text-gray-400
+                                <div className="text-xs text-gray-400">
                                     Kayıt:{" "}
                                     {new Date(
                                         ticket.user?.created_at
@@ -158,7 +158,7 @@ const Show = ({ ticket }) => {
                                 <h4 className="font-medium text-gray-900 mb-2">
                                     Konu
                                 </h4>
-                                <p className="text-gray-700
+                                <p className="text-gray-700">
                                     {ticket.subject}
                                 </p>
                             </div>
@@ -172,7 +172,7 @@ const Show = ({ ticket }) => {
                                     </p>
                                 </div>
                             </div>
-                            <div className="flex items-center space-x-4 text-sm text-gray-500
+                            <div className="flex items-center space-x-4 text-sm text-gray-500">
                                 <div className="flex items-center space-x-1">
                                     <Calendar className="w-4 h-4" />
                                     <span>
@@ -267,8 +267,6 @@ const Show = ({ ticket }) => {
                             </Buton>
                         </form>
                     </Card>
-
-
                 </div>
             </div>
         </AdminLayout>

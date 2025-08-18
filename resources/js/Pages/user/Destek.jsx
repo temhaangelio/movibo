@@ -130,13 +130,13 @@ const Destek = ({ auth }) => {
     const getStatusColor = (status) => {
         switch (status) {
             case "open":
-                return "bg-yellow-100 text-yellow-800
+                return "bg-yellow-100 text-yellow-800";
             case "closed":
-                return "bg-green-100 text-green-800
+                return "bg-green-100 text-green-800";
             case "pending":
-                return "bg-red-100 text-red-800
+                return "bg-red-100 text-red-800";
             default:
-                return "bg-gray-100 text-gray-800
+                return "bg-gray-100 text-gray-800";
         }
     };
 
@@ -148,10 +148,10 @@ const Destek = ({ auth }) => {
                 {/* Header */}
                 <div className="mb-6">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900
+                        <h1 className="text-2xl font-bold text-gray-900">
                             Destek
                         </h1>
-                        <p className="text-gray-600
+                        <p className="text-gray-600">
                             Sorun yaşıyorsanız destek ekibimizle iletişime
                             geçin.
                         </p>
@@ -204,7 +204,7 @@ const Destek = ({ auth }) => {
                                                         {getStatusIcon(
                                                             ticket.status
                                                         )}
-                                                        <h3 className="font-medium text-gray-900
+                                                        <h3 className="font-medium text-gray-900">
                                                             {ticket.subject}
                                                         </h3>
                                                     </div>
@@ -221,7 +221,7 @@ const Destek = ({ auth }) => {
                                                 <p className="text-sm text-gray-600 mb-2 line-clamp-2">
                                                     {ticket.message}
                                                 </p>
-                                                <div className="flex items-center space-x-4 text-xs text-gray-500
+                                                <div className="flex items-center space-x-4 text-xs text-gray-500">
                                                     <div className="flex items-center space-x-1">
                                                         <Clock className="w-3 h-3" />
                                                         <span>
@@ -246,15 +246,15 @@ const Destek = ({ auth }) => {
 
                                         {/* Admin Yanıtı */}
                                         {ticket.admin_reply && (
-                                            <div className="mt-3 pt-3 border-t border-gray-200
+                                            <div className="mt-3 pt-3 border-t border-gray-200">
                                                 <div className="bg-blue-50 rounded-lg p-3">
                                                     <div className="flex items-center space-x-2 mb-2">
                                                         <ChatCircle className="w-4 h-4 text-blue-500" />
-                                                        <span className="text-sm font-medium text-blue-900
+                                                        <span className="text-sm font-medium text-blue-900">
                                                             Admin Yanıtı
                                                         </span>
                                                     </div>
-                                                    <p className="text-sm text-blue-800
+                                                    <p className="text-sm text-blue-800">
                                                         {ticket.admin_reply}
                                                     </p>
                                                     {ticket.replied_at && (
@@ -316,7 +316,7 @@ const Destek = ({ auth }) => {
                             required
                         />
                         {ticketErrors.message && (
-                            <p className="mt-1 text-sm text-red-600
+                            <p className="mt-1 text-sm text-red-600">
                                 {ticketErrors.message}
                             </p>
                         )}

@@ -10,7 +10,7 @@ const Pagination = ({ links, total, from, to, className = "" }) => {
     return (
         <div className={`mt-6 ${className}`}>
             <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-700
+                <div className="text-sm text-gray-700">
                     Toplam {total} kayıttan {from}-{to} arası gösteriliyor
                 </div>
                 <div className="flex space-x-2">
@@ -31,7 +31,7 @@ const Pagination = ({ links, total, from, to, className = "" }) => {
                                     className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
                                         link.active
                                             ? "bg-blue-600 text-white"
-                                            : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300
+                                            : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
                                     }`}
                                     title={
                                         isPrevious

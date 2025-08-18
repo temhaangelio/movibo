@@ -1,17 +1,38 @@
 import React, { useState, useEffect } from "react";
 import UserLayout from "/Layouts/UserLayout";
-import { Head, Link, usePage } from "@inertiajs/react";
+import { Head, Link, usePage, useForm, router } from "@inertiajs/react";
 import Loading from "/ui/Loading";
 import BottomSheet from "/ui/BottomSheet";
-import FilmEkle from "../../components/FilmEkle";
 import { ArrowLeft, Star, User } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
+import Buton from "/ui/Buton";
+import UserRating from "/ui/UserRating";
 
 const FilmDetay = ({ auth }) => {
+    const { t } = useTranslation();
     const { props } = usePage();
     const id = props.id;
     const [movie, setMovie] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isEkleSheetOpen, setIsEkleSheetOpen] = useState(false);
+
+    // FilmEkle state'leri
+    const [selectedMedia, setSelectedMedia] = useState(null);
+    const [userRating, setUserRating] = useState(0);
+    const { data, setData, post, processing, errors, reset } = useForm({
+        content: "",
+        media_type: "movie",
+        media_id: "",
+        media_title: "",
+        media_description: "",
+        media_poster: "",
+        media_release_date: "",
+        media_rating: "",
+        media_genre: "",
+        media_author: "",
+        media_director: "",
+        user_rating: "",
+    });
 
     useEffect(() => {
         fetchMovieDetails();
@@ -29,6 +50,45 @@ const FilmDetay = ({ auth }) => {
         } finally {
             setLoading(false);
         }
+    };
+
+    // FilmEkle fonksiyonları
+    const handleRatingClick = (rating) => {
+        setUserRating(rating);
+        setData("user_rating", rating.toString());
+    };
+
+    const handleMovieSelectForEkle = (movie) => {
+        setSelectedMedia(movie);
+        setData({
+            content: data.content,
+            media_type: "movie",
+            media_id: movie.id.toString(),
+            media_title: movie.title || "",
+            media_description: movie.overview || "",
+            media_poster: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+            media_release_date: movie.release_date || "",
+            media_rating: movie.vote_average?.toString() || "",
+            media_genre: movie.genre_ids?.join(", ") || "",
+            media_author: "",
+            media_director: "",
+            user_rating: "",
+        });
+        setUserRating(0);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        post("/posts", {
+            onSuccess: () => {
+                reset();
+                setSelectedMedia(null);
+                setUserRating(0);
+                // Home sayfasına yönlendir
+                router.visit("/home");
+                setIsEkleSheetOpen(false);
+            },
+        });
     };
 
     if (loading) {
@@ -66,7 +126,7 @@ const FilmDetay = ({ auth }) => {
         <UserLayout auth={auth}>
             <Head title={movie.title} />
 
-            <div className="w-full pt-4">
+            <div className="w-full pt-4 pb-12">
                 {/* Film Detayları */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                     {/* Poster ve Temel Bilgiler */}
@@ -150,7 +210,7 @@ const FilmDetay = ({ auth }) => {
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">
                             Oyuncular
                         </h3>
-                        <div className="flex space-x-4 overflow-x-auto pb-2">
+                        <div className="flex space-x-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
                             {movie.cast.map((actor) => (
                                 <div
                                     key={actor.id}
@@ -193,7 +253,7 @@ const FilmDetay = ({ auth }) => {
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">
                             Ekip
                         </h3>
-                        <div className="flex space-x-4 overflow-x-auto pb-2">
+                        <div className="flex space-x-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
                             {movie.crew.map((member) => (
                                 <div
                                     key={member.id}
@@ -237,13 +297,102 @@ const FilmDetay = ({ auth }) => {
                     title="Film Ekle"
                     maxHeight="max-h-[80vh]"
                 >
-                    <FilmEkle
-                        initialMovie={movie}
-                        onMovieSelect={(selectedMovie) => {
-                            // Film paylaşımı yapıldıktan sonra BottomSheet'i kapat
-                            setIsEkleSheetOpen(false);
-                        }}
-                    />
+                    <div className="space-y-3">
+                        {/* Seçili Film Bilgileri */}
+                        <div className="bg-neutral-800 rounded-lg p-3 border border-neutral-700">
+                            <div className="flex items-center space-x-3">
+                                {movie.poster_path && (
+                                    <img
+                                        src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
+                                        alt={movie.title}
+                                        className="w-12 h-18 object-cover rounded"
+                                        onError={(e) => {
+                                            e.target.style.display = "none";
+                                        }}
+                                    />
+                                )}
+                                <div className="flex-1">
+                                    <h4 className="font-medium text-white text-sm">
+                                        {movie.title}
+                                    </h4>
+                                    <div className="flex items-center space-x-2 text-xs text-neutral-400">
+                                        {movie.release_date && (
+                                            <span>
+                                                {new Date(
+                                                    movie.release_date
+                                                ).getFullYear()}
+                                            </span>
+                                        )}
+                                        {movie.vote_average && (
+                                            <span>
+                                                ⭐ {movie.vote_average}/10
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Kullanıcı Puanı */}
+                        <UserRating
+                            value={userRating}
+                            onChange={handleRatingClick}
+                            label={t("your_rating", "Puanınız")}
+                        />
+
+                        {/* Yorum */}
+                        <div>
+                            <label className="block text-sm font-medium text-white mb-1">
+                                {t("comment", "Yorum")}
+                            </label>
+                            <textarea
+                                value={data.content}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (value.length <= 250) {
+                                        setData("content", value);
+                                    }
+                                }}
+                                placeholder={t(
+                                    "comment_placeholder",
+                                    "Filminiz hakkında düşüncelerinizi paylaşın..."
+                                )}
+                                rows={2}
+                                className="w-full px-2 py-1 border border-neutral-700 rounded-md shadow-sm placeholder:text-neutral-400 bg-neutral-800 text-white focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:border-neutral-400"
+                            />
+                            <div className="flex justify-between items-center mt-1">
+                                {errors.content && (
+                                    <p className="text-sm text-red-400">
+                                        {errors.content}
+                                    </p>
+                                )}
+                                <p
+                                    className={`text-sm ml-auto ${
+                                        data.content.length > 200
+                                            ? "text-red-400"
+                                            : "text-neutral-400"
+                                    }`}
+                                >
+                                    {data.content.length}/250
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Paylaş Butonu */}
+                        <div className="pt-2">
+                            <Buton
+                                type="submit"
+                                disabled={processing}
+                                className="w-full"
+                                size="lg"
+                                onClick={handleSubmit}
+                            >
+                                {processing
+                                    ? t("sharing", "Paylaşılıyor...")
+                                    : t("share", "Paylaş")}
+                            </Buton>
+                        </div>
+                    </div>
                 </BottomSheet>
             </div>
         </UserLayout>

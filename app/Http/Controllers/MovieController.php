@@ -10,7 +10,7 @@ class MovieController extends Controller
     public function getPopularMovies(Request $request)
     {
         try {
-            $apiKey = env('TMDB_API_KEY');
+            $apiKey = config('services.tmdb.api_key');
             $page = (int) $request->get('page', 1);
             
             // Page numarasını kontrol et
@@ -69,7 +69,7 @@ class MovieController extends Controller
     public function getMovieDetails($id)
     {
         try {
-            $apiKey = env('TMDB_API_KEY');
+            $apiKey = config('services.tmdb.api_key');
             $response = Http::get("https://api.themoviedb.org/3/movie/{$id}", [
                 'api_key' => $apiKey,
                 'language' => 'tr-TR',
@@ -137,7 +137,7 @@ class MovieController extends Controller
     public function getActorDetails($id)
     {
         try {
-            $apiKey = env('TMDB_API_KEY');
+            $apiKey = config('services.tmdb.api_key');
             $response = Http::get("https://api.themoviedb.org/3/person/{$id}", [
                 'api_key' => $apiKey,
                 'language' => 'tr-TR',

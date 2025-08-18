@@ -212,14 +212,14 @@ const Index = ({
                                             {ticket.admin_reply ? (
                                                 <>
                                                     <ChatCircle className="w-4 h-4 text-green-500" />
-                                                    <span className="text-sm text-green-600
+                                                    <span className="text-sm text-green-600">
                                                         Yanıtlandı
                                                     </span>
                                                 </>
                                             ) : (
                                                 <>
                                                     <Clock className="w-4 h-4 text-yellow-500" />
-                                                    <span className="text-sm text-yellow-600
+                                                    <span className="text-sm text-yellow-600">
                                                         Bekliyor
                                                     </span>
                                                 </>

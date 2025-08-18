@@ -5,12 +5,12 @@ import { useTranslation } from "react-i18next";
 import PostCard from "@/components/PostCard";
 import Tab from "/ui/Tab";
 import Loading from "/ui/Loading";
-import { FileText } from "@phosphor-icons/react";
+import { FileText, FlyingSaucer } from "@phosphor-icons/react";
 
 const AnaSayfa = ({ auth, posts, user }) => {
     const { t } = useTranslation();
     const [mediaType, setMediaType] = useState("movie");
-    const [activeTab, setActiveTab] = useState("following"); // 'following' veya 'all'
+    const [activeTab, setActiveTab] = useState("all"); // 'following' veya 'all'
     const [currentPosts, setCurrentPosts] = useState(posts);
     const [loading, setLoading] = useState(false);
 
@@ -97,18 +97,18 @@ const AnaSayfa = ({ auth, posts, user }) => {
         <UserLayout auth={auth}>
             <Head title={t("home")} />
 
-            <div className="w-full">
+            <div className="flex flex-col w-full">
                 {/* Tab Navigation */}
                 <div className="mb-4">
                     <Tab
                         tabs={[
                             {
-                                id: "following",
-                                label: t("following_posts", "Takip Ettiklerin"),
-                            },
-                            {
                                 id: "all",
                                 label: t("all_posts", "Tüm Paylaşımlar"),
+                            },
+                            {
+                                id: "following",
+                                label: t("following_posts", "Takip Ettiklerin"),
                             },
                         ]}
                         activeTab={activeTab}
@@ -117,11 +117,11 @@ const AnaSayfa = ({ auth, posts, user }) => {
                 </div>
 
                 {/* Paylaşımlar */}
-                <div className="pb-4">
+                <div className="flex flex-col w-full items-center justify-center pb-4">
                     {loading ? (
                         <Loading size="lg" centered={true} />
                     ) : currentPosts && currentPosts.length > 0 ? (
-                        <div className="space-y-3">
+                        <div className="space-y-3 w-full">
                             {currentPosts.map((post) => (
                                 <PostCard
                                     key={post.id}
@@ -134,15 +134,11 @@ const AnaSayfa = ({ auth, posts, user }) => {
                             ))}
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-16 text-center">
-                            <FileText className="w-16 h-16 text-gray-400 mb-4" />
-                            <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        <div className="flex flex-col items-center justify-center py-48 text-center w-full">
+                            <FlyingSaucer className="w-24 h-24" />
+                            <h3 className="text-lg font-medium  mb-2">
                                 {t("no_content_yet", "Henüz bir içerik yok!")}
                             </h3>
-                            <p className="text-gray-500 text-sm">
-                                Takip ettiğiniz kullanıcılar paylaşım yaptığında
-                                burada görünecek
-                            </p>
                         </div>
                     )}
                 </div>

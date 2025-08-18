@@ -124,7 +124,7 @@ const Index = ({ users }) => {
                                                 <div
                                                     className={`h-10 w-10 rounded-full flex items-center justify-center ${
                                                         user.is_blocked
-                                                            ? "bg-gray-400
+                                                            ? "bg-gray-400"
                                                             : "bg-blue-600"
                                                     }`}
                                                 >
@@ -140,7 +140,7 @@ const Index = ({ users }) => {
                                                     className={`text-sm font-medium ${
                                                         user.is_blocked
                                                             ? "text-gray-500 line-through"
-                                                            : "text-gray-900
+                                                            : "text-gray-900"
                                                     }`}
                                                 >
                                                     {user.name}
@@ -149,7 +149,7 @@ const Index = ({ users }) => {
                                                     className={`text-sm ${
                                                         user.is_blocked
                                                             ? "text-gray-400 line-through"
-                                                            : "text-gray-500
+                                                            : "text-gray-500"
                                                     }`}
                                                 >
                                                     @{user.username}
@@ -161,7 +161,7 @@ const Index = ({ users }) => {
                                         <span
                                             className={
                                                 user.is_blocked
-                                                    ? "line-through text-gray-500
+                                                    ? "line-through text-gray-500"
                                                     : ""
                                             }
                                         >
@@ -172,8 +172,8 @@ const Index = ({ users }) => {
                                         <span
                                             className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                                                 user.is_admin
-                                                    ? "bg-purple-100 text-purple-800
-                                                    : "bg-green-100 text-green-800
+                                                    ? "bg-purple-100 text-purple-800"
+                                                    : "bg-green-100 text-green-800"
                                             }`}
                                         >
                                             {user.is_admin
@@ -185,8 +185,8 @@ const Index = ({ users }) => {
                                         <span
                                             className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                                                 user.is_blocked
-                                                    ? "bg-red-100 text-red-800
-                                                    : "bg-green-100 text-green-800
+                                                    ? "bg-red-100 text-red-800"
+                                                    : "bg-green-100 text-green-800"
                                             }`}
                                         >
                                             {user.is_blocked

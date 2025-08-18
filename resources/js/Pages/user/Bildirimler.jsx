@@ -99,7 +99,7 @@ const Bildirimler = ({
                             <h3 className="text-lg font-medium text-gray-900 mb-2">
                                 Henüz bildiriminiz yok!
                             </h3>
-                            <p className="text-gray-500
+                            <p className="text-gray-500">
                                 Yeni aktiviteler olduğunda burada görünecek.
                             </p>
                         </div>
@@ -117,15 +117,15 @@ const Bildirimler = ({
                                     }}
                                     className={`flex items-start border-b border-gray-200 pb-4 last:border-b-0 last:pb-0 transition-colors cursor-pointer hover:bg-gray-50 ${
                                         notification.is_read
-                                            ? "bg-white border-gray-200
-                                            : "bg-white border-gray-200
+                                            ? "bg-white border-gray-200"
+                                            : "bg-white border-gray-200"
                                     }`}
                                 >
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center space-x-2">
                                                 <div>
-                                                    <p className="text-sm text-gray-900
+                                                    <p className="text-sm text-gray-900">
                                                         {notification.content}
                                                     </p>
                                                     <div className="flex items-center space-x-2 mt-1">
@@ -135,7 +135,7 @@ const Bildirimler = ({
                                                             }
                                                         />
                                                         {!notification.is_read && (
-                                                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800
+                                                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                                 Yeni
                                                             </span>
                                                         )}

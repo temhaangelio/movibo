@@ -49,15 +49,15 @@ const Show = ({ user, userPosts, userStats }) => {
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <div className="flex items-center space-x-2 text-sm text-gray-600
+                                    <div className="flex items-center space-x-2 text-sm text-gray-600">
                                         <Envelope className="w-4 h-4" />
                                         <span>{user.email}</span>
                                     </div>
-                                    <div className="flex items-center space-x-2 text-sm text-gray-600
+                                    <div className="flex items-center space-x-2 text-sm text-gray-600">
                                         <User className="w-4 h-4" />
                                         <span>@{user.username}</span>
                                     </div>
-                                    <div className="flex items-center space-x-2 text-sm text-gray-600
+                                    <div className="flex items-center space-x-2 text-sm text-gray-600">
                                         <Calendar className="w-4 h-4" />
                                         <span>
                                             Kayıt:{" "}
@@ -68,20 +68,20 @@ const Show = ({ user, userPosts, userStats }) => {
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <div className="flex items-center space-x-2 text-sm text-gray-600
+                                    <div className="flex items-center space-x-2 text-sm text-gray-600">
                                         <Article className="w-4 h-4" />
                                         <span>
                                             {userStats?.totalPosts || 0}{" "}
                                             paylaşım
                                         </span>
                                     </div>
-                                    <div className="flex items-center space-x-2 text-sm text-gray-600
+                                    <div className="flex items-center space-x-2 text-sm text-gray-600">
                                         <Heart className="w-4 h-4" />
                                         <span>
                                             {userStats?.totalLikes || 0} beğeni
                                         </span>
                                     </div>
-                                    <div className="flex items-center space-x-2 text-sm text-gray-600
+                                    <div className="flex items-center space-x-2 text-sm text-gray-600">
                                         <ChatCircle className="w-4 h-4" />
                                         <span>
                                             {userStats?.totalComments || 0}{" "}
@@ -107,15 +107,15 @@ const Show = ({ user, userPosts, userStats }) => {
                     <Card className="p-6">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium text-gray-600
+                                <p className="text-sm font-medium text-gray-600">
                                     Toplam Paylaşım
                                 </p>
                                 <p className="text-2xl font-bold text-gray-900 mt-2">
                                     {userStats?.totalPosts || 0}
                                 </p>
                             </div>
-                            <div className="p-3 rounded-lg bg-blue-100
-                                <Article className="w-6 h-6 text-blue-600 />
+                            <div className="p-3 rounded-lg bg-blue-100">
+                                <Article className="w-6 h-6 text-blue-600" />
                             </div>
                         </div>
                     </Card>
@@ -123,15 +123,15 @@ const Show = ({ user, userPosts, userStats }) => {
                     <Card className="p-6">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium text-gray-600
+                                <p className="text-sm font-medium text-gray-600">
                                     Toplam Beğeni
                                 </p>
                                 <p className="text-2xl font-bold text-gray-900 mt-2">
                                     {userStats?.totalLikes || 0}
                                 </p>
                             </div>
-                            <div className="p-3 rounded-lg bg-red-100
-                                <Heart className="w-6 h-6 text-red-600 />
+                            <div className="p-3 rounded-lg bg-red-100">
+                                <Heart className="w-6 h-6 text-red-600" />
                             </div>
                         </div>
                     </Card>
@@ -139,15 +139,15 @@ const Show = ({ user, userPosts, userStats }) => {
                     <Card className="p-6">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium text-gray-600
+                                <p className="text-sm font-medium text-gray-600">
                                     Toplam Yorum
                                 </p>
                                 <p className="text-2xl font-bold text-gray-900 mt-2">
                                     {userStats?.totalComments || 0}
                                 </p>
                             </div>
-                            <div className="p-3 rounded-lg bg-pink-100
-                                <ChatCircle className="w-6 h-6 text-pink-600 />
+                            <div className="p-3 rounded-lg bg-pink-100">
+                                <ChatCircle className="w-6 h-6 text-pink-600" />
                             </div>
                         </div>
                     </Card>
@@ -156,12 +156,12 @@ const Show = ({ user, userPosts, userStats }) => {
                 {/* Recent Posts */}
                 <Card className="p-6">
                     <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-lg font-semibold text-gray-900
+                        <h3 className="text-lg font-semibold text-gray-900">
                             Son Paylaşımlar
                         </h3>
                         <Link
                             href={`/users/${user.id}`}
-                            className="text-sm text-blue-600 hover:text-blue-700
+                            className="text-sm text-blue-600 hover:text-blue-700"
                         >
                             Tümünü Gör
                         </Link>
@@ -170,7 +170,7 @@ const Show = ({ user, userPosts, userStats }) => {
                         {userPosts?.length === 0 ? (
                             <div className="text-center py-8">
                                 <Article className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                                <p className="text-gray-500
+                                <p className="text-gray-500">
                                     Henüz paylaşım bulunmuyor.
                                 </p>
                             </div>
@@ -190,7 +190,7 @@ const Show = ({ user, userPosts, userStats }) => {
                                                 {post.content?.length > 150 &&
                                                     "..."}
                                             </p>
-                                            <div className="flex items-center space-x-4 text-xs text-gray-500
+                                            <div className="flex items-center space-x-4 text-xs text-gray-500">
                                                 <div className="flex items-center space-x-1">
                                                     <Calendar className="w-3 h-3" />
                                                     <span>

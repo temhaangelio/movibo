@@ -92,7 +92,7 @@ const OyuncuDetay = ({ auth }) => {
                             />
                         ) : (
                             <div className="w-full h-80 bg-gray-200 flex items-center justify-center">
-                                <User className="w-32 h-32 text-gray-400 />
+                                <User className="w-32 h-32 text-gray-400" />
                             </div>
                         )}
                     </div>
@@ -133,26 +133,26 @@ const OyuncuDetay = ({ auth }) => {
                         {/* İstatistikler */}
                         <div className="grid grid-cols-3 gap-4 mb-6">
                             <div className="text-center">
-                                <div className="text-2xl font-bold text-gray-900
+                                <div className="text-2xl font-bold text-gray-900">
                                     {actor.popularity?.toFixed(0) || "N/A"}
                                 </div>
-                                <div className="text-sm text-gray-500
+                                <div className="text-sm text-gray-500">
                                     Popülerlik
                                 </div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-bold text-gray-900
+                                <div className="text-2xl font-bold text-gray-900">
                                     {movies.length}
                                 </div>
-                                <div className="text-sm text-gray-500
+                                <div className="text-sm text-gray-500">
                                     Film Sayısı
                                 </div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-bold text-gray-900
+                                <div className="text-2xl font-bold text-gray-900">
                                     {actor.known_for_department || "Oyuncu"}
                                 </div>
-                                <div className="text-sm text-gray-500
+                                <div className="text-sm text-gray-500">
                                     Uzmanlık
                                 </div>
                             </div>
@@ -185,7 +185,7 @@ const OyuncuDetay = ({ auth }) => {
                                                     }}
                                                 />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-gray-500
+                                                <div className="w-full h-full flex items-center justify-center text-gray-500">
                                                     <Play className="w-6 h-6" />
                                                 </div>
                                             )}
@@ -209,7 +209,7 @@ const OyuncuDetay = ({ auth }) => {
                                         )}
                                     </div>
                                     {movie.vote_average && (
-                                        <div className="flex items-center space-x-1 text-xs text-gray-500
+                                        <div className="flex items-center space-x-1 text-xs text-gray-500">
                                             <Star
                                                 className="w-3 h-3"
                                                 weight="fill"

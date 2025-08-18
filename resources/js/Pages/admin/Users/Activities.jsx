@@ -33,18 +33,18 @@ const Activities = ({ user, activities }) => {
             case "login":
             case "post_create":
             case "profile_update":
-                return "text-green-600 bg-green-100
+                return "text-green-600 bg-green-100";
             case "logout":
-                return "text-blue-600 bg-blue-100
+                return "text-blue-600 bg-blue-100";
             case "post_delete":
             case "user_delete":
-                return "text-red-600 bg-red-100
+                return "text-red-600 bg-red-100";
             case "user_block":
-                return "text-orange-600 bg-orange-100
+                return "text-orange-600 bg-orange-100";
             case "user_unblock":
-                return "text-green-600 bg-green-100
+                return "text-green-600 bg-green-100";
             default:
-                return "text-gray-600 bg-gray-100
+                return "text-gray-600 bg-gray-100";
         }
     };
 
@@ -75,13 +75,13 @@ const Activities = ({ user, activities }) => {
                             </span>
                         </div>
                         <div>
-                            <div className="text-sm font-medium text-gray-900
+                            <div className="text-sm font-medium text-gray-900">
                                 {user.name}
                             </div>
-                            <div className="text-sm text-gray-500
+                            <div className="text-sm text-gray-500">
                                 {user.email}
                             </div>
-                            <div className="text-xs text-gray-400
+                            <div className="text-xs text-gray-400">
                                 Kayıt:{" "}
                                 {new Date(user.created_at).toLocaleDateString(
                                     "tr-TR"
@@ -114,7 +114,7 @@ const Activities = ({ user, activities }) => {
                                                     .replace("_", " ")
                                                     .toUpperCase()}
                                             </span>
-                                            <span className="text-sm text-gray-500
+                                            <span className="text-sm text-gray-500">
                                                 {activity.description}
                                             </span>
                                         </div>
@@ -139,7 +139,7 @@ const Activities = ({ user, activities }) => {
                                                 </div>
                                             )}
 
-                                        <div className="flex items-center space-x-4 text-xs text-gray-500
+                                        <div className="flex items-center space-x-4 text-xs text-gray-500">
                                             <div className="flex items-center space-x-1">
                                                 <Clock className="w-3 h-3" />
                                                 <span>
@@ -174,7 +174,7 @@ const Activities = ({ user, activities }) => {
                 {activities.links && (
                     <div className="mt-6">
                         <div className="flex items-center justify-between">
-                            <div className="text-sm text-gray-700
+                            <div className="text-sm text-gray-700">
                                 Toplam {activities.total} aktiviteden{" "}
                                 {activities.from}-{activities.to} arası
                                 gösteriliyor
@@ -188,7 +188,7 @@ const Activities = ({ user, activities }) => {
                                             className={`px-3 py-2 text-sm font-medium rounded-md ${
                                                 link.active
                                                     ? "bg-blue-600 text-white"
-                                                    : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300
+                                                    : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
                                             }`}
                                             dangerouslySetInnerHTML={{
                                                 __html: link.label,

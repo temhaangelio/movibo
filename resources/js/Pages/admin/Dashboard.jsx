@@ -28,25 +28,25 @@ const Dashboard = ({ stats, recentUsers, recentPosts, recentComments }) => {
             title: "Toplam Paylaşım",
             value: stats?.totalPosts || 0,
             icon: Article,
-            color: "bg-gray-100
-            textColor: "text-gray-600
-            iconColor: "text-gray-600
+            color: "bg-gray-100",
+            textColor: "text-gray-600",
+            iconColor: "text-gray-600",
         },
         {
             title: "Toplam Beğeni",
             value: stats?.totalLikes || 0,
             icon: Heart,
-            color: "bg-red-100
-            textColor: "text-red-600
-            iconColor: "text-red-600
+            color: "bg-red-100",
+            textColor: "text-red-600",
+            iconColor: "text-red-600",
         },
         {
             title: "Toplam Yorum",
             value: stats?.totalComments || 0,
             icon: ChatCircle,
-            color: "bg-pink-100
-            textColor: "text-pink-600
-            iconColor: "text-pink-600
+            color: "bg-pink-100",
+            textColor: "text-pink-600",
+            iconColor: "text-pink-600",
         },
     ];
 
@@ -61,7 +61,7 @@ const Dashboard = ({ stats, recentUsers, recentPosts, recentComments }) => {
                         <Card key={index} className="p-6">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm font-medium text-gray-600
+                                    <p className="text-sm font-medium text-gray-600">
                                         {card.title}
                                     </p>
                                     <p className="text-3xl font-bold text-gray-900 mt-2">
@@ -81,7 +81,7 @@ const Dashboard = ({ stats, recentUsers, recentPosts, recentComments }) => {
                 {/* Recent Activities */}
                 <Card className="p-6">
                     <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-lg font-semibold text-gray-900
+                        <h2 className="text-lg font-semibold text-gray-900">
                             Son Aktiviteler
                         </h2>
                     </div>
@@ -162,7 +162,7 @@ const Dashboard = ({ stats, recentUsers, recentPosts, recentComments }) => {
                                 <Link
                                     key={activity.id}
                                     href={activity.link}
-                                    className="flex items-center space-x-4 p-3 last:border-b-0 hover:bg-gray-50 transition-colors border-b border-gray-200
+                                    className="flex items-center space-x-4 p-3 last:border-b-0 hover:bg-gray-50 transition-colors border-b border-gray-200"
                                 >
                                     <div
                                         className={`w-8 h-8 ${activity.bgColor} rounded-full flex items-center justify-center`}
@@ -170,10 +170,10 @@ const Dashboard = ({ stats, recentUsers, recentPosts, recentComments }) => {
                                         <activity.icon className="w-4 h-4 text-white" />
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-sm text-gray-900
+                                        <p className="text-sm text-gray-900">
                                             {activity.content}
                                         </p>
-                                        <p className="text-xs text-gray-500
+                                        <p className="text-xs text-gray-500">
                                             {activity.description && (
                                                 <>{activity.description} • </>
                                             )}

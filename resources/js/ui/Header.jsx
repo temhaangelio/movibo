@@ -1,20 +1,18 @@
 import React from "react";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 
-const Header = ({ 
-    title, 
-    searchTerm, 
-    onSearchChange, 
+const Header = ({
+    title,
+    searchTerm,
+    onSearchChange,
     searchPlaceholder = "Ara...",
     searchWidth = "w-full",
     children,
-    className = "" 
+    className = "",
 }) => {
     return (
         <div className={`flex items-center justify-between mb-6 ${className}`}>
-            <h2 className="text-lg font-semibold text-gray-900
-                {title}
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
             <div className="flex items-center space-x-4">
                 {/* Search */}
                 <div className="relative">

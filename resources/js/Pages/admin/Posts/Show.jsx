@@ -43,15 +43,18 @@ const Show = ({ post }) => {
                                     </span>
                                 </div>
                                 <div>
-                                    <div className="font-medium text-gray-900
+                                    <div className="font-medium text-gray-900">
                                         {post.user.name}
                                     </div>
-                                    <div className="text-sm text-gray-500
+                                    <div className="text-sm text-gray-500">
                                         @{post.user.username}
+                                        {new Date(
+                                            post.created_at
+                                        ).toLocaleDateString("tr-TR")}
                                     </div>
                                 </div>
                             </div>
-                            <div className="text-right text-sm text-gray-500
+                            <div className="text-right text-sm text-gray-500">
                                 {new Date(post.created_at).toLocaleDateString(
                                     "tr-TR"
                                 )}
@@ -74,40 +77,43 @@ const Show = ({ post }) => {
                                 <div className="grid grid-cols-2 gap-4 text-sm">
                                     {post.media_type && (
                                         <div>
-                                            <span className="text-gray-500
+                                            <span className="text-gray-500">
                                                 Tür:
                                             </span>
                                             <span className="ml-2 text-gray-900 capitalize">
+                                                {post.media_type === "movie"
+                                                    ? "Film"
+                                                    : "Dizi"}
                                                 {post.media_type}
                                             </span>
                                         </div>
                                     )}
                                     {post.media_genre && (
                                         <div>
-                                            <span className="text-gray-500
+                                            <span className="text-gray-500">
                                                 Tür:
                                             </span>
-                                            <span className="ml-2 text-gray-900
+                                            <span className="ml-2 text-gray-900">
                                                 {post.media_genre}
                                             </span>
                                         </div>
                                     )}
                                     {post.media_rating && (
                                         <div>
-                                            <span className="text-gray-500
+                                            <span className="text-gray-500">
                                                 Puan:
                                             </span>
-                                            <span className="ml-2 text-gray-900
+                                            <span className="ml-2 text-gray-900">
                                                 {post.media_rating}/10
                                             </span>
                                         </div>
                                     )}
                                     {post.user_rating && (
                                         <div>
-                                            <span className="text-gray-500
+                                            <span className="text-gray-500">
                                                 Kullanıcı Puanı:
                                             </span>
-                                            <span className="ml-2 text-gray-900
+                                            <span className="ml-2 text-gray-900">
                                                 {post.user_rating}/10
                                             </span>
                                         </div>
@@ -115,10 +121,10 @@ const Show = ({ post }) => {
                                 </div>
                                 {post.media_description && (
                                     <div className="mt-3">
-                                        <span className="text-gray-500
+                                        <span className="text-gray-500">
                                             Açıklama:
                                         </span>
-                                        <p className="mt-1 text-gray-900
+                                        <p className="mt-1 text-gray-900">
                                             {post.media_description}
                                         </p>
                                     </div>
@@ -165,14 +171,14 @@ const Show = ({ post }) => {
                                             </div>
                                             <div className="flex-1">
                                                 <div className="flex items-center space-x-2 mb-1">
-                                                    <span className="font-medium text-gray-900
+                                                    <span className="font-medium text-gray-900">
                                                         {comment.user.name}
                                                     </span>
-                                                    <span className="text-sm text-gray-500
+                                                    <span className="text-sm text-gray-500">
                                                         @{comment.user.username}
                                                     </span>
                                                 </div>
-                                                <p className="text-gray-700
+                                                <p className="text-gray-700">
                                                     {comment.content}
                                                 </p>
                                                 <div className="text-xs text-gray-500 mt-2">
@@ -203,19 +209,19 @@ const Show = ({ post }) => {
                                 </span>
                             </div>
                             <div>
-                                <div className="font-medium text-gray-900
+                                <div className="font-medium text-gray-900">
                                     {post.user.name}
                                 </div>
-                                <div className="text-sm text-gray-500
+                                <div className="text-sm text-gray-500">
                                     @{post.user.username}
                                 </div>
-                                <div className="text-xs text-gray-400
+                                <div className="text-xs text-gray-400">
                                     {post.user.email}
                                 </div>
                             </div>
                         </div>
                         <div className="space-y-2 text-sm">
-                            <div className="flex items-center space-x-2 text-gray-600
+                            <div className="flex items-center space-x-2 text-gray-600">
                                 <Calendar className="w-4 h-4" />
                                 <span>
                                     Kayıt:{" "}
@@ -224,7 +230,7 @@ const Show = ({ post }) => {
                                     ).toLocaleDateString("tr-TR")}
                                 </span>
                             </div>
-                            <div className="flex items-center space-x-2 text-gray-600
+                            <div className="flex items-center space-x-2 text-gray-600">
                                 <User className="w-4 h-4" />
                                 <span>
                                     Durum:{" "}

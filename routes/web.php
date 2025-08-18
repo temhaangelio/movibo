@@ -76,10 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
     Route::resource('comments', CommentController::class);
 
-    // Yeni paylaşım sayfası
-    Route::get('/create', function () {
-        return Inertia::render('user/Ekle');
-    })->name('create');
+
 
     // API routes
     Route::get('/api/search/movies', [ApiController::class, 'searchMovies'])->name('api.search.movies');
