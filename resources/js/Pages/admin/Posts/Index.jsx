@@ -85,7 +85,7 @@ const Index = ({ posts }) => {
                         {filteredPosts.map((post) => (
                             <TableRow key={post.id}>
                                 <TableCell>
-                                    <div className="text-sm text-gray-900 dark:text-white max-w-xs truncate">
+                                    <div className="text-sm text-gray-900 max-w-xs truncate">
                                         {post.content?.substring(0, 100)}
                                         {post.content?.length > 100 && "..."}
                                     </div>
@@ -102,7 +102,7 @@ const Index = ({ posts }) => {
                                             </div>
                                         </div>
                                         <div className="ml-3">
-                                            <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                            <div className="text-sm font-medium text-gray-900
                                                 {post.user?.name ||
                                                     "Bilinmeyen Kullanıcı"}
                                             </div>
@@ -117,7 +117,7 @@ const Index = ({ posts }) => {
                                 <TableCell>
                                     <div className="flex items-center">
                                         <Heart className="w-4 h-4 text-red-500 mr-1" />
-                                        <span className="text-sm text-gray-900 dark:text-white">
+                                        <span className="text-sm text-gray-900
                                             {post.likes_count || 0}
                                         </span>
                                     </div>
@@ -125,7 +125,7 @@ const Index = ({ posts }) => {
                                 <TableCell>
                                     <div className="flex items-center">
                                         <ChatCircle className="w-4 h-4 text-blue-500 mr-1" />
-                                        <span className="text-sm text-gray-900 dark:text-white">
+                                        <span className="text-sm text-gray-900
                                             {post.comments_count || 0}
                                         </span>
                                     </div>
@@ -134,7 +134,7 @@ const Index = ({ posts }) => {
                                     <div className="flex items-center justify-end space-x-2">
                                         <Link
                                             href={`/panel/posts/${post.id}`}
-                                            className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 dark:border-gray-600 text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                            className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                                             title="Görüntüle"
                                         >
                                             <Eye className="w-4 h-4" />
@@ -143,7 +143,7 @@ const Index = ({ posts }) => {
                                             onClick={() =>
                                                 handleDelete(post.id)
                                             }
-                                            className="inline-flex items-center justify-center w-8 h-8 border border-red-300 dark:border-red-600 text-xs font-medium rounded-md text-red-700 dark:text-red-400 bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                                            className="inline-flex items-center justify-center w-8 h-8 border border-red-300 text-xs font-medium rounded-md text-red-700 bg-white hover:bg-red-50 transition-colors"
                                             title="Sil"
                                         >
                                             <Trash className="w-4 h-4" />

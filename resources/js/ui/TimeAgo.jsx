@@ -17,7 +17,9 @@ const TimeAgo = ({ date, className = "" }) => {
                 result = t("just_now", "Az önce");
             } else if (diffInSeconds < 3600) {
                 const minutes = Math.floor(diffInSeconds / 60);
-                result = t("minutes_ago", "{{minutes}} dakika önce", { minutes });
+                result = t("minutes_ago", "{{minutes}} dakika önce", {
+                    minutes,
+                });
             } else if (diffInSeconds < 86400) {
                 const hours = Math.floor(diffInSeconds / 3600);
                 result = t("hours_ago", "{{hours}} saat önce", { hours });
@@ -45,9 +47,9 @@ const TimeAgo = ({ date, className = "" }) => {
     }, [date, t]);
 
     return (
-        <time 
-            dateTime={new Date(date).toISOString()} 
-            className={`text-sm text-gray-500 dark:text-gray-400 ${className}`}
+        <time
+            dateTime={new Date(date).toISOString()}
+            className={`text-sm text-gray-500 ${className}`}
             title={new Date(date).toLocaleString()}
         >
             {timeAgo}

@@ -12,7 +12,7 @@ const Header = ({
 }) => {
     return (
         <div className={`flex items-center justify-between mb-6 ${className}`}>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-lg font-semibold text-gray-900
                 {title}
             </h2>
             <div className="flex items-center space-x-4">
@@ -24,7 +24,7 @@ const Header = ({
                         placeholder={searchPlaceholder}
                         value={searchTerm}
                         onChange={onSearchChange}
-                        className={`pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${searchWidth}`}
+                        className={`pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${searchWidth}`}
                     />
                 </div>
                 {children}

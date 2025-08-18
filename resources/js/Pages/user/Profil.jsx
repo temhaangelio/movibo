@@ -5,8 +5,10 @@ import { useTranslation } from "react-i18next";
 import Buton from "/ui/Buton";
 import PostCard from "@/components/PostCard";
 import Alert from "/ui/Alert";
+import Loading from "/ui/Loading";
+import { getDisplayInitials } from "/utils/userUtils";
 
-import { Camera, User, X, Users } from "@phosphor-icons/react";
+import { Camera, User, X, Users, FlyingSaucer } from "@phosphor-icons/react";
 
 const Profil = ({ auth, user, posts }) => {
     const { t } = useTranslation();
@@ -151,12 +153,19 @@ const Profil = ({ auth, user, posts }) => {
             const formData = new FormData();
             formData.append("profile_photo", selectedFile);
 
+            const csrfToken = document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute("content");
+
+            if (!csrfToken) {
+                throw new Error("CSRF token bulunamadı. Sayfayı yenileyin.");
+            }
+
             const response = await fetch("/profile/photo", {
                 method: "POST",
                 headers: {
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"),
+                    "X-CSRF-TOKEN": csrfToken,
+                    Accept: "application/json",
                 },
                 body: formData,
             });
@@ -182,8 +191,24 @@ const Profil = ({ auth, user, posts }) => {
                     message: "Profil fotoğrafı başarıyla güncellendi!",
                 });
             } else {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.message || "Upload failed");
+                // Önce response'u text olarak al
+                const responseText = await response.text();
+                console.error("Server response:", responseText);
+
+                let errorMessage = "Upload failed";
+
+                try {
+                    // JSON parse etmeye çalış
+                    const errorData = JSON.parse(responseText);
+                    errorMessage =
+                        errorData.message || errorData.error || "Upload failed";
+                } catch (parseError) {
+                    // JSON parse edilemezse HTML yanıtı geldi demektir
+                    console.error("Response is not JSON:", responseText);
+                    errorMessage = "Sunucu hatası. Lütfen tekrar deneyin.";
+                }
+
+                throw new Error(errorMessage);
             }
         } catch (error) {
             console.error("Upload error:", error);
@@ -192,7 +217,7 @@ const Profil = ({ auth, user, posts }) => {
                 open: true,
                 type: "error",
                 message:
-                    "Fotoğraf yüklenirken bir hata oluştu: " + error.message,
+                    error.message || "Fotoğraf yüklenirken bir hata oluştu.",
             });
         }
     };
@@ -213,7 +238,7 @@ const Profil = ({ auth, user, posts }) => {
                 <div className="grid grid-cols-1 gap-0">
                     {/* Profil Bilgileri - Sol Taraf */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-4">
+                        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
                             {/* Profil Fotoğrafı */}
                             <div className="text-center mb-6">
                                 <div className="relative inline-block">
@@ -238,7 +263,7 @@ const Profil = ({ auth, user, posts }) => {
                                             />
                                         ) : (
                                             <div
-                                                className="w-24 h-24 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center mx-auto"
+                                                className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center mx-auto"
                                                 style={{
                                                     display:
                                                         currentUser.profile_photo
@@ -248,17 +273,12 @@ const Profil = ({ auth, user, posts }) => {
                                             >
                                                 {currentUser.name ? (
                                                     <span className="text-2xl font-bold">
-                                                        {currentUser.name
-                                                            .split(" ")
-                                                            .map((word) =>
-                                                                word.charAt(0)
-                                                            )
-                                                            .join("")
-                                                            .toUpperCase()
-                                                            .slice(0, 2)}
+                                                        {getDisplayInitials(
+                                                            currentUser.name
+                                                        )}
                                                     </span>
                                                 ) : (
-                                                    <User className="w-12 h-12 text-gray-600 dark:text-gray-400" />
+                                                    <User className="w-12 h-12 text-gray-600" />
                                                 )}
                                             </div>
                                         )}
@@ -266,7 +286,7 @@ const Profil = ({ auth, user, posts }) => {
                                         {auth.user &&
                                             auth.user.id === user.id && (
                                                 <div className="absolute bottom-0 right-0">
-                                                    <label className="flex items-center justify-center bg-gray-900 dark:bg-gray-700 text-white p-2 rounded-full hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors cursor-pointer">
+                                                    <label className="flex items-center justify-center bg-gray-900 text-white p-2 rounded-full hover:bg-gray-800 transition-colors cursor-pointer">
                                                         <Camera className="w-4 h-4" />
                                                         <input
                                                             type="file"
@@ -315,50 +335,50 @@ const Profil = ({ auth, user, posts }) => {
 
                             {/* Kullanıcı Bilgileri */}
                             <div className="text-center mb-6">
-                                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                                <h2 className="text-xl font-bold text-gray-900">
                                     {user.name}
                                 </h2>
-                                <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
+                                <p className="text-gray-500 text-sm">
                                     @{user.username || "user"}
                                 </p>
                             </div>
 
                             {/* Takip İstatistikleri */}
                             <div className="grid grid-cols-3 gap-4">
+                                <div className="text-center cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors">
+                                    <div className="text-2xl font-bold text-gray-900">
+                                        {posts?.length || 0}
+                                    </div>
+                                    <div className="text-xs text-gray-500">
+                                        {t("gonderi")}
+                                    </div>
+                                </div>
                                 <div
-                                    className="text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg p-2 transition-colors"
+                                    className="text-center cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors"
                                     onClick={() => {
                                         setShowFollowersModal(true);
                                         loadFollowers();
                                     }}
                                 >
-                                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    <div className="text-2xl font-bold text-gray-900">
                                         {followersCount}
                                     </div>
-                                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                                    <div className="text-xs text-gray-500">
                                         {t("followers")}
                                     </div>
                                 </div>
                                 <div
-                                    className="text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg p-2 transition-colors"
+                                    className="text-center cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors"
                                     onClick={() => {
                                         setShowFollowingModal(true);
                                         loadFollowing();
                                     }}
                                 >
-                                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    <div className="text-2xl font-bold text-gray-900">
                                         {followingCount}
                                     </div>
-                                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                                    <div className="text-xs text-gray-500">
                                         {t("following")}
-                                    </div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                                        {posts?.length || 0}
-                                    </div>
-                                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                                        {t("film")}
                                     </div>
                                 </div>
                             </div>
@@ -371,8 +391,8 @@ const Profil = ({ auth, user, posts }) => {
                                         disabled={uploading}
                                         className={`w-full px-4 py-3 rounded-full text-sm font-medium transition-all duration-200 flex items-center justify-center space-x-2 ${
                                             isFollowing
-                                                ? "bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30"
-                                                : "bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 shadow-sm hover:shadow-md"
+                                                ? "bg-red-50 border border-red-200 text-red-600 hover:bg-red-100"
+                                                : "bg-blue-600 text-white hover:bg-blue-700 shadow-sm hover:shadow-md"
                                         } ${
                                             uploading
                                                 ? "opacity-50 cursor-not-allowed"
@@ -417,16 +437,17 @@ const Profil = ({ auth, user, posts }) => {
                                     />
                                 ))
                             ) : (
-                                <div className="text-center py-8">
-                                    <p className="text-gray-500 dark:text-gray-400">
+                                <div className="flex flex-col items-center justify-center space-y-4 py-16">
+                                    <FlyingSaucer className="w-24 h-24 mx-auto" />
+                                    <p className="text-gray-500 text-lg">
                                         Henüz paylaşım yapmamışsınız.
                                     </p>
                                     <Link
                                         href="/create"
-                                        className="mt-4 inline-block"
+                                        className="inline-block"
                                     >
-                                        <Buton variant="primary" size="sm">
-                                            İlk Paylaşımınızı Yapın
+                                        <Buton variant="primary" size="md">
+                                            İlk Paylaşımınızı Yapın!
                                         </Buton>
                                     </Link>
                                 </div>
@@ -439,32 +460,29 @@ const Profil = ({ auth, user, posts }) => {
             {/* Takipçiler Modal */}
             {showFollowersModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-96 overflow-hidden">
-                        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    <div className="bg-white rounded-lg shadow-xl max-w-sm w-full max-h-96 overflow-hidden">
+                        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                            <h3 className="text-lg font-semibold text-gray-900">
                                 Takipçiler ({followersCount})
                             </h3>
                             <button
                                 onClick={() => setShowFollowersModal(false)}
-                                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                className="text-gray-400 hover:text-gray-600"
                             >
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
                         <div className="p-4 overflow-y-auto max-h-80">
                             {loadingFollowers ? (
-                                <div className="text-center py-8">
+                                <div className="flex justify-center items-center text-center py-8">
                                     <Loading size="md" />
-                                    <p className="text-gray-500 dark:text-gray-400 mt-2">
-                                        Yükleniyor...
-                                    </p>
                                 </div>
                             ) : followers.length > 0 ? (
                                 <div className="space-y-3">
                                     {followers.map((follower) => (
                                         <div
                                             key={follower.id}
-                                            className="flex items-center space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg"
+                                            className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg"
                                         >
                                             <div className="flex-shrink-0">
                                                 {follower.profile_photo ? (
@@ -474,37 +492,24 @@ const Profil = ({ auth, user, posts }) => {
                                                         className="w-10 h-10 rounded-full object-cover"
                                                     />
                                                 ) : (
-                                                    <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                                                    <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
                                                         {follower.name ? (
-                                                            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                                                {follower.name
-                                                                    .split(" ")
-                                                                    .map(
-                                                                        (
-                                                                            word
-                                                                        ) =>
-                                                                            word.charAt(
-                                                                                0
-                                                                            )
-                                                                    )
-                                                                    .join("")
-                                                                    .toUpperCase()
-                                                                    .slice(
-                                                                        0,
-                                                                        2
-                                                                    )}
+                                                            <span className="text-sm font-semibold text-gray-700">
+                                                                {getDisplayInitials(
+                                                                    follower.name
+                                                                )}
                                                             </span>
                                                         ) : (
-                                                            <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                                                            <User className="w-5 h-5 text-gray-600" />
                                                         )}
                                                     </div>
                                                 )}
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                                <p className="text-sm font-medium text-gray-900 truncate">
                                                     {follower.name}
                                                 </p>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                                <p className="text-xs text-gray-500 truncate">
                                                     @{follower.username}
                                                 </p>
                                             </div>
@@ -513,8 +518,8 @@ const Profil = ({ auth, user, posts }) => {
                                 </div>
                             ) : (
                                 <div className="text-center py-8">
-                                    <Users className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-2" />
-                                    <p className="text-gray-500 dark:text-gray-400">
+                                    <Users className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                                    <p className="text-gray-500">
                                         Henüz takipçi yok
                                     </p>
                                 </div>
@@ -527,32 +532,29 @@ const Profil = ({ auth, user, posts }) => {
             {/* Takip Edilenler Modal */}
             {showFollowingModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-96 overflow-hidden">
-                        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    <div className="bg-white rounded-lg shadow-xl max-w-sm w-full max-h-96 overflow-hidden">
+                        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                            <h3 className="text-lg font-semibold text-gray-900">
                                 Takip Edilenler ({followingCount})
                             </h3>
                             <button
                                 onClick={() => setShowFollowingModal(false)}
-                                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                className="text-gray-400 hover:text-gray-600"
                             >
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
                         <div className="p-4 overflow-y-auto max-h-80">
                             {loadingFollowing ? (
-                                <div className="text-center py-8">
+                                <div className="flex justify-center items-center text-center py-8">
                                     <Loading size="md" />
-                                    <p className="text-gray-500 dark:text-gray-400 mt-2">
-                                        Yükleniyor...
-                                    </p>
                                 </div>
                             ) : following.length > 0 ? (
                                 <div className="space-y-3">
                                     {following.map((followed) => (
                                         <div
                                             key={followed.id}
-                                            className="flex items-center space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg"
+                                            className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg"
                                         >
                                             <div className="flex-shrink-0">
                                                 {followed.profile_photo ? (
@@ -562,37 +564,24 @@ const Profil = ({ auth, user, posts }) => {
                                                         className="w-10 h-10 rounded-full object-cover"
                                                     />
                                                 ) : (
-                                                    <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                                                    <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
                                                         {followed.name ? (
-                                                            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                                                {followed.name
-                                                                    .split(" ")
-                                                                    .map(
-                                                                        (
-                                                                            word
-                                                                        ) =>
-                                                                            word.charAt(
-                                                                                0
-                                                                            )
-                                                                    )
-                                                                    .join("")
-                                                                    .toUpperCase()
-                                                                    .slice(
-                                                                        0,
-                                                                        2
-                                                                    )}
+                                                            <span className="text-sm font-semibold text-gray-700">
+                                                                {getDisplayInitials(
+                                                                    followed.name
+                                                                )}
                                                             </span>
                                                         ) : (
-                                                            <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                                                            <User className="w-5 h-5 text-gray-600" />
                                                         )}
                                                     </div>
                                                 )}
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                                <p className="text-sm font-medium text-gray-900 truncate">
                                                     {followed.name}
                                                 </p>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                                <p className="text-xs text-gray-500 truncate">
                                                     @{followed.username}
                                                 </p>
                                             </div>
@@ -601,9 +590,9 @@ const Profil = ({ auth, user, posts }) => {
                                 </div>
                             ) : (
                                 <div className="text-center py-8">
-                                    <Users className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-2" />
-                                    <p className="text-gray-500 dark:text-gray-400">
-                                        Henüz kimseyi takip etmiyor
+                                    <Users className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                                    <p className="text-gray-500">
+                                        Henüz kimseyi takip etmiyor.
                                     </p>
                                 </div>
                             )}

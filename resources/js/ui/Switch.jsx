@@ -41,10 +41,10 @@ const Switch = ({
                 peer-focus:outline-none 
                 peer-focus:ring-4 
                 peer-focus:ring-gray-300 
-                dark:peer-focus:ring-gray-600 
+                
                 rounded-full 
                 peer 
-                dark:bg-gray-600 
+                
                 peer-checked:after:translate-x-full 
                 peer-checked:after:border-white 
                 after:content-[''] 
@@ -55,10 +55,10 @@ const Switch = ({
                 after:rounded-full 
                 after:transition-all 
                 after:duration-200
-                dark:border-gray-500 
+                
                 peer-checked:bg-black
-                dark:peer-checked:bg-black
-                dark:after:border-gray-500
+               
+               
                 ${switchClasses[size]}
                 ${disabled ? "cursor-not-allowed" : ""}
             `}

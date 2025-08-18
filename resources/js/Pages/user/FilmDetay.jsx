@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import UserLayout from "/Layouts/UserLayout";
 import { Head, Link, usePage } from "@inertiajs/react";
 import Loading from "/ui/Loading";
+import BottomSheet from "/ui/BottomSheet";
+import FilmEkle from "../../components/FilmEkle";
 import { ArrowLeft, Star, User } from "@phosphor-icons/react";
 
 const FilmDetay = ({ auth }) => {
@@ -9,6 +11,7 @@ const FilmDetay = ({ auth }) => {
     const id = props.id;
     const [movie, setMovie] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isEkleSheetOpen, setIsEkleSheetOpen] = useState(false);
 
     useEffect(() => {
         fetchMovieDetails();
@@ -45,7 +48,7 @@ const FilmDetay = ({ auth }) => {
                 <Head title="Film Bulunamadı" />
                 <div className="flex items-center justify-center min-h-screen">
                     <div className="text-center">
-                        <h1 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                        <h1 className="text-xl font-semibold text-gray-900 mb-2">
                             Film bulunamadı
                         </h1>
                         <Link href="/discover">
@@ -65,7 +68,7 @@ const FilmDetay = ({ auth }) => {
 
             <div className="w-full pt-4">
                 {/* Film Detayları */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                     {/* Poster ve Temel Bilgiler */}
                     <div className="relative">
                         {/* Arka plan blur'lu afiş */}
@@ -114,10 +117,10 @@ const FilmDetay = ({ auth }) => {
                         {/* Film Başlığı ve Yıl */}
                         <div className="mb-3">
                             <div>
-                                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
+                                <h2 className="text-xl font-bold text-gray-900 mb-1">
                                     {movie.title}
                                 </h2>
-                                <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm">
+                                <div className="flex items-center text-gray-500 text-sm">
                                     {new Date(movie.release_date).getFullYear()}
                                 </div>
                             </div>
@@ -125,29 +128,26 @@ const FilmDetay = ({ auth }) => {
 
                         {/* Film Açıklaması */}
                         <div className="mb-4">
-                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                            <p className="text-gray-600 leading-relaxed">
                                 {movie.overview ||
                                     "Bu film için henüz açıklama bulunmuyor."}
                             </p>
                         </div>
 
                         {/* Ekle Butonu */}
-                        <Link
-                            href={`/create?movie=${
-                                movie.id
-                            }&title=${encodeURIComponent(movie.title)}`}
+                        <button
+                            onClick={() => setIsEkleSheetOpen(true)}
+                            className="w-full bg-black text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
                         >
-                            <button className="w-full bg-black dark:bg-gray-700 text-white py-3 rounded-lg font-medium  transition-colors flex items-center justify-center">
-                                Ekle
-                            </button>
-                        </Link>
+                            Ekle
+                        </button>
                     </div>
                 </div>
 
                 {/* Oyuncular Bölümü */}
                 {movie.cast && movie.cast.length > 0 && (
-                    <div className="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    <div className="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
                             Oyuncular
                         </h3>
                         <div className="flex space-x-4 overflow-x-auto pb-2">
@@ -157,7 +157,7 @@ const FilmDetay = ({ auth }) => {
                                     className="text-center flex-shrink-0"
                                 >
                                     <Link href={`/actors/${actor.id}`}>
-                                        <div className="w-16 h-16 mb-2 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-600 hover:scale-105 transition-transform cursor-pointer">
+                                        <div className="w-16 h-16 mb-2 rounded-full overflow-hidden bg-gray-200 hover:scale-105 transition-transform cursor-pointer">
                                             {actor.profile_path ? (
                                                 <img
                                                     src={actor.profile_path}
@@ -169,16 +169,16 @@ const FilmDetay = ({ auth }) => {
                                                     }}
                                                 />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-gray-500 dark:text-gray-400">
+                                                <div className="w-full h-full flex items-center justify-center text-gray-500">
                                                     <User className="w-8 h-8" />
                                                 </div>
                                             )}
                                         </div>
                                     </Link>
-                                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate w-16">
+                                    <p className="text-sm font-medium text-gray-900 truncate w-16">
                                         {actor.name}
                                     </p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate w-16">
+                                    <p className="text-xs text-gray-500 truncate w-16">
                                         {actor.character}
                                     </p>
                                 </div>
@@ -189,8 +189,8 @@ const FilmDetay = ({ auth }) => {
 
                 {/* Ekip Bölümü */}
                 {movie.crew && movie.crew.length > 0 && (
-                    <div className="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    <div className="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
                             Ekip
                         </h3>
                         <div className="flex space-x-4 overflow-x-auto pb-2">
@@ -200,7 +200,7 @@ const FilmDetay = ({ auth }) => {
                                     className="text-center flex-shrink-0"
                                 >
                                     <Link href={`/actors/${member.id}`}>
-                                        <div className="w-16 h-16 mb-2 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-600 hover:scale-105 transition-transform cursor-pointer">
+                                        <div className="w-16 h-16 mb-2 rounded-full overflow-hidden bg-gray-200 hover:scale-105 transition-transform cursor-pointer">
                                             {member.profile_path ? (
                                                 <img
                                                     src={member.profile_path}
@@ -212,16 +212,16 @@ const FilmDetay = ({ auth }) => {
                                                     }}
                                                 />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-gray-500 dark:text-gray-400">
+                                                <div className="w-full h-full flex items-center justify-center text-gray-500">
                                                     <User className="w-8 h-8" />
                                                 </div>
                                             )}
                                         </div>
                                     </Link>
-                                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate w-16">
+                                    <p className="text-sm font-medium text-gray-900 truncate w-16">
                                         {member.name}
                                     </p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate w-16">
+                                    <p className="text-xs text-gray-500 truncate w-16">
                                         {member.job}
                                     </p>
                                 </div>
@@ -229,6 +229,22 @@ const FilmDetay = ({ auth }) => {
                         </div>
                     </div>
                 )}
+
+                {/* Film Ekleme BottomSheet */}
+                <BottomSheet
+                    isOpen={isEkleSheetOpen}
+                    onClose={() => setIsEkleSheetOpen(false)}
+                    title="Film Ekle"
+                    maxHeight="max-h-[80vh]"
+                >
+                    <FilmEkle
+                        initialMovie={movie}
+                        onMovieSelect={(selectedMovie) => {
+                            // Film paylaşımı yapıldıktan sonra BottomSheet'i kapat
+                            setIsEkleSheetOpen(false);
+                        }}
+                    />
+                </BottomSheet>
             </div>
         </UserLayout>
     );

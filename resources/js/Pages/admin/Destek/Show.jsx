@@ -67,13 +67,13 @@ const Show = ({ ticket }) => {
     const getStatusColor = (status) => {
         switch (status) {
             case "open":
-                return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+                return "bg-yellow-100 text-yellow-800
             case "closed":
-                return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+                return "bg-green-100 text-green-800
             case "pending":
-                return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+                return "bg-red-100 text-red-800
             default:
-                return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+                return "bg-gray-100 text-gray-800
         }
     };
 
@@ -81,10 +81,10 @@ const Show = ({ ticket }) => {
         <AdminLayout>
             <Head title={`Destek İsteği - ${ticket.subject}`} />
 
-            <div className="mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">
+            <div className="mb-6 border-b border-gray-200 pb-4">
                 <Link
                     href="/panel/support"
-                    className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                    className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
                 >
                     <ArrowLeft className="w-5 h-5 mr-2" />
                     Geri Dön
@@ -95,10 +95,10 @@ const Show = ({ ticket }) => {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                            <h1 className="text-2xl font-bold text-gray-900
                                 Destek İsteği Detayı
                             </h1>
-                            <p className="text-gray-600 dark:text-gray-400">
+                            <p className="text-gray-600
                                 #{ticket.id} - {ticket.subject}
                             </p>
                         </div>
@@ -121,7 +121,7 @@ const Show = ({ ticket }) => {
                 <div className="lg:col-span-2 space-y-6">
                     {/* Kullanıcı Bilgileri */}
                     <Card className="p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
                             Kullanıcı Bilgileri
                         </h3>
                         <div className="flex items-center space-x-4">
@@ -131,14 +131,14 @@ const Show = ({ ticket }) => {
                                 </span>
                             </div>
                             <div>
-                                <div className="font-medium text-gray-900 dark:text-white">
+                                <div className="font-medium text-gray-900
                                     {ticket.user?.name ||
                                         "Bilinmeyen Kullanıcı"}
                                 </div>
-                                <div className="text-sm text-gray-500 dark:text-gray-400">
+                                <div className="text-sm text-gray-500
                                     {ticket.user?.email}
                                 </div>
-                                <div className="text-xs text-gray-400 dark:text-gray-500">
+                                <div className="text-xs text-gray-400
                                     Kayıt:{" "}
                                     {new Date(
                                         ticket.user?.created_at
@@ -150,29 +150,29 @@ const Show = ({ ticket }) => {
 
                     {/* Destek İsteği */}
                     <Card className="p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
                             Destek İsteği
                         </h3>
                         <div className="space-y-4">
                             <div>
-                                <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                                <h4 className="font-medium text-gray-900 mb-2">
                                     Konu
                                 </h4>
-                                <p className="text-gray-700 dark:text-gray-300">
+                                <p className="text-gray-700
                                     {ticket.subject}
                                 </p>
                             </div>
                             <div>
-                                <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                                <h4 className="font-medium text-gray-900 mb-2">
                                     Mesaj
                                 </h4>
-                                <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-                                    <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                                <div className="bg-gray-50 rounded-lg p-4">
+                                    <p className="text-gray-700 whitespace-pre-wrap">
                                         {ticket.message}
                                     </p>
                                 </div>
                             </div>
-                            <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
+                            <div className="flex items-center space-x-4 text-sm text-gray-500
                                 <div className="flex items-center space-x-1">
                                     <Calendar className="w-4 h-4" />
                                     <span>
@@ -188,16 +188,16 @@ const Show = ({ ticket }) => {
                     {/* Admin Yanıtı */}
                     {ticket.admin_reply && (
                         <Card className="p-6">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                            <h3 className="text-lg font-semibold text-gray-900 mb-4">
                                 Admin Yanıtı
                             </h3>
-                            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-                                <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                            <div className="bg-blue-50 rounded-lg p-4">
+                                <p className="text-gray-700 whitespace-pre-wrap">
                                     {ticket.admin_reply}
                                 </p>
                             </div>
                             {ticket.replied_at && (
-                                <div className="flex items-center space-x-1 text-sm text-gray-500 dark:text-gray-400 mt-3">
+                                <div className="flex items-center space-x-1 text-sm text-gray-500 mt-3">
                                     <Calendar className="w-4 h-4" />
                                     <span>
                                         Yanıtlandı:{" "}
@@ -215,12 +215,12 @@ const Show = ({ ticket }) => {
                 <div className="space-y-6">
                     {/* Yanıt Formu */}
                     <Card className="p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
                             Yanıt Ver
                         </h3>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Durum
                                 </label>
                                 <select
@@ -231,7 +231,7 @@ const Show = ({ ticket }) => {
                                             status: e.target.value,
                                         })
                                     }
-                                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 >
                                     <option value="open">Açık</option>
                                     <option value="pending">Beklemede</option>
@@ -239,7 +239,7 @@ const Show = ({ ticket }) => {
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Yanıt
                                 </label>
                                 <textarea
@@ -250,7 +250,7 @@ const Show = ({ ticket }) => {
                                             admin_reply: e.target.value,
                                         })
                                     }
-                                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                                     rows={6}
                                     placeholder="Kullanıcıya yanıtınızı yazın..."
                                     required

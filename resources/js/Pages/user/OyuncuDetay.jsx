@@ -47,7 +47,7 @@ const OyuncuDetay = ({ auth }) => {
                 <Head title="Oyuncu Bulunamadı" />
                 <div className="flex items-center justify-center min-h-screen">
                     <div className="text-center">
-                        <h1 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                        <h1 className="text-xl font-semibold text-gray-900 mb-2">
                             Oyuncu bulunamadı
                         </h1>
                         <Link href="/discover">
@@ -67,7 +67,7 @@ const OyuncuDetay = ({ auth }) => {
 
             <div className="w-full pt-4">
                 {/* Oyuncu Detayları */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                     {/* Profil Fotoğrafı ve Temel Bilgiler */}
                     <div className="relative">
                         {/* Geri Butonu */}
@@ -91,8 +91,8 @@ const OyuncuDetay = ({ auth }) => {
                                 }}
                             />
                         ) : (
-                            <div className="w-full h-80 bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
-                                <User className="w-32 h-32 text-gray-400 dark:text-gray-500" />
+                            <div className="w-full h-80 bg-gray-200 flex items-center justify-center">
+                                <User className="w-32 h-32 text-gray-400 />
                             </div>
                         )}
                     </div>
@@ -100,11 +100,11 @@ const OyuncuDetay = ({ auth }) => {
                     <div className="p-4">
                         {/* Oyuncu Adı */}
                         <div className="mb-4">
-                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                            <h2 className="text-2xl font-bold text-gray-900 mb-2">
                                 {actor.name}
                             </h2>
                             {actor.birthday && (
-                                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                                <p className="text-gray-500 text-sm">
                                     Doğum Tarihi:{" "}
                                     {new Date(
                                         actor.birthday
@@ -112,7 +112,7 @@ const OyuncuDetay = ({ auth }) => {
                                 </p>
                             )}
                             {actor.place_of_birth && (
-                                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                                <p className="text-gray-500 text-sm">
                                     Doğum Yeri: {actor.place_of_birth}
                                 </p>
                             )}
@@ -121,10 +121,10 @@ const OyuncuDetay = ({ auth }) => {
                         {/* Oyuncu Biyografisi */}
                         {actor.biography && (
                             <div className="mb-6">
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                                <h3 className="text-lg font-semibold text-gray-900 mb-3">
                                     Biyografi
                                 </h3>
-                                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                                <p className="text-gray-600 leading-relaxed">
                                     {actor.biography}
                                 </p>
                             </div>
@@ -133,26 +133,26 @@ const OyuncuDetay = ({ auth }) => {
                         {/* İstatistikler */}
                         <div className="grid grid-cols-3 gap-4 mb-6">
                             <div className="text-center">
-                                <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                                <div className="text-2xl font-bold text-gray-900
                                     {actor.popularity?.toFixed(0) || "N/A"}
                                 </div>
-                                <div className="text-sm text-gray-500 dark:text-gray-400">
+                                <div className="text-sm text-gray-500
                                     Popülerlik
                                 </div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                                <div className="text-2xl font-bold text-gray-900
                                     {movies.length}
                                 </div>
-                                <div className="text-sm text-gray-500 dark:text-gray-400">
+                                <div className="text-sm text-gray-500
                                     Film Sayısı
                                 </div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                                <div className="text-2xl font-bold text-gray-900
                                     {actor.known_for_department || "Oyuncu"}
                                 </div>
-                                <div className="text-sm text-gray-500 dark:text-gray-400">
+                                <div className="text-sm text-gray-500
                                     Uzmanlık
                                 </div>
                             </div>
@@ -162,18 +162,18 @@ const OyuncuDetay = ({ auth }) => {
 
                 {/* Filmler Bölümü */}
                 {movies.length > 0 && (
-                    <div className="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    <div className="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
                             Oynadığı Filmler
                         </h3>
                         <div className="space-y-3">
                             {movies.map((movie) => (
                                 <div
                                     key={movie.id}
-                                    className="flex items-center space-x-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                                    className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                                 >
                                     <Link href={`/movies/${movie.id}`}>
-                                        <div className="w-16 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-600 hover:scale-105 transition-transform cursor-pointer">
+                                        <div className="w-16 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200 hover:scale-105 transition-transform cursor-pointer">
                                             {movie.poster_path ? (
                                                 <img
                                                     src={movie.poster_path}
@@ -185,7 +185,7 @@ const OyuncuDetay = ({ auth }) => {
                                                     }}
                                                 />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-gray-500 dark:text-gray-400">
+                                                <div className="w-full h-full flex items-center justify-center text-gray-500
                                                     <Play className="w-6 h-6" />
                                                 </div>
                                             )}
@@ -193,15 +193,15 @@ const OyuncuDetay = ({ auth }) => {
                                     </Link>
                                     <div className="flex-1 min-w-0">
                                         <Link href={`/movies/${movie.id}`}>
-                                            <h4 className="text-sm font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">
+                                            <h4 className="text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors cursor-pointer">
                                                 {movie.title}
                                             </h4>
                                         </Link>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                        <p className="text-xs text-gray-500 mt-1">
                                             {movie.character}
                                         </p>
                                         {movie.release_date && (
-                                            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                                            <p className="text-xs text-gray-400 mt-1">
                                                 {new Date(
                                                     movie.release_date
                                                 ).getFullYear()}
@@ -209,7 +209,7 @@ const OyuncuDetay = ({ auth }) => {
                                         )}
                                     </div>
                                     {movie.vote_average && (
-                                        <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
+                                        <div className="flex items-center space-x-1 text-xs text-gray-500
                                             <Star
                                                 className="w-3 h-3"
                                                 weight="fill"

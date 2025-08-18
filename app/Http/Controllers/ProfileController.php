@@ -73,7 +73,7 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function updateSettings(Request $request): RedirectResponse
+    public function updateSettings(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -86,6 +86,13 @@ class ProfileController extends Controller
         $user = $request->user();
         $user->fill($validated);
         $user->save();
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Profil bilgileri başarıyla güncellendi!'
+            ]);
+        }
 
         return Redirect::route('settings')->with('success', 'Ayarlar başarıyla güncellendi!');
     }
@@ -187,6 +194,13 @@ class ProfileController extends Controller
     public function updatePhoto(Request $request)
     {
         try {
+            // Debug için log ekle
+            \Log::info('Profile photo upload started', [
+                'user_id' => $request->user()->id,
+                'has_file' => $request->hasFile('profile_photo'),
+                'file_size' => $request->file('profile_photo') ? $request->file('profile_photo')->getSize() : null,
+            ]);
+
             $request->validate([
                 'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
@@ -204,24 +218,39 @@ class ProfileController extends Controller
             $user->profile_photo = $path;
             $user->save();
 
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Profil fotoğrafı başarıyla güncellendi!',
-                    'profile_photo' => $path,
-                ]);
-            }
+            \Log::info('Profile photo upload successful', [
+                'user_id' => $user->id,
+                'path' => $path,
+            ]);
 
-            return back()->with('success', 'Profil fotoğrafı başarıyla güncellendi!');
+            // Her zaman JSON response döndür
+            return response()->json([
+                'success' => true,
+                'message' => 'Profil fotoğrafı başarıyla güncellendi!',
+                'profile_photo' => $path,
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Profile photo validation error', [
+                'errors' => $e->errors(),
+            ]);
+
+            // Her zaman JSON response döndür
+            return response()->json([
+                'success' => false,
+                'message' => 'Dosya formatı geçersiz. Lütfen JPEG, PNG, JPG veya GIF formatında bir dosya seçin.',
+                'errors' => $e->errors(),
+            ], 422);
         } catch (\Exception $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Fotoğraf yüklenirken bir hata oluştu: ' . $e->getMessage(),
-                ], 422);
-            }
+            \Log::error('Profile photo upload error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
 
-            return back()->withErrors(['profile_photo' => 'Fotoğraf yüklenirken bir hata oluştu.']);
+            // Her zaman JSON response döndür
+            return response()->json([
+                'success' => false,
+                'message' => 'Fotoğraf yüklenirken bir hata oluştu: ' . $e->getMessage(),
+            ], 500);
         }
     }
 }

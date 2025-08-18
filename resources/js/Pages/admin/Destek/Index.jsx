@@ -100,13 +100,13 @@ const Index = ({
     const getStatusColor = (status) => {
         switch (status) {
             case "open":
-                return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+                return "bg-yellow-100 text-yellow-800";
             case "closed":
-                return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+                return "bg-green-100 text-green-800";
             case "pending":
-                return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+                return "bg-red-100 text-red-800";
             default:
-                return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+                return "bg-gray-100 text-gray-800";
         }
     };
 
@@ -127,7 +127,7 @@ const Index = ({
                     <select
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value)}
-                        className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                         <option value="">Tüm Durumlar</option>
                         <option value="open">Açık</option>
@@ -155,7 +155,7 @@ const Index = ({
                                     className="text-center py-8"
                                 >
                                     <Question className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                                    <p className="text-gray-500 dark:text-gray-400">
+                                    <p className="text-gray-500">
                                         Henüz destek talebi bulunmuyor.
                                     </p>
                                 </TableCell>
@@ -175,18 +175,18 @@ const Index = ({
                                                 </div>
                                             </div>
                                             <div className="ml-3">
-                                                <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                                <div className="text-sm font-medium text-gray-900">
                                                     {ticket.user?.name ||
                                                         "Bilinmeyen Kullanıcı"}
                                                 </div>
-                                                <div className="text-sm text-gray-500 dark:text-gray-400">
+                                                <div className="text-sm text-gray-500">
                                                     {ticket.user?.email}
                                                 </div>
                                             </div>
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        <div className="text-sm text-gray-900 dark:text-white max-w-xs truncate">
+                                        <div className="text-sm text-gray-900 max-w-xs truncate">
                                             {ticket.subject}
                                         </div>
                                     </TableCell>
@@ -212,14 +212,14 @@ const Index = ({
                                             {ticket.admin_reply ? (
                                                 <>
                                                     <ChatCircle className="w-4 h-4 text-green-500" />
-                                                    <span className="text-sm text-green-600 dark:text-green-400">
+                                                    <span className="text-sm text-green-600
                                                         Yanıtlandı
                                                     </span>
                                                 </>
                                             ) : (
                                                 <>
                                                     <Clock className="w-4 h-4 text-yellow-500" />
-                                                    <span className="text-sm text-yellow-600 dark:text-yellow-400">
+                                                    <span className="text-sm text-yellow-600
                                                         Bekliyor
                                                     </span>
                                                 </>
@@ -230,7 +230,7 @@ const Index = ({
                                         <div className="flex items-center justify-end space-x-2">
                                             <Link
                                                 href={`/panel/support/${ticket.id}`}
-                                                className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 dark:border-gray-600 text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                                className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                                                 title="Görüntüle"
                                             >
                                                 <Eye className="w-4 h-4" />
@@ -239,7 +239,7 @@ const Index = ({
                                                 onClick={() =>
                                                     handleDelete(ticket.id)
                                                 }
-                                                className="inline-flex items-center justify-center w-8 h-8 border border-red-300 dark:border-red-600 text-xs font-medium rounded-md text-red-700 dark:text-red-400 bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                                                className="inline-flex items-center justify-center w-8 h-8 border border-red-300 text-xs font-medium rounded-md text-red-700 bg-white hover:bg-red-50 transition-colors"
                                                 title="Sil"
                                             >
                                                 <Trash className="w-4 h-4" />

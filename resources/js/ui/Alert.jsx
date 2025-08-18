@@ -1,42 +1,56 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { CheckCircle, Warning, XCircle, Info } from "@phosphor-icons/react";
 
 const Alert = ({ type = "error", message, onClose, open }) => {
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        if (open) {
+            setIsVisible(true);
+        } else {
+            setIsVisible(false);
+        }
+    }, [open]);
+
     if (!open) return null;
 
     const alertClasses = {
-        error: "bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400",
-        success:
-            "bg-green-50 border-green-200 text-green-800 dark:bg-green-900/20 dark:border-green-800 dark:text-green-400",
-        warning:
-            "bg-yellow-50 border-yellow-200 text-yellow-800 dark:bg-yellow-900/20 dark:border-yellow-800 dark:text-yellow-400",
-        info: "bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400",
+        error: "bg-white border-gray-300 text-gray-900",
+        success: "bg-white border-gray-300 text-gray-900",
+        warning: "bg-white border-gray-300 text-gray-900",
+        info: "bg-white border-gray-300 text-gray-900",
+    };
+
+    const alertIcons = {
+        error: <XCircle className="w-16 h-16 text-black" />,
+        success: <CheckCircle className="w-16 h-16 text-black" />,
+        warning: <Warning className="w-16 h-16 text-black" />,
+        info: <Info className="w-16 h-16 text-black" />,
     };
 
     return (
-        <div className="fixed top-4 right-4 z-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
             <div
-                className={`border rounded-lg p-4 shadow-lg ${alertClasses[type]}`}
+                className={`border rounded-lg p-6 shadow-lg transform transition-all duration-300 ease-in-out max-w-sm w-full mx-4 ${
+                    isVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
+                } ${alertClasses[type]}`}
             >
-                <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium">{message}</p>
+                <div className="flex flex-col items-center text-center space-y-2">
+                    <div className="flex-shrink-0">{alertIcons[type]}</div>
+                    <div className="flex-1 mb-8">
+                        <p className="text-sm font-medium">{message}</p>
+                    </div>
                     {onClose && (
                         <button
-                            onClick={onClose}
-                            className="ml-4 text-current hover:opacity-70"
+                            onClick={() => {
+                                setIsVisible(false);
+                                setTimeout(() => {
+                                    onClose();
+                                }, 300);
+                            }}
+                            className=" px-4 py-2 bg-black hover:bg-gray-800 w-full text-white rounded-lg text-sm font-medium transition-colors"
                         >
-                            <svg
-                                className="w-4 h-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
+                            Tamam
                         </button>
                     )}
                 </div>

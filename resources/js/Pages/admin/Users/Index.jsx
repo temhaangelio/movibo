@@ -124,7 +124,7 @@ const Index = ({ users }) => {
                                                 <div
                                                     className={`h-10 w-10 rounded-full flex items-center justify-center ${
                                                         user.is_blocked
-                                                            ? "bg-gray-400 dark:bg-gray-600"
+                                                            ? "bg-gray-400
                                                             : "bg-blue-600"
                                                     }`}
                                                 >
@@ -139,8 +139,8 @@ const Index = ({ users }) => {
                                                 <div
                                                     className={`text-sm font-medium ${
                                                         user.is_blocked
-                                                            ? "text-gray-500 dark:text-gray-400 line-through"
-                                                            : "text-gray-900 dark:text-white"
+                                                            ? "text-gray-500 line-through"
+                                                            : "text-gray-900
                                                     }`}
                                                 >
                                                     {user.name}
@@ -148,8 +148,8 @@ const Index = ({ users }) => {
                                                 <div
                                                     className={`text-sm ${
                                                         user.is_blocked
-                                                            ? "text-gray-400 dark:text-gray-500 line-through"
-                                                            : "text-gray-500 dark:text-gray-400"
+                                                            ? "text-gray-400 line-through"
+                                                            : "text-gray-500
                                                     }`}
                                                 >
                                                     @{user.username}
@@ -161,7 +161,7 @@ const Index = ({ users }) => {
                                         <span
                                             className={
                                                 user.is_blocked
-                                                    ? "line-through text-gray-500 dark:text-gray-400"
+                                                    ? "line-through text-gray-500
                                                     : ""
                                             }
                                         >
@@ -172,8 +172,8 @@ const Index = ({ users }) => {
                                         <span
                                             className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                                                 user.is_admin
-                                                    ? "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
-                                                    : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                                    ? "bg-purple-100 text-purple-800
+                                                    : "bg-green-100 text-green-800
                                             }`}
                                         >
                                             {user.is_admin
@@ -185,8 +185,8 @@ const Index = ({ users }) => {
                                         <span
                                             className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                                                 user.is_blocked
-                                                    ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-                                                    : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                                    ? "bg-red-100 text-red-800
+                                                    : "bg-green-100 text-green-800
                                             }`}
                                         >
                                             {user.is_blocked
@@ -206,14 +206,14 @@ const Index = ({ users }) => {
                                         <div className="flex space-x-2 justify-end">
                                             <Link
                                                 href={`/panel/users/${user.id}`}
-                                                className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 dark:border-gray-600 text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                                className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                                                 title="Görüntüle"
                                             >
                                                 <Eye className="w-4 h-4" />
                                             </Link>
                                             <Link
                                                 href={`/panel/users/${user.id}/activities`}
-                                                className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 dark:border-gray-600 text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                                className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                                                 title="Aktiviteler"
                                             >
                                                 <Clock className="w-4 h-4" />
@@ -225,7 +225,7 @@ const Index = ({ users }) => {
                                                         user.is_blocked
                                                     )
                                                 }
-                                                className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 dark:border-gray-600 text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                                className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                                                 title={
                                                     user.is_blocked
                                                         ? "Bloktan Çıkar"
@@ -242,7 +242,7 @@ const Index = ({ users }) => {
                                                 onClick={() =>
                                                     handleDelete(user.id)
                                                 }
-                                                className="inline-flex items-center justify-center w-8 h-8 border border-red-300 dark:border-red-600 text-xs font-medium rounded-md text-red-700 dark:text-red-300 bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                                                className="inline-flex items-center justify-center w-8 h-8 border border-red-300 text-xs font-medium rounded-md text-red-700 bg-white hover:bg-red-50 transition-colors"
                                                 title="Sil"
                                             >
                                                 <Trash className="w-4 h-4" />

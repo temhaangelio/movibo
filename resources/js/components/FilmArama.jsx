@@ -73,14 +73,14 @@ const FilmArama = ({
     };
 
     return (
-        <div className="py-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="py-4 border-b border-gray-200">
             <div className="relative">
                 <input
                     type="text"
                     value={searchQuery}
                     onChange={handleInputChange}
                     placeholder={placeholder}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
                 {isSearching && (
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -93,13 +93,13 @@ const FilmArama = ({
             {(searchResults.movies.length > 0 ||
                 searchResults.users.length > 0) && (
                 <div
-                    className="mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                    className="mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
                     style={{ zIndex: 9999 }}
                 >
                     {/* Film Sonuçları */}
                     {searchResults.movies.length > 0 && (
-                        <div className="border-b border-gray-100 dark:border-gray-600">
-                            <div className="px-3 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700">
+                        <div className="border-b border-gray-100">
+                            <div className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-50">
                                 Filmler
                             </div>
                             {searchResults.movies.slice(0, 5).map((movie) => (
@@ -107,7 +107,7 @@ const FilmArama = ({
                                     key={movie.id}
                                     type="button"
                                     onClick={() => handleMovieSelect(movie)}
-                                    className="w-full p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-600 last:border-b-0"
+                                    className="w-full p-3 text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
                                 >
                                     <div className="flex items-center space-x-3">
                                         <img
@@ -120,10 +120,10 @@ const FilmArama = ({
                                             }}
                                         />
                                         <div className="flex-1">
-                                            <h4 className="font-medium text-gray-900 dark:text-white">
+                                            <h4 className="font-medium text-gray-900">
                                                 {movie.title}
                                             </h4>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                                            <p className="text-sm text-gray-500">
                                                 {
                                                     movie.release_date?.split(
                                                         "-"
@@ -133,7 +133,7 @@ const FilmArama = ({
                                             {movie.vote_average && (
                                                 <div className="flex items-center mt-1">
                                                     <Star className="w-4 h-4 text-black fill-current" />
-                                                    <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
+                                                    <span className="text-xs text-gray-500 ml-1">
                                                         {movie.vote_average.toFixed(
                                                             1
                                                         )}
@@ -150,7 +150,7 @@ const FilmArama = ({
                     {/* Kullanıcı Sonuçları */}
                     {searchResults.users.length > 0 && (
                         <div>
-                            <div className="px-3 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700">
+                            <div className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-50">
                                 Kullanıcılar
                             </div>
                             {searchResults.users.slice(0, 5).map((user) => (
@@ -158,7 +158,7 @@ const FilmArama = ({
                                     key={user.id}
                                     type="button"
                                     onClick={() => handleUserSelect(user)}
-                                    className="w-full p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-600 last:border-b-0"
+                                    className="w-full p-3 text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
                                 >
                                     <div className="flex items-center space-x-3">
                                         <div className="flex-shrink-0">
@@ -169,16 +169,16 @@ const FilmArama = ({
                                                     className="w-10 h-10 rounded-full object-cover"
                                                 />
                                             ) : (
-                                                <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
-                                                    <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                                                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                                                    <User className="w-5 h-5 text-gray-600" />
                                                 </div>
                                             )}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                            <p className="text-sm font-medium text-gray-900 truncate">
                                                 {user.name}
                                             </p>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                                            <p className="text-sm text-gray-500 truncate">
                                                 @
                                                 {user.username ||
                                                     user.name

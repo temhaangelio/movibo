@@ -135,11 +135,11 @@ const AnaSayfa = ({ auth, posts, user }) => {
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center py-16 text-center">
-                            <FileText className="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4" />
-                            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                            <FileText className="w-16 h-16 text-gray-400 mb-4" />
+                            <h3 className="text-lg font-medium text-gray-900 mb-2">
                                 {t("no_content_yet", "Henüz bir içerik yok!")}
                             </h3>
-                            <p className="text-gray-500 dark:text-gray-400 text-sm">
+                            <p className="text-gray-500 text-sm">
                                 Takip ettiğiniz kullanıcılar paylaşım yaptığında
                                 burada görünecek
                             </p>

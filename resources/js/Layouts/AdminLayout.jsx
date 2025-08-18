@@ -26,12 +26,12 @@ export default function AdminLayout({ children }) {
     const currentPath = window.location.pathname;
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-dark-900">
+        <div className="min-h-screen bg-gray-50
             {/* Sidebar */}
-            <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-dark-100 shadow-lg">
+            <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg">
                 <div className="flex flex-col h-full">
                     {/* Logo */}
-                    <div className="flex items-center px-6 py-4 border-b border-gray-200 dark:border-dark-200">
+                    <div className="flex items-center px-6 py-4 border-b border-gray-200
                         <Link
                             href="/panel"
                             className="flex items-center space-x-2"
@@ -41,7 +41,7 @@ export default function AdminLayout({ children }) {
                                     M
                                 </span>
                             </div>
-                            <span className="text-xl font-bold text-gray-900 dark:text-white">
+                            <span className="text-xl font-bold text-gray-900
                                 Movibo
                             </span>
                         </Link>
@@ -53,8 +53,8 @@ export default function AdminLayout({ children }) {
                             href="/panel"
                             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 currentPath === "/panel"
-                                    ? "bg-accent-blue/10 dark:bg-accent-blue/30 text-blue-500 dark:text-accent-blue"
-                                    : "text-gray-700 dark:text-gray-300 hover:bg-accent-blue/10 dark:hover:bg-accent-purple/20 hover:text-accent-blue dark:hover:text-accent-blue"
+                                    ? "bg-accent-blue/10 text-blue-500
+                                    : "text-gray-700 hover:bg-accent-blue/10 hover:text-accent-blue
                             }`}
                         >
                             <House className="w-5 h-5 mr-3" />
@@ -64,8 +64,8 @@ export default function AdminLayout({ children }) {
                             href="/panel/users"
                             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 currentPath.startsWith("/panel/users")
-                                    ? "bg-accent-blue/10 dark:bg-accent-blue/30 text-blue-500 dark:text-accent-blue"
-                                    : "text-gray-700 dark:text-gray-300 hover:bg-accent-blue/10 dark:hover:bg-accent-blue/20 hover:text-accent-blue dark:hover:text-accent-blue"
+                                    ? "bg-accent-blue/10 text-blue-500
+                                    : "text-gray-700 hover:bg-accent-blue/10 hover:text-accent-blue
                             }`}
                         >
                             <Users className="w-5 h-5 mr-3" />
@@ -75,8 +75,8 @@ export default function AdminLayout({ children }) {
                             href="/panel/posts"
                             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 currentPath.startsWith("/panel/posts")
-                                    ? "bg-accent-blue/10 dark:bg-accent-blue/30 text-blue-500 dark:text-accent-blue"
-                                    : "text-gray-700 dark:text-gray-300 hover:bg-accent-blue/10 dark:hover:bg-accent-blue/20 hover:text-accent-blue dark:hover:text-accent-blue"
+                                    ? "bg-accent-blue/10 text-blue-500
+                                    : "text-gray-700 hover:bg-accent-blue/10 hover:text-accent-blue
                             }`}
                         >
                             <Article className="w-5 h-5 mr-3" />
@@ -86,8 +86,8 @@ export default function AdminLayout({ children }) {
                             href="/panel/comments"
                             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 currentPath.startsWith("/panel/comments")
-                                    ? "bg-accent-blue/10 dark:bg-accent-blue/30 text-blue-500 dark:text-accent-blue"
-                                    : "text-gray-700 dark:text-gray-300 hover:bg-accent-blue/10 dark:hover:bg-accent-blue/20 hover:text-accent-blue dark:hover:text-accent-blue"
+                                    ? "bg-accent-blue/10 text-blue-500
+                                    : "text-gray-700 hover:bg-accent-blue/10 hover:text-accent-blue
                             }`}
                         >
                             <ChatCircle className="w-5 h-5 mr-3" />
@@ -97,8 +97,8 @@ export default function AdminLayout({ children }) {
                             href="/panel/activities"
                             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 currentPath.startsWith("/panel/activities")
-                                    ? "bg-accent-blue/10 dark:bg-accent-blue/30 text-blue-500 dark:text-accent-blue"
-                                    : "text-gray-700 dark:text-gray-300 hover:bg-accent-blue/10 dark:hover:bg-accent-blue/20 hover:text-accent-blue dark:hover:text-accent-blue"
+                                    ? "bg-accent-blue/10 text-blue-500
+                                    : "text-gray-700 hover:bg-accent-blue/10 hover:text-accent-blue
                             }`}
                         >
                             <Calendar className="w-5 h-5 mr-3" />
@@ -108,8 +108,8 @@ export default function AdminLayout({ children }) {
                             href="/panel/support"
                             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 currentPath.startsWith("/panel/support")
-                                    ? "bg-accent-blue/10 dark:bg-accent-blue/30 text-blue-500 dark:text-accent-blue"
-                                    : "text-gray-700 dark:text-gray-300 hover:bg-accent-blue/10 dark:hover:bg-accent-blue/20 hover:text-accent-blue dark:hover:text-accent-blue"
+                                    ? "bg-accent-blue/10 text-blue-500
+                                    : "text-gray-700 hover:bg-accent-blue/10 hover:text-accent-blue
                             }`}
                         >
                             <Question className="w-5 h-5 mr-3" />
@@ -118,10 +118,10 @@ export default function AdminLayout({ children }) {
                     </nav>
 
                     {/* Bottom Links */}
-                    <div className="py-4 border-t border-gray-200 dark:border-dark-200 space-y-2">
+                    <div className="py-4 border-t border-gray-200 space-y-2">
                         <Link
                             href="/panel/profile"
-                            className="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-dark-200 rounded-lg transition-colors"
+                            className="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 rounded-lg transition-colors"
                         >
                             <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center">
                                 <span className="text-white font-semibold">
@@ -129,10 +129,10 @@ export default function AdminLayout({ children }) {
                                 </span>
                             </div>
                             <div>
-                                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                                <p className="text-sm font-medium text-gray-900
                                     {auth.user.name}
                                 </p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                <p className="text-xs text-gray-500
                                     {auth.user.email}
                                 </p>
                             </div>
@@ -144,7 +144,7 @@ export default function AdminLayout({ children }) {
             {/* Main Content */}
             <div className="ml-64">
                 {/* Top Header */}
-                <header className="bg-white dark:bg-dark-100 shadow-sm border-b border-gray-200 dark:border-dark-200">
+                <header className="bg-white shadow-sm border-b border-gray-200
                     <div className="px-6 py-3">
                         <div className="flex items-center justify-between">
                             <div className="relative flex-1 max-w-md">
@@ -152,7 +152,7 @@ export default function AdminLayout({ children }) {
                                 <input
                                     type="text"
                                     placeholder="Ara..."
-                                    className="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-dark-300 rounded-lg bg-gray-50 dark:bg-dark-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent-purple focus:border-transparent"
+                                    className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent-purple focus:border-transparent"
                                 />
                             </div>
 
@@ -161,7 +161,7 @@ export default function AdminLayout({ children }) {
                                 {/* Uygulamaya Git Butonu */}
                                 <Link
                                     href="/home"
-                                    className="inline-flex items-center px-4 py-2 bg-accent-purple hover:bg-accent-purple/90 dark:bg-accent-purple dark:hover:bg-accent-purple/90 text-white text-sm font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"
+                                    className="inline-flex items-center px-4 py-2 bg-accent-purple hover:bg-accent-purple/90 text-white text-sm font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"
                                 >
                                     <Globe className="w-4 h-4 mr-2" />
                                     Uygulamaya Git
@@ -187,7 +187,7 @@ export default function AdminLayout({ children }) {
 
             {/* Mobile Navigation */}
             <div
-                className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-dark-100 shadow-lg transform transition-transform duration-300 ease-in-out lg:hidden ${
+                className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:hidden ${
                     showingNavigationDropdown
                         ? "translate-x-0"
                         : "-translate-x-full"
@@ -195,7 +195,7 @@ export default function AdminLayout({ children }) {
             >
                 <div className="flex flex-col h-full">
                     {/* Mobile Logo */}
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-dark-200">
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200
                         <Link
                             href="/panel"
                             className="flex items-center space-x-2"
@@ -205,13 +205,13 @@ export default function AdminLayout({ children }) {
                                     M
                                 </span>
                             </div>
-                            <span className="text-xl font-bold text-gray-900 dark:text-white">
+                            <span className="text-xl font-bold text-gray-900
                                 Movibo
                             </span>
                         </Link>
                         <button
                             onClick={() => setShowingNavigationDropdown(false)}
-                            className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                            className="p-2 text-gray-500 hover:text-gray-700
                         >
                             <svg
                                 className="w-6 h-6"
@@ -230,11 +230,11 @@ export default function AdminLayout({ children }) {
                     </div>
 
                     {/* Mobile User Profile */}
-                    <div className="px-6 py-4 border-b border-gray-200 dark:border-dark-200">
+                    <div className="px-6 py-4 border-b border-gray-200
                         <Link
                             href="/panel/profile"
                             onClick={() => setShowingNavigationDropdown(false)}
-                            className="flex items-center space-x-3 hover:bg-gray-50 dark:hover:bg-dark-200 p-2 rounded-lg transition-colors"
+                            className="flex items-center space-x-3 hover:bg-gray-50 p-2 rounded-lg transition-colors"
                         >
                             <div className="w-10 h-10 bg-accent-purple rounded-full flex items-center justify-center">
                                 <span className="text-white font-semibold">
@@ -242,10 +242,10 @@ export default function AdminLayout({ children }) {
                                 </span>
                             </div>
                             <div>
-                                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                                <p className="text-sm font-medium text-gray-900
                                     {auth.user.name}
                                 </p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                <p className="text-xs text-gray-500
                                     {auth.user.email}
                                 </p>
                             </div>
@@ -259,8 +259,8 @@ export default function AdminLayout({ children }) {
                             onClick={() => setShowingNavigationDropdown(false)}
                             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 currentPath === "/panel"
-                                    ? "bg-accent-purple/20 dark:bg-accent-purple/30 text-accent-purple dark:text-accent-purple"
-                                    : "text-gray-700 dark:text-gray-300 hover:bg-accent-purple/10 dark:hover:bg-accent-purple/20 hover:text-accent-purple dark:hover:text-accent-purple"
+                                    ? "bg-accent-purple/20 text-accent-purple
+                                    : "text-gray-700 hover:bg-accent-purple/10 hover:text-accent-purple
                             }`}
                         >
                             <House className="w-5 h-5 mr-3" />
@@ -271,8 +271,8 @@ export default function AdminLayout({ children }) {
                             onClick={() => setShowingNavigationDropdown(false)}
                             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 currentPath.startsWith("/panel/users")
-                                    ? "bg-accent-purple/20 dark:bg-accent-purple/30 text-accent-purple dark:text-accent-purple"
-                                    : "text-gray-700 dark:text-gray-300 hover:bg-accent-purple/10 dark:hover:bg-accent-purple/20 hover:text-accent-purple dark:hover:text-accent-purple"
+                                    ? "bg-accent-purple/20 text-accent-purple
+                                    : "text-gray-700 hover:bg-accent-purple/10 hover:text-accent-purple
                             }`}
                         >
                             <Users className="w-5 h-5 mr-3" />
@@ -283,8 +283,8 @@ export default function AdminLayout({ children }) {
                             onClick={() => setShowingNavigationDropdown(false)}
                             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 currentPath.startsWith("/panel/posts")
-                                    ? "bg-accent-purple/20 dark:bg-accent-purple/30 text-accent-purple dark:text-accent-purple"
-                                    : "text-gray-700 dark:text-gray-300 hover:bg-accent-purple/10 dark:hover:bg-accent-purple/20 hover:text-accent-purple dark:hover:text-accent-purple"
+                                    ? "bg-accent-purple/20 text-accent-purple
+                                    : "text-gray-700 hover:bg-accent-purple/10 hover:text-accent-purple
                             }`}
                         >
                             <Article className="w-5 h-5 mr-3" />
@@ -295,8 +295,8 @@ export default function AdminLayout({ children }) {
                             onClick={() => setShowingNavigationDropdown(false)}
                             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 currentPath.startsWith("/panel/comments")
-                                    ? "bg-accent-purple/20 dark:bg-accent-purple/30 text-accent-purple dark:text-accent-purple"
-                                    : "text-gray-700 dark:text-gray-300 hover:bg-accent-purple/10 dark:hover:bg-accent-purple/20 hover:text-accent-purple dark:hover:text-accent-purple"
+                                    ? "bg-accent-purple/20 text-accent-purple
+                                    : "text-gray-700 hover:bg-accent-purple/10 hover:text-accent-purple
                             }`}
                         >
                             <ChatCircle className="w-5 h-5 mr-3" />
@@ -307,8 +307,8 @@ export default function AdminLayout({ children }) {
                             onClick={() => setShowingNavigationDropdown(false)}
                             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 currentPath.startsWith("/panel/activities")
-                                    ? "bg-accent-purple/20 dark:bg-accent-purple/30 text-accent-purple dark:text-accent-purple"
-                                    : "text-gray-700 dark:text-gray-300 hover:bg-accent-purple/10 dark:hover:bg-accent-purple/20 hover:text-accent-purple dark:hover:text-accent-purple"
+                                    ? "bg-accent-purple/20 text-accent-purple
+                                    : "text-gray-700 hover:bg-accent-purple/10 hover:text-accent-purple
                             }`}
                         >
                             <Calendar className="w-5 h-5 mr-3" />
@@ -319,8 +319,8 @@ export default function AdminLayout({ children }) {
                             onClick={() => setShowingNavigationDropdown(false)}
                             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 currentPath.startsWith("/panel/destek")
-                                    ? "bg-accent-purple/20 dark:bg-accent-purple/30 text-accent-purple dark:text-accent-purple"
-                                    : "text-gray-700 dark:text-gray-300 hover:bg-accent-purple/10 dark:hover:bg-accent-purple/20 hover:text-accent-purple dark:hover:text-accent-purple"
+                                    ? "bg-accent-purple/20 text-accent-purple
+                                    : "text-gray-700 hover:bg-accent-purple/10 hover:text-accent-purple
                             }`}
                         >
                             <Headphones className="w-5 h-5 mr-3" />
@@ -329,11 +329,11 @@ export default function AdminLayout({ children }) {
                     </nav>
 
                     {/* Mobile Bottom Links */}
-                    <div className="px-4 py-4 border-t border-gray-200 dark:border-dark-200 space-y-2">
+                    <div className="px-4 py-4 border-t border-gray-200 space-y-2">
                         <Link
                             href="/home"
                             onClick={() => setShowingNavigationDropdown(false)}
-                            className="flex items-center w-full px-3 py-2 text-sm font-medium rounded-lg transition-colors text-accent-purple dark:text-accent-purple hover:bg-accent-purple/10 dark:hover:bg-accent-purple/20"
+                            className="flex items-center w-full px-3 py-2 text-sm font-medium rounded-lg transition-colors text-accent-purple hover:bg-accent-purple/10
                         >
                             <Globe className="w-5 h-5 mr-3" />
                             Uygulamaya Git
@@ -346,7 +346,7 @@ export default function AdminLayout({ children }) {
             <div className="fixed top-4 left-4 z-50 lg:hidden">
                 <button
                     onClick={() => setShowingNavigationDropdown(true)}
-                    className="p-2 bg-white dark:bg-dark-100 rounded-lg shadow-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                    className="p-2 bg-white rounded-lg shadow-lg text-gray-500 hover:text-gray-700
                 >
                     <svg
                         className="w-6 h-6"

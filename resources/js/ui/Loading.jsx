@@ -16,7 +16,7 @@ const Loading = ({
 
     const Spinner = () => (
         <div
-            className={`animate-spin rounded-full border-4 border-gray-300 dark:border-gray-600 border-t-gray-900 dark:border-t-gray-300 ${sizes[size]} ${className}`}
+            className={`animate-spin rounded-full border-4 border-gray-300 border-t-gray-900 ${sizes[size]} ${className}`}
             {...props}
         />
     );
@@ -24,15 +24,15 @@ const Loading = ({
     const Dots = () => (
         <div className={`flex space-x-1 ${className}`} {...props}>
             <div
-                className={`${sizes[size]} bg-gray-900 dark:bg-gray-300 rounded-full animate-bounce`}
+                className={`${sizes[size]} bg-gray-900 rounded-full animate-bounce`}
                 style={{ animationDelay: "0ms" }}
             />
             <div
-                className={`${sizes[size]} bg-gray-900 dark:bg-gray-300 rounded-full animate-bounce`}
+                className={`${sizes[size]} bg-gray-900 rounded-full animate-bounce`}
                 style={{ animationDelay: "150ms" }}
             />
             <div
-                className={`${sizes[size]} bg-gray-900 dark:bg-gray-300 rounded-full animate-bounce`}
+                className={`${sizes[size]} bg-gray-900 rounded-full animate-bounce`}
                 style={{ animationDelay: "300ms" }}
             />
         </div>
@@ -40,7 +40,7 @@ const Loading = ({
 
     const Pulse = () => (
         <div
-            className={`${sizes[size]} bg-gray-900 dark:bg-gray-300 rounded-full animate-pulse ${className}`}
+            className={`${sizes[size]} bg-gray-900 rounded-full animate-pulse ${className}`}
             {...props}
         />
     );

@@ -7,15 +7,15 @@ import Buton from "/ui/Buton";
 import Confirm from "/ui/Confirm";
 import BottomSheet from "/ui/BottomSheet";
 import Card from "/ui/Card";
-import ThemeToggle from "/ui/ThemeToggle";
+
 import Dropdown from "/ui/Dropdown";
+import Alert from "/ui/Alert";
 import {
     SignOut,
     Trash,
     User,
     Bell,
     Eye,
-    Palette,
     Translate,
     CaretDown,
     FileText,
@@ -26,13 +26,15 @@ import {
 const Ayarlar = ({ auth }) => {
     const { t, i18n } = useTranslation();
     const user = auth.user;
-    const [currentTheme, setCurrentTheme] = useState("auto");
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [isProfileSheetOpen, setIsProfileSheetOpen] = useState(false);
+    const [alert, setAlert] = useState({
+        open: false,
+        type: "success",
+        message: "",
+    });
 
     useEffect(() => {
-        setCurrentTheme(localStorage.getItem("theme") || "auto");
-
         // Mevcut dili kontrol et ve güncelle
         const currentLanguage = localStorage.getItem("language") || "tr";
         if (i18n.language !== currentLanguage) {
@@ -44,7 +46,6 @@ const Ayarlar = ({ auth }) => {
         name: user.name,
         username: user.username || "",
         email: user.email,
-        theme: localStorage.getItem("theme") || "auto",
         language: localStorage.getItem("language") || "tr",
     });
 
@@ -54,7 +55,6 @@ const Ayarlar = ({ auth }) => {
             name: user.name,
             username: user.username || "",
             email: user.email,
-            theme: localStorage.getItem("theme") || "auto",
             language: localStorage.getItem("language") || "tr",
         });
     }, [user, setData]);
@@ -84,17 +84,6 @@ const Ayarlar = ({ auth }) => {
         // Artık gerekli değil çünkü otomatik kaydetme var
     };
 
-    const handleThemeChange = (theme) => {
-        window.setTheme(theme);
-        setCurrentTheme(theme);
-        setData("theme", theme);
-
-        // Tema değişikliğinin anında uygulanması için
-        setTimeout(() => {
-            window.location.reload();
-        }, 100);
-    };
-
     const handleLanguageChange = (language) => {
         i18n.changeLanguage(language);
         localStorage.setItem("language", language);
@@ -108,15 +97,42 @@ const Ayarlar = ({ auth }) => {
 
     const handleProfileSubmit = (e) => {
         e.preventDefault();
-        patchProfile("/settings", {
-            onSuccess: () => {
-                setIsProfileSheetOpen(false);
-                alert("Profil bilgileri başarıyla güncellendi!");
+
+        const formData = new FormData();
+        formData.append("name", profileData.name);
+        formData.append("username", profileData.username);
+        formData.append("email", profileData.email);
+        formData.append("_method", "PATCH");
+
+        fetch("/settings", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+                Accept: "application/json",
             },
-            onError: (errors) => {
-                console.error("Profil güncellenirken hata:", errors);
-            },
-        });
+            body: formData,
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    setIsProfileSheetOpen(false);
+                    setAlert({
+                        open: true,
+                        type: "success",
+                        message: data.message,
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error("Profil güncellenirken hata:", error);
+                setAlert({
+                    open: true,
+                    type: "error",
+                    message: "Profil güncellenirken bir hata oluştu.",
+                });
+            });
     };
 
     const openProfileSheet = () => {
@@ -131,8 +147,9 @@ const Ayarlar = ({ auth }) => {
     const handleDeleteAccount = () => {
         router.delete("/settings/delete-account", {
             onSuccess: () => {
-                alert("Hesabınız başarıyla silindi!");
-                router.visit("/");
+                if (confirm("Hesabınız başarıyla silindi!")) {
+                    router.visit("/");
+                }
             },
             onError: (errors) => {
                 console.error("Hesap silinirken hata:", errors);
@@ -144,57 +161,42 @@ const Ayarlar = ({ auth }) => {
         <UserLayout auth={auth}>
             <Head title={t("settings")} />
 
-            <div className="pb-4 bg-gray-50 dark:bg-gray-900 mt-4">
+            <Alert
+                open={alert.open}
+                type={alert.type}
+                message={alert.message}
+                onClose={() => setAlert({ ...alert, open: false })}
+            />
+
+            <div className="pb-4 bg-gray-50 mt-4">
                 <Card>
                     <div className="p-4 space-y-4">
                         <div
                             onClick={openProfileSheet}
-                            className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+                            className="flex items-center justify-between pb-4 border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer"
                         >
                             <div className="flex items-center">
-                                <User className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
+                                <User className="w-5 h-5 text-gray-500 mr-3" />
                                 <div>
-                                    <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                                    <h3 className="text-sm font-medium text-gray-900">
                                         {t("profile_info")}
                                     </h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    <p className="text-sm text-gray-500">
                                         Profil bilgilerinizi düzenleyin
                                     </p>
                                 </div>
                             </div>
-                            <ArrowRight className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                            <ArrowRight className="w-5 h-5 text-gray-400" />
                         </div>
 
-                        <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
-                            <div className="flex items-center">
-                                <Palette className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
-                                <div>
-                                    <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                                        {t("theme")}
-                                    </h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        {currentTheme === "light"
-                                            ? t("light_theme")
-                                            : currentTheme === "dark"
-                                            ? t("dark_theme")
-                                            : t("system_theme")}
-                                    </p>
-                                </div>
-                            </div>
-                            <ThemeToggle
-                                currentTheme={currentTheme}
-                                onThemeChange={handleThemeChange}
-                            />
-                        </div>
-
-                        <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 pb-4">
+                        <div className="flex items-center justify-between border-b border-gray-200 pb-4">
                             <div className="flex items-center ">
-                                <Translate className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
+                                <Translate className="w-5 h-5 text-gray-500 mr-3" />
                                 <div>
-                                    <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                                    <h3 className="text-sm font-medium text-gray-900">
                                         {t("language")}
                                     </h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    <p className="text-sm text-gray-500">
                                         {data.language === "tr"
                                             ? "Türkçe"
                                             : data.language === "en"
@@ -217,8 +219,8 @@ const Ayarlar = ({ auth }) => {
                             </div>
                             <Dropdown>
                                 <Dropdown.Trigger>
-                                    <div className="flex items-center space-x-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                                    <div className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 cursor-pointer">
+                                        <span className="text-sm text-gray-700">
                                             {data.language === "tr"
                                                 ? "TR"
                                                 : data.language === "en"
@@ -248,8 +250,8 @@ const Ayarlar = ({ auth }) => {
                                             }
                                             className={`block w-full px-4 py-2 text-left text-sm ${
                                                 data.language === "tr"
-                                                    ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
-                                                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                    ? "bg-gray-100 text-gray-900"
+                                                    : "text-gray-700 hover:bg-gray-50"
                                             }`}
                                         >
                                             <div className="flex items-center justify-between">
@@ -267,8 +269,8 @@ const Ayarlar = ({ auth }) => {
                                             }
                                             className={`block w-full px-4 py-2 text-left text-sm ${
                                                 data.language === "en"
-                                                    ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
-                                                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                    ? "bg-gray-100 text-gray-900"
+                                                    : "text-gray-700 hover:bg-gray-50"
                                             }`}
                                         >
                                             <div className="flex items-center justify-between">
@@ -286,8 +288,8 @@ const Ayarlar = ({ auth }) => {
                                             }
                                             className={`block w-full px-4 py-2 text-left text-sm ${
                                                 data.language === "fr"
-                                                    ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
-                                                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                    ? "bg-gray-100 text-gray-900"
+                                                    : "text-gray-700 hover:bg-gray-50"
                                             }`}
                                         >
                                             <div className="flex items-center justify-between">
@@ -305,8 +307,8 @@ const Ayarlar = ({ auth }) => {
                                             }
                                             className={`block w-full px-4 py-2 text-left text-sm ${
                                                 data.language === "es"
-                                                    ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
-                                                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                    ? "bg-gray-100 text-gray-900"
+                                                    : "text-gray-700 hover:bg-gray-50"
                                             }`}
                                         >
                                             <div className="flex items-center justify-between">
@@ -324,8 +326,8 @@ const Ayarlar = ({ auth }) => {
                                             }
                                             className={`block w-full px-4 py-2 text-left text-sm ${
                                                 data.language === "it"
-                                                    ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
-                                                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                    ? "bg-gray-100 text-gray-900"
+                                                    : "text-gray-700 hover:bg-gray-50"
                                             }`}
                                         >
                                             <div className="flex items-center justify-between">
@@ -343,8 +345,8 @@ const Ayarlar = ({ auth }) => {
                                             }
                                             className={`block w-full px-4 py-2 text-left text-sm ${
                                                 data.language === "ar"
-                                                    ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
-                                                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                    ? "bg-gray-100 text-gray-900"
+                                                    : "text-gray-700 hover:bg-gray-50"
                                             }`}
                                         >
                                             <div className="flex items-center justify-between">
@@ -362,8 +364,8 @@ const Ayarlar = ({ auth }) => {
                                             }
                                             className={`block w-full px-4 py-2 text-left text-sm ${
                                                 data.language === "ru"
-                                                    ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
-                                                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                    ? "bg-gray-100 text-gray-900"
+                                                    : "text-gray-700 hover:bg-gray-50"
                                             }`}
                                         >
                                             <div className="flex items-center justify-between">
@@ -381,8 +383,8 @@ const Ayarlar = ({ auth }) => {
                                             }
                                             className={`block w-full px-4 py-2 text-left text-sm ${
                                                 data.language === "de"
-                                                    ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
-                                                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                    ? "bg-gray-100 text-gray-900"
+                                                    : "text-gray-700 hover:bg-gray-50"
                                             }`}
                                         >
                                             <div className="flex items-center justify-between">
@@ -401,38 +403,38 @@ const Ayarlar = ({ auth }) => {
 
                         <Link
                             href="/terms"
-                            className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+                            className="flex items-center justify-between pb-4 border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer"
                         >
                             <div className="flex items-center">
-                                <FileText className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
+                                <FileText className="w-5 h-5 text-gray-500 mr-3" />
                                 <div>
-                                    <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                                    <h3 className="text-sm font-medium text-gray-900">
                                         {t("terms_of_service")}
                                     </h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    <p className="text-sm text-gray-500">
                                         Kullanım şartları
                                     </p>
                                 </div>
                             </div>
-                            <ArrowRight className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                            <ArrowRight className="w-5 h-5 text-gray-400" />
                         </Link>
 
                         <Link
                             href="/support"
-                            className="flex items-center justify-between pb-4  hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+                            className="flex items-center justify-between pb-4  hover:bg-gray-50 transition-colors cursor-pointer"
                         >
                             <div className="flex items-center">
-                                <Question className="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3" />
+                                <Question className="w-5 h-5 text-gray-500 mr-3" />
                                 <div>
-                                    <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                                    <h3 className="text-sm font-medium text-gray-900">
                                         Destek
                                     </h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    <p className="text-sm text-gray-500">
                                         Yardım alın
                                     </p>
                                 </div>
                             </div>
-                            <ArrowRight className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                            <ArrowRight className="w-5 h-5 text-gray-400" />
                         </Link>
                     </div>
                 </Card>
@@ -514,7 +516,7 @@ const Ayarlar = ({ auth }) => {
                         error={profileErrors.username}
                         disabled={true}
                     />
-                    <p className="text-xs text-gray-500 dark:text-gray-400 -mt-2">
+                    <p className="text-xs text-gray-500 -mt-2">
                         {t("username_cannot_change")}
                     </p>
                     <TextInput
@@ -526,7 +528,7 @@ const Ayarlar = ({ auth }) => {
                         }
                         error={profileErrors.email}
                     />
-                    <div className="flex justify-end space-x-3 pt-4 sticky bottom-0 bg-white dark:bg-gray-800 py-2">
+                    <div className="flex justify-end space-x-3 pt-4 sticky bottom-0 bg-white py-2">
                         <Buton
                             type="button"
                             variant="secondary"

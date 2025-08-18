@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Head, Link, usePage, router } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
 import ApplicationLogo from "/ui/Logo";
+import BottomSheet from "/ui/BottomSheet";
+import FilmEkle from "../components/FilmEkle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDice } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -21,6 +23,7 @@ const UserLayout = ({ children, auth }) => {
     const { t } = useTranslation();
     const [isDark, setIsDark] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
+    const [isEkleSheetOpen, setIsEkleSheetOpen] = useState(false);
 
     // Auth prop'u yoksa usePage'den al
     const userAuth = auth || usePage().props.auth;
@@ -71,19 +74,19 @@ const UserLayout = ({ children, auth }) => {
     };
 
     return (
-        <div className="min-h-screen h-screen max-w-md mx-auto bg-gray-100 dark:bg-gray-900 flex flex-col">
+        <div className="min-h-screen h-screen max-w-md mx-auto bg-gray-100 flex flex-col">
             {/* Mobile Header */}
-            <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+            <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
                 <div className="px-4 py-3">
                     <div className="flex items-center justify-between">
                         <Link href="/home" className="flex items-center">
-                            <ApplicationLogo className="text-gray-900 text-2xl dark:text-white" />
+                            <ApplicationLogo className="text-gray-900 text-2xl" />
                         </Link>
                         <div className="flex items-center space-x-2">
                             {userAuth?.user?.is_admin && (
                                 <Link
                                     href="/panel"
-                                    className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                                    className="p-2 text-gray-600 hover:text-gray-900 transition-colors"
                                     title="Admin Panel"
                                 >
                                     <Shield className="w-6 h-6" />
@@ -91,7 +94,7 @@ const UserLayout = ({ children, auth }) => {
                             )}
                             <Link
                                 href="/notifications"
-                                className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors relative"
+                                className="p-2 text-gray-600 hover:text-gray-900 transition-colors relative"
                                 title="Bildirimler"
                             >
                                 <div className="relative">
@@ -107,7 +110,7 @@ const UserLayout = ({ children, auth }) => {
                             </Link>
                             <Link
                                 href="/settings"
-                                className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                                className="p-2 text-gray-600 hover:text-gray-900 transition-colors"
                                 title={t("settings")}
                             >
                                 <Gear className="w-6 h-6" />
@@ -123,15 +126,15 @@ const UserLayout = ({ children, auth }) => {
             </main>
 
             {/* Mobile Bottom Navigation */}
-            <nav className="fixed bottom-0 left-0 max-w-md mx-auto right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50 shadow-lg pb-safe">
-                <div className="flex justify-around  items-center py-3">
+            <nav className="fixed bottom-10 left-0 max-w-sm mx-auto right-0 bg-black z-50 shadow-lg pb-safe rounded-full">
+                <div className="flex justify-around  items-center py-1">
                     {/* Ana Sayfa */}
                     <Link
                         href="/home"
                         className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
                             url.startsWith("/home")
-                                ? "text-gray-900 dark:text-white"
-                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                                ? "text-white"
+                                : "text-white hover:text-gray-900"
                         }`}
                     >
                         <House
@@ -147,8 +150,8 @@ const UserLayout = ({ children, auth }) => {
                         href="/discover"
                         className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
                             url.startsWith("/discover")
-                                ? "text-gray-900 dark:text-white"
-                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                                ? "text-white"
+                                : "text-white hover:text-gray-900"
                         }`}
                     >
                         <MagnifyingGlass
@@ -160,39 +163,33 @@ const UserLayout = ({ children, auth }) => {
                     </Link>
 
                     {/* Yeni Paylaşım */}
-                    <Link
-                        href="/create"
+                    <button
+                        onClick={() => setIsEkleSheetOpen(true)}
                         className="flex flex-col items-center py-2 px-3"
                     >
-                        <div
-                            className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg ${
-                                url.startsWith("/create")
-                                    ? "bg-blue-600 dark:bg-blue-500"
-                                    : "bg-gray-900 dark:bg-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600"
-                            } transition-colors`}
-                        >
+                        <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg bg-blue-600 hover:bg-blue-700 transition-colors">
                             <Plus
                                 className="w-6 h-6 text-white"
                                 weight="bold"
                             />
                         </div>
-                    </Link>
+                    </button>
 
                     {/* Rastgele */}
                     <Link
                         href="/rastgele"
                         className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
                             url.startsWith("/rastgele")
-                                ? "text-gray-900 dark:text-white"
-                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                                ? "text-white"
+                                : "text-white hover:text-gray-900"
                         }`}
                     >
                         <FontAwesomeIcon
                             icon={faDice}
                             className={`w-6 h-6 ${
                                 url.startsWith("/rastgele")
-                                    ? "text-gray-900 dark:text-white"
-                                    : "text-gray-600 dark:text-gray-400"
+                                    ? "text-white"
+                                    : "text-white"
                             }`}
                         />
                     </Link>
@@ -202,8 +199,8 @@ const UserLayout = ({ children, auth }) => {
                         href="/profile"
                         className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
                             url.startsWith("/profile")
-                                ? "text-gray-900 dark:text-white"
-                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                                ? "text-white"
+                                : "text-white hover:text-gray-900"
                         }`}
                     >
                         <User
@@ -215,6 +212,20 @@ const UserLayout = ({ children, auth }) => {
                     </Link>
                 </div>
             </nav>
+
+            {/* Film Ekleme BottomSheet */}
+            <BottomSheet
+                isOpen={isEkleSheetOpen}
+                onClose={() => setIsEkleSheetOpen(false)}
+                title="Film Ekle"
+            >
+                <FilmEkle
+                    onMovieSelect={(movie) => {
+                        // Film paylaşımı yapıldıktan sonra BottomSheet'i kapat
+                        setIsEkleSheetOpen(false);
+                    }}
+                />
+            </BottomSheet>
         </div>
     );
 };

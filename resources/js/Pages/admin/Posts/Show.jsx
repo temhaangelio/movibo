@@ -22,7 +22,7 @@ const Show = ({ post }) => {
                 <div className="flex items-center space-x-4">
                     <Link
                         href="/panel/posts"
-                        className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                        className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
                     >
                         <ArrowLeft className="w-5 h-5" />
                         <span>Geri Dön</span>
@@ -43,15 +43,15 @@ const Show = ({ post }) => {
                                     </span>
                                 </div>
                                 <div>
-                                    <div className="font-medium text-gray-900 dark:text-white">
+                                    <div className="font-medium text-gray-900
                                         {post.user.name}
                                     </div>
-                                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                                    <div className="text-sm text-gray-500
                                         @{post.user.username}
                                     </div>
                                 </div>
                             </div>
-                            <div className="text-right text-sm text-gray-500 dark:text-gray-400">
+                            <div className="text-right text-sm text-gray-500
                                 {new Date(post.created_at).toLocaleDateString(
                                     "tr-TR"
                                 )}
@@ -60,54 +60,54 @@ const Show = ({ post }) => {
 
                         {/* Post Content */}
                         <div className="mb-6">
-                            <p className="text-gray-900 dark:text-white text-lg leading-relaxed">
+                            <p className="text-gray-900 text-lg leading-relaxed">
                                 {post.content}
                             </p>
                         </div>
 
                         {/* Media Info */}
                         {post.media_title && (
-                            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mb-6">
-                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                            <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                                <h3 className="font-semibold text-gray-900 mb-2">
                                     {post.media_title}
                                 </h3>
                                 <div className="grid grid-cols-2 gap-4 text-sm">
                                     {post.media_type && (
                                         <div>
-                                            <span className="text-gray-500 dark:text-gray-400">
+                                            <span className="text-gray-500
                                                 Tür:
                                             </span>
-                                            <span className="ml-2 text-gray-900 dark:text-white capitalize">
+                                            <span className="ml-2 text-gray-900 capitalize">
                                                 {post.media_type}
                                             </span>
                                         </div>
                                     )}
                                     {post.media_genre && (
                                         <div>
-                                            <span className="text-gray-500 dark:text-gray-400">
+                                            <span className="text-gray-500
                                                 Tür:
                                             </span>
-                                            <span className="ml-2 text-gray-900 dark:text-white">
+                                            <span className="ml-2 text-gray-900
                                                 {post.media_genre}
                                             </span>
                                         </div>
                                     )}
                                     {post.media_rating && (
                                         <div>
-                                            <span className="text-gray-500 dark:text-gray-400">
+                                            <span className="text-gray-500
                                                 Puan:
                                             </span>
-                                            <span className="ml-2 text-gray-900 dark:text-white">
+                                            <span className="ml-2 text-gray-900
                                                 {post.media_rating}/10
                                             </span>
                                         </div>
                                     )}
                                     {post.user_rating && (
                                         <div>
-                                            <span className="text-gray-500 dark:text-gray-400">
+                                            <span className="text-gray-500
                                                 Kullanıcı Puanı:
                                             </span>
-                                            <span className="ml-2 text-gray-900 dark:text-white">
+                                            <span className="ml-2 text-gray-900
                                                 {post.user_rating}/10
                                             </span>
                                         </div>
@@ -115,10 +115,10 @@ const Show = ({ post }) => {
                                 </div>
                                 {post.media_description && (
                                     <div className="mt-3">
-                                        <span className="text-gray-500 dark:text-gray-400">
+                                        <span className="text-gray-500
                                             Açıklama:
                                         </span>
-                                        <p className="mt-1 text-gray-900 dark:text-white">
+                                        <p className="mt-1 text-gray-900
                                             {post.media_description}
                                         </p>
                                     </div>
@@ -127,7 +127,7 @@ const Show = ({ post }) => {
                         )}
 
                         {/* Post Stats */}
-                        <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 pt-4">
+                        <div className="flex items-center justify-between text-sm text-gray-500 border-t border-gray-200 pt-4">
                             <div className="flex items-center space-x-4">
                                 <div className="flex items-center space-x-1">
                                     <Heart className="w-4 h-4" />
@@ -146,14 +146,14 @@ const Show = ({ post }) => {
                     {/* Comments */}
                     {post.comments && post.comments.length > 0 && (
                         <Card className="p-6 mt-6">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                            <h3 className="text-lg font-semibold text-gray-900 mb-4">
                                 Yorumlar ({post.comments.length})
                             </h3>
                             <div className="space-y-4">
                                 {post.comments.map((comment) => (
                                     <div
                                         key={comment.id}
-                                        className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0"
+                                        className="border-b border-gray-200 pb-4 last:border-b-0"
                                     >
                                         <div className="flex items-start space-x-3">
                                             <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center">
@@ -165,17 +165,17 @@ const Show = ({ post }) => {
                                             </div>
                                             <div className="flex-1">
                                                 <div className="flex items-center space-x-2 mb-1">
-                                                    <span className="font-medium text-gray-900 dark:text-white">
+                                                    <span className="font-medium text-gray-900
                                                         {comment.user.name}
                                                     </span>
-                                                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                                                    <span className="text-sm text-gray-500
                                                         @{comment.user.username}
                                                     </span>
                                                 </div>
-                                                <p className="text-gray-700 dark:text-gray-300">
+                                                <p className="text-gray-700
                                                     {comment.content}
                                                 </p>
-                                                <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                                                <div className="text-xs text-gray-500 mt-2">
                                                     {new Date(
                                                         comment.created_at
                                                     ).toLocaleString("tr-TR")}
@@ -193,7 +193,7 @@ const Show = ({ post }) => {
                 <div className="lg:col-span-1">
                     {/* User Info */}
                     <Card className="p-6 mb-6">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
                             Kullanıcı Bilgileri
                         </h3>
                         <div className="flex items-center space-x-3 mb-4">
@@ -203,19 +203,19 @@ const Show = ({ post }) => {
                                 </span>
                             </div>
                             <div>
-                                <div className="font-medium text-gray-900 dark:text-white">
+                                <div className="font-medium text-gray-900
                                     {post.user.name}
                                 </div>
-                                <div className="text-sm text-gray-500 dark:text-gray-400">
+                                <div className="text-sm text-gray-500
                                     @{post.user.username}
                                 </div>
-                                <div className="text-xs text-gray-400 dark:text-gray-500">
+                                <div className="text-xs text-gray-400
                                     {post.user.email}
                                 </div>
                             </div>
                         </div>
                         <div className="space-y-2 text-sm">
-                            <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                            <div className="flex items-center space-x-2 text-gray-600
                                 <Calendar className="w-4 h-4" />
                                 <span>
                                     Kayıt:{" "}
@@ -224,7 +224,7 @@ const Show = ({ post }) => {
                                     ).toLocaleDateString("tr-TR")}
                                 </span>
                             </div>
-                            <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                            <div className="flex items-center space-x-2 text-gray-600
                                 <User className="w-4 h-4" />
                                 <span>
                                     Durum:{" "}
@@ -252,7 +252,7 @@ const Show = ({ post }) => {
 
                     {/* Actions */}
                     <Card className="p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
                             İşlemler
                         </h3>
                         <div className="space-y-3">

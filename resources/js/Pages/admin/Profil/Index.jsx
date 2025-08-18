@@ -6,39 +6,17 @@ import Buton from "/ui/Buton";
 import TextInput from "/ui/TextInput";
 import InputLabel from "/ui/InputLabel";
 import InputError from "/ui/InputError";
-import ThemeToggle from "/ui/ThemeToggle";
+
 import {
-    User,
-    Envelope,
-    Calendar,
-    Shield,
     CheckCircle,
-    Warning,
     Eye,
     EyeSlash,
     SignOut,
-    Moon,
-    Sun,
 } from "@phosphor-icons/react";
 
 const Index = ({ auth }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
-    const [currentTheme, setCurrentTheme] = useState("auto");
-
-    useEffect(() => {
-        setCurrentTheme(localStorage.getItem("theme") || "auto");
-    }, []);
-
-    const handleThemeChange = (theme) => {
-        window.setTheme(theme);
-        setCurrentTheme(theme);
-
-        // Tema değişikliğinin anında uygulanması için
-        setTimeout(() => {
-            window.location.reload();
-        }, 100);
-    };
 
     const { data, setData, patch, errors, processing, recentlySuccessful } =
         useForm({
@@ -64,7 +42,7 @@ const Index = ({ auth }) => {
                     <Card className="p-6">
                         <form onSubmit={submit} className="space-y-6">
                             <div>
-                                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                                <h3 className="text-lg font-medium text-gray-900 mb-4">
                                     Profil Bilgileri
                                 </h3>
 
@@ -122,21 +100,21 @@ const Index = ({ auth }) => {
                                     <TextInput
                                         id="username"
                                         type="text"
-                                        className="mt-1 block w-full bg-gray-100 dark:bg-gray-800"
+                                        className="mt-1 block w-full bg-gray-100
                                         value={
                                             auth.user.username ||
                                             "Kullanıcı adı yok"
                                         }
                                         disabled
                                     />
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                    <p className="text-xs text-gray-500 mt-1">
                                         Kullanıcı adı değiştirilemez
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                            <div className="border-t border-gray-200 pt-6">
+                                <h3 className="text-lg font-medium text-gray-900 mb-4">
                                     Şifre Değiştir
                                 </h3>
 
@@ -288,7 +266,7 @@ const Index = ({ auth }) => {
                             </div>
 
                             {recentlySuccessful && (
-                                <div className="flex items-center space-x-2 text-green-600 dark:text-green-400">
+                                <div className="flex items-center space-x-2 text-green-600
                                     <CheckCircle className="w-4 h-4" />
                                     <span>Profil başarıyla güncellendi!</span>
                                 </div>
@@ -297,48 +275,20 @@ const Index = ({ auth }) => {
                     </Card>
                 </div>
 
-                {/* Theme Settings */}
-                <Card className="p-6">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
-                        Görünüm Ayarları
-                    </h3>
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                            <div className="flex items-center space-x-3">
-                                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
-                                    <Sun className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                                </div>
-                                <div>
-                                    <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                        Tema Değiştir
-                                    </p>
-                                    <p className="text-xs text-gray-600 dark:text-gray-400">
-                                        Açık veya koyu tema arasında geçiş yapın
-                                    </p>
-                                </div>
-                            </div>
-                            <ThemeToggle
-                                currentTheme={currentTheme}
-                                onThemeChange={handleThemeChange}
-                            />
-                        </div>
-                    </div>
-                </Card>
-
                 {/* Logout Section */}
                 <Card className="p-6">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">
                         Hesap İşlemleri
                     </h3>
                     <div className="space-y-4">
-                        <div className="flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                        <div className="flex items-center justify-between p-4 bg-red-50 rounded-lg">
                             <div className="flex items-center space-x-3">
-                                <SignOut className="w-5 h-5 text-red-600 dark:text-red-400" />
+                                <SignOut className="w-5 h-5 text-red-600 />
                                 <div>
-                                    <p className="text-sm font-medium text-red-800 dark:text-red-400">
+                                    <p className="text-sm font-medium text-red-800
                                         Çıkış Yap
                                     </p>
-                                    <p className="text-xs text-red-600 dark:text-red-500">
+                                    <p className="text-xs text-red-600
                                         Hesabınızdan güvenli bir şekilde çıkış
                                         yapın
                                     </p>
@@ -347,7 +297,7 @@ const Index = ({ auth }) => {
                             <Buton
                                 onClick={() => router.post("/logout")}
                                 variant="outline"
-                                className="text-red-600 border-red-600 hover:bg-red-600 hover:text-white dark:text-red-400 dark:border-red-400 dark:hover:bg-red-400 dark:hover:text-white"
+                                className="text-red-600 border-red-600 hover:bg-red-600 hover:text-white
                             >
                                 <SignOut className="w-4 h-4 mr-2" />
                                 Çıkış Yap

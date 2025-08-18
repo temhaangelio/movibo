@@ -3,6 +3,7 @@ import { useForm, Link } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
 import TimeAgo from "/ui/TimeAgo";
 import Confirm from "/ui/Confirm";
+import { getDisplayInitials } from "/utils/userUtils";
 
 import CommentDropdown from "@/components/CommentDropdown";
 import {
@@ -16,9 +17,6 @@ import {
 } from "@phosphor-icons/react";
 
 const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
-    // Debug: Post verilerini kontrol et
-    console.log("PostCard render - post:", post);
-    console.log("PostCard render - post.user:", post.user);
     const { t } = useTranslation();
     const [isLiked, setIsLiked] = useState(post.is_liked || false);
     const [likesCount, setLikesCount] = useState(post.likes_count || 0);
@@ -56,15 +54,9 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
             user.id !== post.user.id &&
             post.user.username
         ) {
-            console.log("Post user data:", post.user);
-            console.log("Checking follow status for:", post.user.username);
             fetch(`/users/${post.user.username}/follow/check`)
-                .then((res) => {
-                    console.log("Follow check response status:", res.status);
-                    return res.json();
-                })
+                .then((res) => res.json())
                 .then((data) => {
-                    console.log("Follow check data:", data);
                     setIsFollowing(data.isFollowing);
                 })
                 .catch((error) => {
@@ -102,7 +94,7 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
                 setIsFollowing(data.isFollowing);
             }
         } catch (error) {
-            console.error("Follow error:", error);
+            // Follow error silently handled
         }
     };
 
@@ -142,7 +134,6 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
                 }
             })
             .catch((error) => {
-                console.error("Like error:", error);
                 // Hata durumunda UI'yi geri al
                 setIsLiked(!newLikedState);
                 setLikesCount(newLikedState ? likesCount + 1 : likesCount - 1);
@@ -173,12 +164,11 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
                 await navigator.clipboard.writeText(shareData.url);
             }
         } catch (error) {
-            console.error("Share error:", error);
             // Hata durumunda URL'yi kopyala
             try {
                 await navigator.clipboard.writeText(shareData.url);
             } catch (copyError) {
-                console.error("Copy error:", copyError);
+                // Copy error silently handled
             }
         }
     };
@@ -201,7 +191,7 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
     };
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             {/* Kullanıcı Bilgisi */}
             <div className="flex items-center p-3">
                 <Link
@@ -224,21 +214,16 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
                         />
                     ) : null}
                     <div
-                        className={`w-10 h-10 bg-black dark:bg-gray-900 rounded-full flex items-center justify-center cursor-pointer transition-colors ${
+                        className={`w-10 h-10 bg-black rounded-full flex items-center justify-center cursor-pointer transition-colors ${
                             post.user?.profile_photo ? "hidden" : ""
                         }`}
                     >
                         {post.user?.name ? (
-                            <span className="text-sm font-semibold text-white dark:text-gray-400">
-                                {post.user.name
-                                    .split(" ")
-                                    .map((word) => word.charAt(0))
-                                    .join("")
-                                    .toUpperCase()
-                                    .slice(0, 2)}
+                            <span className="text-sm font-semibold text-white">
+                                {getDisplayInitials(post.user.name)}
                             </span>
                         ) : (
-                            <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                            <User className="w-5 h-5 text-gray-600" />
                         )}
                     </div>
                 </Link>
@@ -251,12 +236,12 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
                         }
                         className="block"
                     >
-                        <p className="font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">
+                        <p className="font-medium text-gray-900 hover:text-blue-600 transition-colors cursor-pointer">
                             {post.user?.name}
                         </p>
                     </Link>
                     <div className="flex items-center space-x-2">
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                        <p className="text-xs text-gray-500">
                             <TimeAgo date={post.created_at} />
                         </p>
                     </div>
@@ -267,8 +252,8 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
                             onClick={handleFollow}
                             className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
                                 isFollowing
-                                    ? "bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30"
-                                    : "bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 shadow-sm hover:shadow-md"
+                                    ? "bg-red-50 border border-red-200 text-red-600 hover:bg-red-100"
+                                    : "bg-blue-600 text-white hover:bg-blue-700 shadow-sm hover:shadow-md"
                             }`}
                         >
                             {isFollowing ? "Takibi Bırak" : "Takip Et"}
@@ -279,21 +264,21 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
                     <div className="relative" ref={menuRef}>
                         <button
                             onClick={() => setMenuOpen(!menuOpen)}
-                            className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                            className="p-2 text-gray-500 hover:text-gray-900 transition-colors rounded-full hover:bg-gray-100"
                         >
                             <DotsThree className="w-5 h-5" />
                         </button>
 
                         {/* Dropdown Menü */}
                         {menuOpen && (
-                            <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-10">
+                            <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
                                 <div className="py-1">
                                     <button
                                         onClick={() => {
                                             handleShare();
                                             setMenuOpen(false);
                                         }}
-                                        className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                        className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                                     >
                                         <PaperPlaneTilt className="w-4 h-4 mr-3" />
                                         {t("share_post")}
@@ -306,7 +291,7 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
                                                 setMenuOpen(false);
                                             }}
                                             disabled={deleteProcessing}
-                                            className="w-full flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50"
+                                            className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
                                         >
                                             <Trash className="w-4 h-4 mr-3" />
                                             {t("delete_post")}
@@ -323,7 +308,7 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
             <div className="p-3">
                 <div className="mb-3">
                     <Link href={`/movies/${post.media_id}`}>
-                        <h3 className="font-semibold text-gray-900 dark:text-white text-lg mb-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">
+                        <h3 className="font-semibold text-gray-900 text-lg mb-2 hover:text-blue-600 transition-colors cursor-pointer">
                             {post.media_title}
                         </h3>
                     </Link>
@@ -341,7 +326,7 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
                             </Link>
                             {/* Film Puanı - Sağ Üst */}
                             {post.media_rating && (
-                                <div className="absolute top-2 right-2 bg-black/70 dark:bg-gray-800/70 backdrop-blur-sm px-2 py-1 rounded-full">
+                                <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-sm px-2 py-1 rounded-full">
                                     <span className="flex items-center text-sm">
                                         <Star
                                             className="w-4 h-4 text-white mr-1"
@@ -353,14 +338,14 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
                                     </span>
                                 </div>
                             )}
-                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 dark:from-gray-800/70 to-transparent p-3 rounded-b-lg">
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 rounded-b-lg">
                                 <div className="flex items-center justify-between text-white">
                                     <span className="text-sm font-medium">
                                         {post.media_release_date?.split("-")[0]}
                                     </span>
                                     {(post.user_rating ||
                                         post.user_rating === 0) && (
-                                        <span className="flex items-center text-sm bg-black/70 dark:bg-gray-800/70 px-2 py-1 rounded-full">
+                                        <span className="flex items-center text-sm bg-black/70 px-2 py-1 rounded-full">
                                             <Star
                                                 className="w-3 h-3 text-white mr-1"
                                                 weight="fill"
@@ -379,7 +364,7 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
 
                 {/* Kullanıcı Yorumu */}
                 <div className="mb-4">
-                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    <p className="text-gray-700 leading-relaxed">
                         {post.content}
                     </p>
                 </div>
@@ -391,7 +376,7 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
                     <button
                         onClick={handleLike}
                         disabled={likeProcessing}
-                        className="flex items-center space-x-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors disabled:opacity-50"
+                        className="flex items-center space-x-2 text-gray-500 hover:text-gray-900 transition-colors disabled:opacity-50"
                     >
                         <Heart
                             className={`w-5 h-5 ${
@@ -406,13 +391,11 @@ const PostCard = ({ post, onComment, user, onDelete, onLike = () => {} }) => {
 
                     <button
                         onClick={() => setCommentDropdownOpen(true)}
-                        className="flex items-center space-x-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                        className="flex items-center space-x-2 text-gray-500 hover:text-gray-900 transition-colors"
                     >
                         <ChatCircle
                             className={`w-5 h-5 ${
-                                commentDropdownOpen
-                                    ? "text-gray-900 dark:text-white"
-                                    : ""
+                                commentDropdownOpen ? "text-gray-900" : ""
                             }`}
                             weight={commentDropdownOpen ? "fill" : "regular"}
                         />

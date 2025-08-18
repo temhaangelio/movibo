@@ -4,7 +4,7 @@ const Table = ({ children, className = "" }) => {
     return (
         <div className="overflow-x-auto overflow-y-visible relative" style={{ overflow: "visible" }}>
             <table
-                className={`min-w-full divide-y divide-gray-200 dark:divide-gray-700 ${className}`}
+                className={`min-w-full divide-y divide-gray-200 ${className}`}
                 style={{ overflow: "visible" }}
             >
                 {children}
@@ -15,7 +15,7 @@ const Table = ({ children, className = "" }) => {
 
 const TableHead = ({ children, className = "" }) => {
     return (
-        <thead className={`bg-gray-50 dark:bg-gray-800 ${className}`}>
+        <thead className={`bg-gray-50 ${className}`}>
             {children}
         </thead>
     );
@@ -24,7 +24,7 @@ const TableHead = ({ children, className = "" }) => {
 const TableBody = ({ children, className = "" }) => {
     return (
         <tbody
-            className={`bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700 ${className}`}
+            className={`bg-white divide-y divide-gray-200 ${className}`}
         >
             {children}
         </tbody>
@@ -34,7 +34,7 @@ const TableBody = ({ children, className = "" }) => {
 const TableRow = ({ children, className = "", ...props }) => {
     return (
         <tr
-            className={`hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${className}`}
+            className={`hover:bg-gray-50 transition-colors ${className}`}
             {...props}
         >
             {children}
@@ -56,7 +56,7 @@ const TableHeader = ({
 
     return (
         <th
-            className={`px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider ${alignClasses[align]} ${className}`}
+            className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ${alignClasses[align]} ${className}`}
             {...props}
         >
             {children}

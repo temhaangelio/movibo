@@ -10,7 +10,7 @@ const UserRating = ({ value, onChange, label = "Puanınız" }) => {
 
     return (
         <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
                 {label}
             </label>
             <div className="flex items-center space-x-1">
@@ -21,13 +21,13 @@ const UserRating = ({ value, onChange, label = "Puanınız" }) => {
                         onClick={() => handleRatingClick(star)}
                         onMouseEnter={() => setHoveredRating(star)}
                         onMouseLeave={() => setHoveredRating(0)}
-                        className="text-2xl transition-colors"
+                        className="text-xl transition-colors"
                     >
                         <Star
-                            className={`w-8 h-8 ${
+                            className={`w-6 h-6 ${
                                 star <= (hoveredRating || value)
                                     ? "text-black fill-current"
-                                    : "text-gray-300 dark:text-gray-600"
+                                    : "text-gray-300"
                             }`}
                             weight={
                                 star <= (hoveredRating || value)
@@ -38,7 +38,7 @@ const UserRating = ({ value, onChange, label = "Puanınız" }) => {
                     </button>
                 ))}
                 {value > 0 && (
-                    <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+                    <span className="ml-2 text-sm text-gray-600">
                         {value}/5
                     </span>
                 )}

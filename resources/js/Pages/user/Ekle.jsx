@@ -128,7 +128,8 @@ const Create = ({ auth }) => {
         <UserLayout auth={auth}>
             <Head title={t("new_post", "Yeni Paylaşım")} />
 
-            <div className="w-full pt-4">
+            <div className="w-full pt-4 ">
+                asdasdasd
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Film Ekle */}
@@ -143,12 +144,12 @@ const Create = ({ auth }) => {
 
                     {/* Seçili Film Bilgileri */}
                     {selectedMedia && (
-                        <div className="flex flex-col border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg p-4">
+                        <div className="flex flex-col border border-gray-200 bg-white rounded-lg p-4">
                             <div className="flex justify-end">
                                 <button
                                     type="button"
                                     onClick={handleMovieDeselect}
-                                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                    className="text-gray-500 hover:text-gray-700"
                                 >
                                     <X className="w-5 h-5" />
                                 </button>
@@ -165,18 +166,18 @@ const Create = ({ auth }) => {
                                     />
                                 )}
                                 <div className="flex-1">
-                                    <h4 className="font-medium text-gray-900 dark:text-white">
+                                    <h4 className="font-medium text-gray-900">
                                         {selectedMedia.title}
                                     </h4>
                                     {selectedMedia.release_date && (
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        <p className="text-sm text-gray-600">
                                             {new Date(
                                                 selectedMedia.release_date
                                             ).getFullYear()}
                                         </p>
                                     )}
                                     {selectedMedia.vote_average && (
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        <p className="text-sm text-gray-600">
                                             ⭐ {selectedMedia.vote_average}
                                             /10
                                         </p>
@@ -197,7 +198,7 @@ const Create = ({ auth }) => {
 
                     {/* Yorum */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                             {t("comment")}
                         </label>
                         <textarea
@@ -210,11 +211,11 @@ const Create = ({ auth }) => {
                             }}
                             placeholder={t("comment_placeholder")}
                             rows={4}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 dark:focus:ring-gray-400 dark:focus:border-gray-400"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                         />
                         <div className="flex justify-between items-center mt-1">
                             {errors.content && (
-                                <p className="text-sm text-red-600 dark:text-red-400">
+                                <p className="text-sm text-red-600">
                                     {errors.content}
                                 </p>
                             )}
@@ -222,7 +223,7 @@ const Create = ({ auth }) => {
                                 className={`text-sm ml-auto ${
                                     data.content.length > 200
                                         ? "text-red-500"
-                                        : "text-gray-500 dark:text-gray-400"
+                                        : "text-gray-500"
                                 }`}
                             >
                                 {data.content.length}/250

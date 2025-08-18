@@ -10,20 +10,10 @@ export default {
         "./resources/js/**/*.jsx",
     ],
 
-    darkMode: "class",
-
     theme: {
         extend: {
             fontFamily: {
-                sans: [
-                    "Nunito",
-                    "Inter",
-                    "Segoe UI",
-                    "Roboto",
-                    "Helvetica Neue",
-                    "Arial",
-                    "sans-serif",
-                ],
+                sans: ["Nunito"],
             },
             colors: {
                 gray: {
@@ -38,18 +28,7 @@ export default {
                     800: "#1f2937",
                     900: "#111827",
                 },
-                dark: {
-                    50: "#1a1a1a",
-                    100: "#2d2d2d",
-                    200: "#404040",
-                    300: "#525252",
-                    400: "#666666",
-                    500: "#808080",
-                    600: "#999999",
-                    700: "#b3b3b3",
-                    800: "#cccccc",
-                    900: "#e6e6e6",
-                },
+
                 accent: {
                     purple: "#8b5cf6",
                     magenta: "#ec4899",

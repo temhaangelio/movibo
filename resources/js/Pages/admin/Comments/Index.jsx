@@ -83,7 +83,7 @@ const Index = ({ comments }) => {
                         {filteredComments.map((comment) => (
                             <TableRow key={comment.id}>
                                 <TableCell>
-                                    <div className="text-sm text-gray-900 dark:text-white max-w-xs truncate">
+                                    <div className="text-sm text-gray-900 max-w-xs truncate">
                                         {comment.content?.substring(0, 100)}
                                         {comment.content?.length > 100 && "..."}
                                     </div>
@@ -100,7 +100,7 @@ const Index = ({ comments }) => {
                                             </div>
                                         </div>
                                         <div className="ml-3">
-                                            <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                            <div className="text-sm font-medium text-gray-900">
                                                 {comment.user?.name ||
                                                     "Bilinmeyen Kullanıcı"}
                                             </div>
@@ -108,7 +108,7 @@ const Index = ({ comments }) => {
                                     </div>
                                 </TableCell>
                                 <TableCell>
-                                    <div className="text-sm text-gray-900 dark:text-white">
+                                    <div className="text-sm text-gray-900">
                                         Paylaşım #{comment.post?.id || "N/A"}
                                     </div>
                                 </TableCell>
@@ -121,7 +121,7 @@ const Index = ({ comments }) => {
                                     <div className="flex items-center justify-end space-x-2">
                                         <Link
                                             href={`/panel/posts/${comment.post?.id}`}
-                                            className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 dark:border-gray-600 text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                            className="inline-flex items-center justify-center w-8 h-8 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                                             title="Paylaşımı Görüntüle"
                                         >
                                             <Eye className="w-4 h-4" />
@@ -130,7 +130,7 @@ const Index = ({ comments }) => {
                                             onClick={() =>
                                                 handleDelete(comment.id)
                                             }
-                                            className="inline-flex items-center justify-center w-8 h-8 border border-red-300 dark:border-red-600 text-xs font-medium rounded-md text-red-700 dark:text-red-400 bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                                            className="inline-flex items-center justify-center w-8 h-8 border border-red-300 text-xs font-medium rounded-md text-red-700 bg-white hover:bg-red-50 transition-colors"
                                             title="Sil"
                                         >
                                             <Trash className="w-4 h-4" />
